@@ -6,7 +6,7 @@ import { ArrowDown } from "lucide-react";
 const Hero = () => {
     const { canvasRef } = useHeroSection();
 
-    return (
+    return ( 
         <div
             id="hero"
             className="h-screen w-screen bg-black">
