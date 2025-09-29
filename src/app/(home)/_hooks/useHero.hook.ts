@@ -74,6 +74,18 @@ const useHeroSection = () => {
       const progress = Math.min(self.progress / 0.9, 1);
       const targetFrame = Math.round(progress * (totalFrames.current - 1));
       videoFrameRef.current = totalFrames.current - targetFrame - 1;
+
+      // Debug logging to help identify scroll issues
+      if (self.progress > 0.1 && self.progress < 0.2) {
+        console.log("ScrollTrigger Debug:", {
+          progress: self.progress,
+          start: self.start,
+          end: self.end,
+          scroll: self.scroll,
+          direction: self.direction,
+        });
+      }
+
       render();
       heroAnimations.initialPageOpacity(progress, gsap);
       heroAnimations.initialTextTranslation(progress, gsap);
@@ -87,13 +99,22 @@ const useHeroSection = () => {
       scrollTriggerRef.current.kill();
     }
 
-    scrollTriggerRef.current = ScrollTrigger.create({
-      trigger: "#hero",
-      start: "top top",
-      end: `+=${window.innerHeight * 7}px`,
-      pin: true,
-      scrub: 1,
-      onUpdate: handleScroll,
+    // Wait for the next frame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      scrollTriggerRef.current = ScrollTrigger.create({
+        trigger: "#hero",
+        start: "top top",
+        end: `+=${window.innerHeight * 8}px`, // Increased to 8vh for better coverage
+        pin: true,
+        scrub: 1,
+        onUpdate: handleScroll,
+        onRefresh: () => {
+          console.log("ScrollTrigger refreshed");
+        },
+      });
+
+      // Force refresh to ensure proper calculation
+      ScrollTrigger.refresh();
     });
   }, [handleScroll]);
 
@@ -115,7 +136,7 @@ const useHeroSection = () => {
         const img = new Image();
         img.crossOrigin = "anonymous"; // Add CORS support
 
-        const loadPromise = new Promise<void>((resolve, reject) => {
+        const loadPromise = new Promise<void>((resolve) => {
           img.onload = () => {
             loadedCount.current++;
             resolve();
@@ -210,11 +231,15 @@ const useHeroSection = () => {
           }
         };
 
-        lenis.on("scroll", handleScroll);
-        gsap.ticker.add(handleRaf);
-        gsap.ticker.lagSmoothing(0);
+        // Add a small delay to ensure ScrollTrigger is properly initialized
+        const timeoutId = setTimeout(() => {
+          lenis.on("scroll", handleScroll);
+          gsap.ticker.add(handleRaf);
+          gsap.ticker.lagSmoothing(0);
+        }, 100);
 
         return () => {
+          clearTimeout(timeoutId);
           lenis.off("scroll", handleScroll);
           gsap.ticker.remove(handleRaf);
         };
