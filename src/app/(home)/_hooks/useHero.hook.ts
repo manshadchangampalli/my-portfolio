@@ -3,7 +3,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { heroAnimations } from "../_config/hero.config";
 
@@ -29,9 +29,10 @@ const useHeroSection = () => {
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const totalFrames = useRef(getTotalFrames());
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isSetupComplete = useRef(false);
 
   const render = useCallback(() => {
-    if (!ctx.current) return;
+    if (!ctx.current || !canvasRef.current) return;
     const img = imagesRef.current[videoFrameRef.current];
     if (!img || !img.complete || img.naturalHeight === 0) return;
 
@@ -71,20 +72,10 @@ const useHeroSection = () => {
 
   const handleScroll = useCallback(
     (self: globalThis.ScrollTrigger) => {
-      const progress = Math.min(self.progress / 0.9, 1);
+      // Fixed: Remove the 0.9 division - use full progress
+      const progress = Math.max(0, Math.min(self.progress, 1));
       const targetFrame = Math.round(progress * (totalFrames.current - 1));
       videoFrameRef.current = totalFrames.current - targetFrame - 1;
-
-      // Debug logging to help identify scroll issues
-      if (self.progress > 0.1 && self.progress < 0.2) {
-        console.log("ScrollTrigger Debug:", {
-          progress: self.progress,
-          start: self.start,
-          end: self.end,
-          scroll: self.scroll,
-          direction: self.direction,
-        });
-      }
 
       render();
       heroAnimations.initialPageOpacity(progress, gsap);
@@ -97,24 +88,41 @@ const useHeroSection = () => {
     // Clean up existing scroll trigger
     if (scrollTriggerRef.current) {
       scrollTriggerRef.current.kill();
+      scrollTriggerRef.current = null;
     }
 
-    // Wait for the next frame to ensure DOM is ready
+    // Wait for DOM to be fully ready
     requestAnimationFrame(() => {
-      scrollTriggerRef.current = ScrollTrigger.create({
-        trigger: "#hero",
-        start: "top top",
-        end: `+=${window.innerHeight * 8}px`, // Increased to 8vh for better coverage
-        pin: true,
-        scrub: 1,
-        onUpdate: handleScroll,
-        onRefresh: () => {
-          console.log("ScrollTrigger refreshed");
-        },
-      });
+      requestAnimationFrame(() => {
+        const heroElement = document.getElementById("hero");
+        if (!heroElement) {
+          console.warn("Hero element not found");
+          return;
+        }
 
-      // Force refresh to ensure proper calculation
-      ScrollTrigger.refresh();
+        scrollTriggerRef.current = ScrollTrigger.create({
+          trigger: "#hero",
+          start: "top top",
+          end: "+=700%", // Changed: Use percentage for more reliable calculations
+          pin: true,
+          scrub: 1.5, // Slightly higher scrub for smoother experience
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: handleScroll,
+          onRefresh: (self) => {
+            console.log("ScrollTrigger refreshed", {
+              start: self.start,
+              end: self.end,
+            });
+          },
+        });
+
+        // Single refresh after creation
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+          isSetupComplete.current = true;
+        }, 100);
+      });
     });
   }, [handleScroll]);
 
@@ -134,7 +142,7 @@ const useHeroSection = () => {
 
       for (let i = 0; i < totalFrames.current; i++) {
         const img = new Image();
-        img.crossOrigin = "anonymous"; // Add CORS support
+        img.crossOrigin = "anonymous";
 
         const loadPromise = new Promise<void>((resolve) => {
           img.onload = () => {
@@ -143,8 +151,8 @@ const useHeroSection = () => {
           };
           img.onerror = () => {
             console.warn(`Failed to load image: ${currentFrame(i)}`);
-            loadedCount.current++; // Count failed images too
-            resolve(); // Don't reject, just continue
+            loadedCount.current++;
+            resolve();
           };
         });
 
@@ -153,7 +161,6 @@ const useHeroSection = () => {
         loadPromises.push(loadPromise);
       }
 
-      // Set a timeout to prevent infinite loading
       loadingTimeoutRef.current = setTimeout(() => {
         if (loadedCount.current < totalFrames.current) {
           console.warn("Image loading timeout, proceeding with available images");
@@ -164,7 +171,7 @@ const useHeroSection = () => {
             setupScrollTrigger();
           }
         }
-      }, 10000); // 10 second timeout
+      }, 10000);
 
       await Promise.all(loadPromises);
 
@@ -183,19 +190,30 @@ const useHeroSection = () => {
     }
   }, [render, setupScrollTrigger]);
 
-  // Load images on mount
+  // Initialize canvas and load images
   useGSAP(
     () => {
-      ctx.current = canvasRef.current?.getContext("2d") ?? null;
+      ctx.current =
+        canvasRef.current?.getContext("2d", {
+          alpha: false, // Better performance for opaque canvas
+          desynchronized: true, // Better performance
+        }) ?? null;
+
       setCanvasSize();
       loadImages();
 
       const handleResize = () => {
         setCanvasSize();
+        render();
+
         // Reload images if screen size changed significantly
         const newTotalFrames = getTotalFrames();
         if (newTotalFrames !== totalFrames.current) {
+          isSetupComplete.current = false;
           loadImages();
+        } else if (scrollTriggerRef.current) {
+          // Just refresh ScrollTrigger for resize
+          ScrollTrigger.refresh();
         }
       };
 
@@ -208,62 +226,55 @@ const useHeroSection = () => {
         }
       };
     },
-    { scope: canvasRef, dependencies: [setCanvasSize, loadImages] }
+    { scope: canvasRef }
   );
 
-  // Lenis integration with better error handling
-  useGSAP(
-    () => {
-      if (lenis) {
-        const handleScroll = () => {
-          try {
-            ScrollTrigger.update();
-          } catch (error) {
-            console.warn("ScrollTrigger update error:", error);
-          }
-        };
+  // Lenis integration - Fixed timing
+  useEffect(() => {
+    if (!lenis || !isSetupComplete.current) return;
 
-        const handleRaf = (time: number) => {
-          try {
-            lenis.raf(time * 1000);
-          } catch (error) {
-            console.warn("Lenis RAF error:", error);
-          }
-        };
+    const handleLenisScroll = () => {
+      ScrollTrigger.update();
+    };
 
-        // Add a small delay to ensure ScrollTrigger is properly initialized
-        const timeoutId = setTimeout(() => {
-          lenis.on("scroll", handleScroll);
-          gsap.ticker.add(handleRaf);
-          gsap.ticker.lagSmoothing(0);
-        }, 100);
+    const handleRaf = (time: number) => {
+      lenis.raf(time * 1000);
+    };
 
-        return () => {
-          clearTimeout(timeoutId);
-          lenis.off("scroll", handleScroll);
-          gsap.ticker.remove(handleRaf);
-        };
-      }
-    },
-    { dependencies: [lenis] }
-  );
+    // Wait for setup to complete
+    const timeoutId = setTimeout(() => {
+      lenis.on("scroll", handleLenisScroll);
+      gsap.ticker.add(handleRaf);
+      gsap.ticker.lagSmoothing(0);
+
+      console.log("Lenis integrated with ScrollTrigger");
+    }, 200);
+
+    return () => {
+      clearTimeout(timeoutId);
+      lenis.off("scroll", handleLenisScroll);
+      gsap.ticker.remove(handleRaf);
+    };
+  }, [lenis, isSetupComplete.current]);
 
   // Cleanup on unmount
-  useGSAP(
-    () => {
-      return () => {
-        if (scrollTriggerRef.current) {
-          scrollTriggerRef.current.kill();
+  useEffect(() => {
+    return () => {
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+        scrollTriggerRef.current = null;
+      }
+
+      // Kill only hero-related triggers
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === "#hero") {
+          trigger.kill();
         }
-        ScrollTrigger.getAll().forEach((trigger) => {
-          if (trigger.trigger && trigger.trigger.id === "hero") {
-            trigger.kill();
-          }
-        });
-      };
-    },
-    { revertOnUpdate: true }
-  );
+      });
+
+      isSetupComplete.current = false;
+    };
+  }, []);
 
   return {
     canvasRef,
