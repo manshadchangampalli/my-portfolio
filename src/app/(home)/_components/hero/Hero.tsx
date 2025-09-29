@@ -9,7 +9,7 @@ const Hero = () => {
     return (
         <div
             id="hero"
-            className="h-screen w-screen bg-black relative">
+            className=" w-screen bg-black relative">
             {/* Loading overlay */}
             {isLoading && (
                 <div className="absolute inset-0 bg-black z-50 flex items-center justify-center">

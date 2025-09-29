@@ -2,6 +2,7 @@
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLenis } from "lenis/react";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { heroAnimations } from "../_config/hero.config";
@@ -17,6 +18,7 @@ const getTotalFrames = () => {
 const currentFrame = (i: number) => `/images/hero/output_${(i + 1).toString().padStart(4, "0")}.jpg`;
 
 const useHeroSection = () => {
+  const lenis = useLenis();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctx = useRef<CanvasRenderingContext2D | null>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
@@ -27,6 +29,7 @@ const useHeroSection = () => {
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const totalFrames = useRef(getTotalFrames());
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isSetupComplete = useRef(false);
 
   const render = useCallback(() => {
     if (!ctx.current || !canvasRef.current) return;
@@ -69,6 +72,7 @@ const useHeroSection = () => {
 
   const handleScroll = useCallback(
     (self: globalThis.ScrollTrigger) => {
+      // Fixed: Remove the 0.9 division - use full progress
       const progress = Math.max(0, Math.min(self.progress, 1));
       const targetFrame = Math.round(progress * (totalFrames.current - 1));
       videoFrameRef.current = totalFrames.current - targetFrame - 1;
@@ -86,27 +90,34 @@ const useHeroSection = () => {
       scrollTriggerRef.current.kill();
       scrollTriggerRef.current = null;
     }
+    const heroElement = document.getElementById("hero");
+    if (!heroElement) {
+      console.warn("Hero element not found");
+      return;
+    }
 
-    // Wait for DOM to be fully ready
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollTriggerRef.current = ScrollTrigger.create({
-          trigger: "#hero",
-          start: "top top",
-          end: "+=700%",
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: handleScroll,
+    scrollTriggerRef.current = ScrollTrigger.create({
+      trigger: "#hero",
+      start: "top top",
+      end: `+=${window.innerHeight * 7}px`, // Changed: Use percentage for more reliable calculations
+      pin: true,
+      scrub: 1.5, // Slightly higher scrub for smoother experience
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onUpdate: handleScroll,
+      onRefresh: (self) => {
+        console.log("ScrollTrigger refreshed", {
+          start: self.start,
+          end: self.end,
         });
-
-        // Refresh after creation
-        setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100);
-      });
+      },
     });
+
+    // Single refresh after creation
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+      isSetupComplete.current = true;
+    }, 100);
   }, [handleScroll]);
 
   const loadImages = useCallback(async () => {
@@ -178,8 +189,8 @@ const useHeroSection = () => {
     () => {
       ctx.current =
         canvasRef.current?.getContext("2d", {
-          alpha: false,
-          desynchronized: true,
+          alpha: false, // Better performance for opaque canvas
+          desynchronized: true, // Better performance
         }) ?? null;
 
       setCanvasSize();
@@ -189,10 +200,13 @@ const useHeroSection = () => {
         setCanvasSize();
         render();
 
+        // Reload images if screen size changed significantly
         const newTotalFrames = getTotalFrames();
         if (newTotalFrames !== totalFrames.current) {
+          isSetupComplete.current = false;
           loadImages();
         } else if (scrollTriggerRef.current) {
+          // Just refresh ScrollTrigger for resize
           ScrollTrigger.refresh();
         }
       };
@@ -209,6 +223,34 @@ const useHeroSection = () => {
     { scope: canvasRef }
   );
 
+  // Lenis integration - Fixed timing
+  useEffect(() => {
+    if (!lenis || !isSetupComplete.current) return;
+
+    const handleLenisScroll = () => {
+      ScrollTrigger.update();
+    };
+
+    const handleRaf = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    // Wait for setup to complete
+    const timeoutId = setTimeout(() => {
+      lenis.on("scroll", handleLenisScroll);
+      gsap.ticker.add(handleRaf);
+      gsap.ticker.lagSmoothing(0);
+
+      console.log("Lenis integrated with ScrollTrigger");
+    }, 200);
+
+    return () => {
+      clearTimeout(timeoutId);
+      lenis.off("scroll", handleLenisScroll);
+      gsap.ticker.remove(handleRaf);
+    };
+  }, [lenis, isSetupComplete.current]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -217,11 +259,14 @@ const useHeroSection = () => {
         scrollTriggerRef.current = null;
       }
 
+      // Kill only hero-related triggers
       ScrollTrigger.getAll().forEach((trigger) => {
         if (trigger.vars.trigger === "#hero") {
           trigger.kill();
         }
       });
+
+      isSetupComplete.current = false;
     };
   }, []);
 
