@@ -9,7 +9,7 @@ const Hero = () => {
     return (
         <div
             id="hero"
-            className=" w-screen bg-black relative">
+            className="w-screen bg-black relative">
             {/* Loading overlay */}
             {isLoading && (
                 <div className="absolute inset-0 bg-black z-50 flex items-center justify-center">
@@ -25,7 +25,7 @@ const Hero = () => {
 
             {/* Error state */}
             {loadingError && !isLoading && (
-                <div className="absolute inset-0 bg-black z-40 flex items-center justify-center">
+                <div className="fixed inset-0 top-0 left-0 bg-black z-40 flex items-center justify-center">
                     <div className="text-white text-center">
                         <p className="text-lg mb-4">Some images failed to load</p>
                         <p className="text-sm text-gray-400">Scroll to continue</p>
