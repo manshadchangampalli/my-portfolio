@@ -20,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={oswald.className}>
-        <ReactLenis root>{children}</ReactLenis>
-      </body>
+      <body className={oswald.className}>{children}</body>
     </html>
   );
 }
