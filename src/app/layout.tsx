@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ReactLenis from "lenis/react";
 import { Oswald } from "next/font/google";
 
 export const metadata: Metadata = {
@@ -20,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={oswald.className}>{children}</body>
+      <body className={oswald.className}>
+        <div id="smooth-wrapper">{children}</div>
+      </body>
     </html>
   );
 }
