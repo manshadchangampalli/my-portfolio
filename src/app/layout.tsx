@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Oswald } from "next/font/google";
+import LenisProvider from "./_components/LenisProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 const oswald = Oswald({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["200", "300", "400", "500", "600", "700"],
 });
 
 export default function RootLayout({
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={oswald.className}>
-        <div id="smooth-wrapper">{children}</div>
+        <LenisProvider>
+          <div>{children}</div>
+        </LenisProvider>
       </body>
     </html>
   );
