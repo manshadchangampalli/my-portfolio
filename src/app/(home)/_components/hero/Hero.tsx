@@ -1,5 +1,7 @@
 import useHero from "../../_hooks/useHero.hook";
 import { Loader2 } from "lucide-react";
+import { LiquidGlass } from "react-ios-liquid-glass";
+import "react-ios-liquid-glass/dist/index.css";
 
 export default function HeroSection() {
   const { canvasRef, isLoading } = useHero();
@@ -21,6 +23,7 @@ export default function HeroSection() {
         <div className="w-[1px] h-[100px] bg-white" />
         <p className="text-white text-[24px] font-[200] text-center">Scroll to discover</p>
       </div>
+      <div className="bg-white hero_profile_bar w-100vw h-100vh"></div>
       <canvas ref={canvasRef} />
     </div>
   );

@@ -2,7 +2,7 @@ import { useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { heroContainerOpacity } from "../_config/hero.config";
+import { heroContainerOpacity, heroProfileBar } from "../_config/hero.config";
 
 const TOTAL_FRAMES = 192;
 const currentFrame = (index: number) => `/images/hero/output_${(index + 1).toString().padStart(4, "0")}.jpg`;
@@ -14,7 +14,8 @@ export const useHero = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Memoize render function
+  gsap.registerPlugin(ScrollTrigger);
+
   const render = useCallback((frameIdx: number) => {
     const canvas = canvasRef.current;
     if (!canvas || !imagesRef.current[frameIdx]) return;
@@ -23,17 +24,17 @@ export const useHero = () => {
     if (!ctx) return;
 
     const img = imagesRef.current[frameIdx];
-    if (!img.complete || !img.naturalWidth) return; // Check if image is actually loaded
+    if (!img.complete || !img.naturalWidth) return;
 
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = window.innerHeight;
+    const canvasWidth = canvas.clientWidth;
+    const canvasHeight = canvas.clientHeight;
+
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    // Aspect-ratio logic
     const aspectRatio = img.naturalWidth / img.naturalHeight;
     const canvasRatio = canvasWidth / canvasHeight;
-    let drawWidth, drawHeight, drawX, drawY;
 
+    let drawWidth, drawHeight, drawX, drawY;
     if (aspectRatio > canvasRatio) {
       drawHeight = canvasHeight;
       drawWidth = canvasHeight * aspectRatio;
@@ -45,6 +46,7 @@ export const useHero = () => {
       drawX = 0;
       drawY = (canvasHeight - drawHeight) / 2;
     }
+
     ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
   }, []);
 
@@ -53,15 +55,14 @@ export const useHero = () => {
     const animationProgress = Math.min(progress / 0.9, 1);
     const targetFrame = Math.round(animationProgress * (TOTAL_FRAMES - 1));
     const reversedFrame = TOTAL_FRAMES - targetFrame - 1;
-    console.log(reversedFrame);
     frameRef.current = reversedFrame;
     render(reversedFrame);
 
-    heroContainerOpacity(animationProgress,gsap);
+    heroContainerOpacity(animationProgress, gsap); 
+    // heroProfileBar(animationProgress, gsap);
   };
 
   useGSAP(() => {
-    gsap.registerPlugin(ScrollTrigger);
     // Setup Canvas Sizing
     const setCanvasSize = () => {
       const canvas = canvasRef.current;
@@ -70,10 +71,16 @@ export const useHero = () => {
       if (!ctx) return;
 
       const pixelRatio = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * pixelRatio;
-      canvas.height = window.innerHeight * pixelRatio;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      canvas.width = width * pixelRatio;
+      canvas.height = height * pixelRatio;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      // Reset transform before scaling (important for resize)
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(pixelRatio, pixelRatio);
     };
     setCanvasSize();
