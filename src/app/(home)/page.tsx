@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-const Hero = dynamic(() => import("./_components/hero/Hero"), { ssr: false });
+const Hero = dynamic(() => import("./_components/hero/Hero"),);
 
 export default function Home() {
   return (
