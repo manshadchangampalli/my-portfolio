@@ -125,6 +125,8 @@ export const useHero = () => {
         onUpdate: scrollUpdate,
       });
 
+      ScrollTrigger.normalizeScroll(true);
+
       // Move hero_profile_bar after hero section completes
       // Use gsap.to instead of ScrollTrigger.create with onUpdate for better performance
       gsap.to(".hero_profile_bar", {
