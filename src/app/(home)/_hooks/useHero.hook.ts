@@ -66,7 +66,6 @@ export const useHero = () => {
 
   useGSAP(() => {
     const windowHeight = window?.visualViewport?.height || window?.innerHeight;
-
     // Setup Canvas Sizing
     const setCanvasSize = () => {
       const canvas = canvasRef.current;
@@ -128,18 +127,17 @@ export const useHero = () => {
 
       ScrollTrigger.normalizeScroll(true);
 
-      gsap?.to(".hero_profile_bar", {
-        y: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero__section",
-          start: `bottom-=${window.innerHeight}px top`,
-          end: `bottom top`,
-          scrub: 1,
-          // Add these for better mobile performance
-          invalidateOnRefresh: true,
-        },
-      });
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: ".hero__section",
+            start: `bottom-=${window.innerHeight}px top`,
+            end: `bottom top`,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        })
+        .to(".hero_profile_bar", { y: windowHeight * 0.75, ease: "none", duration: 10 });
     }
 
     // Resize/Redraw Handler

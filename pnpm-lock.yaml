@@ -30,8 +30,8 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       react-ios-liquid-glass:
-        specifier: ^0.1.5
-        version: 0.1.5
+        specifier: 1.0.1
+        version: 1.0.1
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3
@@ -2349,8 +2349,8 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
-  react-ios-liquid-glass@0.1.5:
-    resolution: {integrity: sha512-YMoiQ5WaX1s/KB1CipY+PiUpx4rxP842BPz7kwLRPXcz2Ocd7jK+lkvBQsJZEBgyTo/nbs9l+7ts7kZSRhRPqw==}
+  react-ios-liquid-glass@1.0.1:
+    resolution: {integrity: sha512-ONOi0U8twx6Uc+3kMUp4oFdnUD2Kla4jA+BrGVej4xL0Rf1SH4Vbt/Du1F68QlyHcnEsvzTiPpRHlD4xfyuhiQ==}
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -5234,7 +5234,7 @@ snapshots:
       react: 19.1.0
       scheduler: 0.26.0
 
-  react-ios-liquid-glass@0.1.5: {}
+  react-ios-liquid-glass@1.0.1: {}
 
   react-is@16.13.1: {}
 
