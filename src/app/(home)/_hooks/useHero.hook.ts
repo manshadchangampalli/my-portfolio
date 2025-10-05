@@ -1,10 +1,12 @@
 import { useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
 import { heroContainerOpacity, heroProfileBar } from "../_config/hero.config";
 
 const TOTAL_FRAMES = 192;
+const SCROLL_TRIGGER_HEIGHT = 7;
 const currentFrame = (index: number) => `/images/hero/output_${(index + 1).toString().padStart(4, "0")}.jpg`;
 
 export const useHero = () => {
@@ -14,7 +16,7 @@ export const useHero = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
   const render = useCallback((frameIdx: number) => {
     const canvas = canvasRef.current;
@@ -58,8 +60,8 @@ export const useHero = () => {
     frameRef.current = reversedFrame;
     render(reversedFrame);
 
-    heroContainerOpacity(animationProgress, gsap); 
-    // heroProfileBar(animationProgress, gsap);
+    heroContainerOpacity(animationProgress, gsap);
+    heroProfileBar(animationProgress, gsap);
   };
 
   useGSAP(() => {
@@ -111,13 +113,30 @@ export const useHero = () => {
     // ScrollTrigger Sequence Animation
     function setupScrollTrigger() {
       ScrollTrigger.create({
-        trigger: ".container",
+        trigger: ".hero__section",
         start: "top top",
-        end: "+=7000px",
+        end: `+=${window.innerHeight * SCROLL_TRIGGER_HEIGHT}px`,
         pin: true,
         pinSpacing: true,
         scrub: 1,
         onUpdate: scrollUpdate,
+      });
+
+      ScrollTrigger.create({
+        trigger: ".hero__section",
+        start: `top+=${0}px top`,
+        end: `+=${window.innerHeight}px`,
+        scrub: 1,
+        // pin: true,
+        // pinSpacing: true,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          console.log({ progress });
+          const yPosition = progress * window.innerHeight;
+          gsap.set(".hero_profile_bar", {
+            y: yPosition,
+          });
+        },
       });
     }
 
