@@ -8,11 +8,11 @@ export const heroContainerOpacity = (animationProgress: number, gsap: typeof glo
 export const heroProfileBar = (animationProgress: number, gsap: typeof globalThis.gsap) => {
   if (animationProgress >= 0.9) {
     const normalizedProgress = (animationProgress - 0.9) / (1 - 0.9);
-    const translateZ = 120 - normalizedProgress * 120;
+    const translateZ = 800 - normalizedProgress * 800;
 
     gsap.set(".hero_profile_bar", {
       opacity: 1,
-      transform: `perspective(500px) translateZ(${translateZ}px)`,
+      transform: `perspective(1000px) translateZ(${translateZ}px)`,
       force3D: true, // Force GPU acceleration
     });
   } else {

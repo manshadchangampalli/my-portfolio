@@ -15,6 +15,7 @@ export const useHero = () => {
   const frameRef = useRef(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const windowHeight = window?.visualViewport?.height || window?.innerHeight;
 
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -74,7 +75,7 @@ export const useHero = () => {
 
       const pixelRatio = window.devicePixelRatio || 1;
       const width = window.innerWidth;
-      const height = window.innerHeight;
+      const height = windowHeight;
 
       canvas.width = width * pixelRatio;
       canvas.height = height * pixelRatio;
@@ -112,7 +113,7 @@ export const useHero = () => {
 
     // ScrollTrigger Sequence Animation
     function setupScrollTrigger() {
-      const scrollDistance = window.innerHeight * SCROLL_TRIGGER_HEIGHT;
+      const scrollDistance = windowHeight * SCROLL_TRIGGER_HEIGHT;
       // Main hero section pin and animation
       ScrollTrigger.create({
         trigger: ".hero__section",
@@ -126,10 +127,8 @@ export const useHero = () => {
 
       ScrollTrigger.normalizeScroll(true);
 
-      // Move hero_profile_bar after hero section completes
-      // Stop when it reaches the center of the second section
-      gsap.to(".hero_profile_bar", {
-        y: window.innerHeight,
+      gsap?.to(".hero_profile_bar", {
+        y: 0,
         ease: "none",
         scrollTrigger: {
           trigger: ".hero__section",

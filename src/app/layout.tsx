@@ -21,9 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={oswald.className}>
-        <LenisProvider>
-          <div>{children}</div>
-        </LenisProvider>
+        <div>{children}</div>
       </body>
     </html>
   );
