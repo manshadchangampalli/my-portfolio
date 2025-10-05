@@ -11,7 +11,7 @@ export default function Home() {
     <main className="bg-white w-full">
       <Hero />
       <HeroProfile />
-      <div className="min-h-screen bg-gray-100 z-0 flex items-center justify-center relative"></div>
+      <div className="min-h-screen bg-black z-0 flex items-center justify-center relative"></div>
     </main>
   );
 }
