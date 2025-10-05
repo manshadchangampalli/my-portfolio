@@ -113,7 +113,6 @@ export const useHero = () => {
     // ScrollTrigger Sequence Animation
     function setupScrollTrigger() {
       const scrollDistance = window.innerHeight * SCROLL_TRIGGER_HEIGHT;
-
       // Main hero section pin and animation
       ScrollTrigger.create({
         trigger: ".hero__section",
@@ -128,7 +127,7 @@ export const useHero = () => {
       ScrollTrigger.normalizeScroll(true);
 
       // Move hero_profile_bar after hero section completes
-      // Use gsap.to instead of ScrollTrigger.create with onUpdate for better performance
+      // Stop when it reaches the center of the second section
       gsap.to(".hero_profile_bar", {
         y: window.innerHeight,
         ease: "none",
