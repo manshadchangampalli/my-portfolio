@@ -106,36 +106,37 @@ export const useHero = () => {
       };
 
       img.onload = handleLoad;
-      img.onerror = handleLoad; // Still count failed images to prevent hanging
+      img.onerror = handleLoad;
       imagesRef.current[i] = img;
     }
 
     // ScrollTrigger Sequence Animation
     function setupScrollTrigger() {
+      const scrollDistance = window.innerHeight * SCROLL_TRIGGER_HEIGHT;
+
+      // Main hero section pin and animation
       ScrollTrigger.create({
         trigger: ".hero__section",
         start: "top top",
-        end: `+=${window.innerHeight * SCROLL_TRIGGER_HEIGHT}px`,
+        end: `+=${scrollDistance}px`,
         pin: true,
         pinSpacing: true,
         scrub: 1,
         onUpdate: scrollUpdate,
       });
 
-      ScrollTrigger.create({
-        trigger: ".hero__section",
-        start: `top+=${0}px top`,
-        end: `+=${window.innerHeight}px`,
-        scrub: 1,
-        // pin: true,
-        // pinSpacing: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          console.log({ progress });
-          const yPosition = progress * window.innerHeight;
-          gsap.set(".hero_profile_bar", {
-            y: yPosition,
-          });
+      // Move hero_profile_bar after hero section completes
+      // Use gsap.to instead of ScrollTrigger.create with onUpdate for better performance
+      gsap.to(".hero_profile_bar", {
+        y: window.innerHeight,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".hero__section",
+          start: `bottom-=${window.innerHeight}px top`,
+          end: `bottom top`,
+          scrub: 1,
+          // Add these for better mobile performance
+          invalidateOnRefresh: true,
         },
       });
     }
@@ -144,6 +145,7 @@ export const useHero = () => {
     function handleResize() {
       setCanvasSize();
       render(frameRef.current);
+      ScrollTrigger.refresh();
     }
     window.addEventListener("resize", handleResize, { passive: true });
 

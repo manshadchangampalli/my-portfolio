@@ -17,3 +17,24 @@ body {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
+
+.hero_profile_bar {
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.hero__content__container {
+  will-change: opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+canvas {
+  will-change: contents;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
