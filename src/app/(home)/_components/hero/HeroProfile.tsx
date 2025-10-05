@@ -1,3 +1,5 @@
+"use client";
+
 import { LiquidGlass } from "react-ios-liquid-glass";
 import "react-ios-liquid-glass/dist/index.css";
 

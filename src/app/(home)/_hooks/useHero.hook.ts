@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,12 +12,13 @@ const SCROLL_TRIGGER_HEIGHT = 7;
 const currentFrame = (index: number) => `/images/hero/output_${(index + 1).toString().padStart(4, "0")}.jpg`;
 
 export const useHero = () => {
+  const [windowHeight, setWindowHeight] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const windowHeight = window?.visualViewport?.height || window?.innerHeight;
+  //   const windowHeight = window?.visualViewport?.height || window?.innerHeight;
 
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -66,6 +69,9 @@ export const useHero = () => {
   };
 
   useGSAP(() => {
+    const windowHeight = window?.visualViewport?.height || window?.innerHeight;
+    setWindowHeight(windowHeight);
+
     // Setup Canvas Sizing
     const setCanvasSize = () => {
       const canvas = canvasRef.current;
