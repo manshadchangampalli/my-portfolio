@@ -137,7 +137,8 @@ export const useHero = () => {
             invalidateOnRefresh: true,
           },
         })
-        .to(".hero_profile_bar", { y: windowHeight * 0.75, ease: "none", duration: 10 });
+        .to(".hero_profile_bar", { y: 0, ease: "none", duration: 10 })
+        .to(".hero_profile_bar_liquid", { backgroundColor: "white", color: "black", ease: "none", duration: 10 });
     }
 
     // Resize/Redraw Handler

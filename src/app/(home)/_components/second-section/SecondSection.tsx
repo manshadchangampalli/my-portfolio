@@ -2,60 +2,88 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useRef } from "react";
 
 const SecondSection = () => {
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-    const textRef = useRef<HTMLHeadingElement>(null);
+    const sectionRef = useRef<HTMLDivElement | null>(null);
+    const panelsRef = useRef<HTMLDivElement[]>([]);
+
+    gsap.registerPlugin(ScrollTrigger);
 
     useGSAP(() => {
-        const finalText = "Simplifying complexity through thoughtful engineering.";
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        const element = textRef.current;
+        const section = sectionRef.current;
+        const panels = panelsRef.current;
 
-        if (!element) return;
+        if (!section || panels.length === 0) return;
 
-        let iteration = 0;
-        const speed = 50; // milliseconds between updates
-        const revealSpeed = 5; // characters revealed per iteration
+        // Reset all panels
+        gsap.set(panels, { opacity: 0, xPercent: 100 });
+        gsap.set(panels[0], { opacity: 1, xPercent: 0 });
 
-        const interval = setInterval(() => {
-            if (!element) return;
+        // ScrollTrigger configuration
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: section,
+                start: "top top",             // start when section hits top of viewport
+                end: () => "+=" + window.innerHeight * (panels.length - 1),
+                scrub: true,
+                pin: true,
+                anticipatePin: 1,
+                markers: false,               // set true for debugging positions
+            },
+        });
 
-            element.innerText = finalText
-                .split("")
-                .map((char, index) => {
-                    if (index < iteration) {
-                        return finalText[index];
-                    }
-                    if (char === " ") {
-                        return " ";
-                    }
-                    return chars[Math.floor(Math.random() * chars.length)];
-                })
-                .join("");
-
-            if (iteration >= finalText.length) {
-                clearInterval(interval);
+        // Animate between panels
+        panels.forEach((panel, i) => {
+            const next = panels[i + 1];
+            if (next) {
+                tl.to(panel, { opacity: 0, xPercent: -100, duration: 1 }, "+=0.5")
+                    .to(next, { opacity: 1, xPercent: 0, duration: 1 }, "<");
             }
+        });
 
-            iteration += 1 / revealSpeed;
-        }, speed);
-
-        return () => clearInterval(interval);
+        return () => {
+            ScrollTrigger.getAll().forEach((st) => st.kill());
+            tl.kill();
+        };
     }, []);
 
     return (
-        <div className="min-h-screen w-screen bg-gradient-to-b from-[#b8a8a6] to-[#000000] z-0 flex items-center justify-center relative">
-            <div className="w-full p-4">
-                <h1
-                    ref={textRef}
-                    className="text-[100px] second_section_text text-white"
-                >
-                    Simplifying complexity through thoughtful engineering.
-                </h1>
+        <div className="bg-[#585955]">
+            <div
+                ref={sectionRef}
+                className="min-h-screen w-screen bg-[#585955] flex items-center justify-center relative overflow-hidden"
+            >
+                {[
+                    {
+                        title: "Section 1",
+                        text: "Welcome to the first section. Scroll down to explore more.",
+                    },
+                    {
+                        title: "Section 2",
+                        text: "Discover amazing features as you continue scrolling through the experience.",
+                    },
+                    {
+                        title: "Section 3",
+                        text: "Every scroll reveals something new and exciting. Keep going!",
+                    },
+                    {
+                        title: "Section 4",
+                        text: "You've reached the final section. Thanks for scrolling!",
+                    },
+                ].map((panel, i) => (
+                    <div
+                        key={i}
+                        ref={(el) => {
+                            if (el) panelsRef.current[i] = el;
+                        }}
+                        className="absolute inset-0 flex flex-col items-center justify-center text-white p-8"
+                    >
+                        <h2 className="text-6xl font-bold mb-4">{panel.title}</h2>
+                        <p className="text-2xl text-center max-w-2xl">{panel.text}</p>
+                    </div>
+                ))}
             </div>
         </div>
     );
