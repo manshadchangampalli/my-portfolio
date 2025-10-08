@@ -34,14 +34,7 @@ const SecondSection = () => {
             },
         });
 
-        // Animate between panels
-        panels.forEach((panel, i) => {
-            const next = panels[i + 1];
-            if (next) {
-                tl.to(panel, { opacity: 0, xPercent: -100, duration: 1 }, "+=0.5")
-                    .to(next, { opacity: 1, xPercent: 0, duration: 1 }, "<");
-            }
-        });
+
 
         return () => {
             ScrollTrigger.getAll().forEach((st) => st.kill());
@@ -50,40 +43,12 @@ const SecondSection = () => {
     }, []);
 
     return (
-        <div className="bg-[#585955]">
+        <div className="bg-[#585955] section_two">
             <div
                 ref={sectionRef}
-                className="min-h-screen w-screen bg-[#585955] flex items-center justify-center relative overflow-hidden"
+                className="min-h-screen w-screen flex items-center justify-center relative overflow-hidden"
             >
-                {[
-                    {
-                        title: "Section 1",
-                        text: "Welcome to the first section. Scroll down to explore more.",
-                    },
-                    {
-                        title: "Section 2",
-                        text: "Discover amazing features as you continue scrolling through the experience.",
-                    },
-                    {
-                        title: "Section 3",
-                        text: "Every scroll reveals something new and exciting. Keep going!",
-                    },
-                    {
-                        title: "Section 4",
-                        text: "You've reached the final section. Thanks for scrolling!",
-                    },
-                ].map((panel, i) => (
-                    <div
-                        key={i}
-                        ref={(el) => {
-                            if (el) panelsRef.current[i] = el;
-                        }}
-                        className="absolute inset-0 flex flex-col items-center justify-center text-white p-8"
-                    >
-                        <h2 className="text-6xl font-bold mb-4">{panel.title}</h2>
-                        <p className="text-2xl text-center max-w-2xl">{panel.text}</p>
-                    </div>
-                ))}
+
             </div>
         </div>
     );

@@ -138,7 +138,19 @@ export const useHero = () => {
           },
         })
         .to(".hero_profile_bar", { y: 0, ease: "none", duration: 10 })
-        .to(".hero_profile_bar_liquid", { backgroundColor: "white", color: "black", ease: "none", duration: 10 });
+        .to(".hero_profile_bar_liquid", { backgroundColor: "white", filter: "none", color: "black", ease: "none", duration: 10 });
+
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: ".hero__section",
+            start: `center top`,
+            end: `bottom-=${200}px top`,
+            scrub: 1,
+          },
+        })
+        .to(".section_two", { backgroundColor: "white", ease: "none", duration: 15 })
+        .to(".hero_profile_bar", { opacity: 0, ease: "none", duration: 5 });
     }
 
     // Resize/Redraw Handler
