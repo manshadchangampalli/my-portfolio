@@ -147,6 +147,8 @@ export const useHero = () => {
             start: `center top`,
             end: `bottom-=${200}px top`,
             scrub: 1,
+            refreshPriority: -1,
+            invalidateOnRefresh: true,
           },
         })
         .to(".section_two", { backgroundColor: "white", ease: "none", duration: 15 })
