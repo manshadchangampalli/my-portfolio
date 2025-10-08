@@ -60,8 +60,11 @@ export const useHero = () => {
     frameRef.current = reversedFrame;
     render(reversedFrame);
 
-    heroContainerOpacity(animationProgress, gsap);
-    heroProfileBar(animationProgress, gsap);
+    // Use requestAnimationFrame for better iOS performance
+    requestAnimationFrame(() => {
+      heroContainerOpacity(animationProgress, gsap);
+      heroProfileBar(animationProgress, gsap);
+    });
   };
 
   useGSAP(() => {
@@ -125,6 +128,9 @@ export const useHero = () => {
         invalidateOnRefresh: true,
         refreshPriority: -1,
         onUpdate: scrollUpdate,
+        // iOS-specific optimizations
+        anticipatePin: 1,
+        fastScrollEnd: true,
       });
 
       ScrollTrigger.normalizeScroll(true);
@@ -141,7 +147,15 @@ export const useHero = () => {
           },
         })
         .to(".hero_profile_bar", { y: 0, ease: "none", duration: 10 })
-        .to(".hero_profile_bar_liquid", { backgroundColor: "white", filter: "none", color: "black", ease: "none", duration: 10 });
+        .to(".hero_profile_bar_liquid", {
+          backgroundColor: "white",
+          filter: "none",
+          color: "black",
+          ease: "none",
+          duration: 10,
+          force3D: true,
+          willChange: "background-color, color, filter",
+        });
 
       gsap
         .timeline({
@@ -154,8 +168,20 @@ export const useHero = () => {
             invalidateOnRefresh: true,
           },
         })
-        .to(".section_two", { backgroundColor: "white", ease: "none", duration: 15 })
-        .to(".hero_profile_bar", { opacity: 0, ease: "none", duration: 5 });
+        .to(".section_two", {
+          backgroundColor: "white",
+          ease: "none",
+          duration: 15,
+          force3D: true,
+          willChange: "background-color",
+        })
+        .to(".hero_profile_bar", {
+          opacity: 0,
+          ease: "none",
+          duration: 5,
+          force3D: true,
+          willChange: "opacity",
+        });
     }
 
     // Resize/Redraw Handler
