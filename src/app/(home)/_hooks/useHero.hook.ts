@@ -122,6 +122,8 @@ export const useHero = () => {
         pin: true,
         pinSpacing: true,
         scrub: 1,
+        invalidateOnRefresh: true,
+        refreshPriority: -1,
         onUpdate: scrollUpdate,
       });
 
@@ -135,6 +137,7 @@ export const useHero = () => {
             end: `bottom top`,
             scrub: 1,
             invalidateOnRefresh: true,
+            refreshPriority: -1,
           },
         })
         .to(".hero_profile_bar", { y: 0, ease: "none", duration: 10 })
