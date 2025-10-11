@@ -68,7 +68,7 @@ export const useHero = () => {
   };
 
   useGSAP(() => {
-    const windowHeight = window?.visualViewport?.height || window?.innerHeight;
+    const windowHeight = window?.innerHeight;
     // Setup Canvas Sizing
     const setCanvasSize = () => {
       const canvas = canvasRef.current;
