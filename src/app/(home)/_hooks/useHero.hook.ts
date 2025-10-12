@@ -155,30 +155,11 @@ export const useHero = () => {
           duration: 10,
           force3D: true,
           willChange: "background-color, color, filter",
-        });
-
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: ".hero__section",
-            start: `center top`,
-            end: `bottom-=${200}px top`,
-            scrub: 1,
-            refreshPriority: -1,
-            invalidateOnRefresh: true,
-          },
-        })
-        .to(".section_two", {
-          backgroundColor: "white",
-          ease: "none",
-          duration: 15,
-          force3D: true,
-          willChange: "background-color",
         })
         .to(".hero_profile_bar", {
           opacity: 0,
           ease: "none",
-          duration: 5,
+          duration: 10,
           force3D: true,
           willChange: "opacity",
         });
