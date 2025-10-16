@@ -1,8 +1,11 @@
-import { cn } from "@/utils/classNames";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useRef } from "react";
+import { evolutionData } from "../../_config/evolution.config";
+import EvolutionTitle from "./EvolutionTitle";
+import EvolutionCard from "./EvolutionCard";
+import SkillsTitle from "./SkillsTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -58,51 +61,13 @@ const EvolutionCards = () => {
         <div
             ref={container}
             style={{ WebkitOverflowScrolling: "touch" }}>
-            <div className="h-[100svh] sticky-card bg-black flex items-center justify-center">
-                <h1 className="text-white text-[2rem] sm:text-[3rem] md:text-[5rem] lg:text-[7rem]">My Evolution</h1>
-            </div>
+            <EvolutionTitle />
             {evolutionData.map((item) => (
-                <div
-                    key={item.title}
-                    className={cn(`sticky-card flex w-full flex-col items-center justify-center`, `transform-gpu`, item.backgroundColor)}
-                    style={{
-                        height: "calc(var(--vh, 1vh) * 100)",
-                        minHeight: "-webkit-fill-available",
-                    }}>
-                    <h2 className="text-white text-4xl font-bold mb-4">{item.title}</h2>
-                    <p className="text-white text-lg text-center px-8">{item.description}</p>
-                </div>
+                <EvolutionCard key={item.title} item={item} />
             ))}
-            <div
-                key={`skills`}
-                className={cn(`sticky-card flex w-full flex-col items-center justify-center`, `transform-gpu`, "bg-white")}
-                style={{
-                    height: "calc(var(--vh, 1vh) * 100)",
-                    minHeight: "-webkit-fill-available",
-                }}>
-                <h2 className="text-black text-4xl font-bold mb-4">My Skills</h2>
-                <p className="text-black text-lg text-center px-8">I started learning web development in 2020. I learned HTML, CSS, and JavaScript.</p>
-            </div>
+            <SkillsTitle />
         </div>
     );
 };
 
 export default EvolutionCards;
-
-const evolutionData = [
-    {
-        title: "Texki",
-        description: "I started learning web development in 2020. I learned HTML, CSS, and JavaScript.",
-        backgroundColor: "bg-[#ff0000]",
-    },
-    {
-        title: "Configancelabs",
-        description: "I started learning web development in 2020. I learned HTML, CSS, and JavaScript.",
-        backgroundColor: "bg-[#0000ff]",
-    },
-    {
-        title: "ISPG",
-        description: "I started learning web development in 2020. I learned HTML, CSS, and JavaScript.",
-        backgroundColor: "bg-[#00ff00]",
-    },
-];

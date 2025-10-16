@@ -25,6 +25,23 @@ body {
   --font-mono: var(--font-geist-mono);
 }
 
+/* Font family classes */
+.font-poller-one {
+  font-family: var(--font-poller-one);
+}
+
+.font-great-vibes {
+  font-family: var(--font-great-vibes);
+}
+
+/* Text outline styles */
+.text-outline-white {
+  -webkit-text-stroke: 2px white;
+  text-stroke: 2px white;
+  color: transparent;
+}
+
+
 .hero_profile_bar {
   will-change: transform;
   -webkit-transform: translateZ(0);
