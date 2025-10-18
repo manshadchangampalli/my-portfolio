@@ -18,10 +18,10 @@ const EvolutionCard: React.FC<EvolutionCardProps> = ({ item }) => {
                 backgroundColor: item.backgroundColor,
             }}>
             <div className="grid leading-[1] -mb-2 max-h-fit">
-                <p className="font-great-vibes text-white leading-[1] -ml-4 text-sm sm:text-lg md:text-[34px] font-[300] px-4">{item.monthYear}</p>
-                <h2 className="text-white font-poller-one text-[120px] font-bold mb-2">{item.title}</h2>
+                <p className="font-great-vibes text-white leading-[1] -ml-4 text-xs sm:text-sm md:text-lg lg:text-xl xl:text-[34px] font-[300] px-2 sm:px-4">{item.monthYear}</p>
+                <h2 className="text-white font-poller-one text-[2rem] sm:text-[3rem] md:text-[4rem] lg:text-[5rem] xl:text-[6rem] 2xl:text-[120px] font-bold mb-2">{item.title}</h2>
             </div>
-            <p className="text-white absolute top-10 right-10 opacity-60 text-2xl font-semibold">{item.designation}</p>
+            <p className="text-white absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8 lg:top-10 lg:right-10 opacity-60 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-semibold">{item.designation}</p>
         </div>
     );
 };

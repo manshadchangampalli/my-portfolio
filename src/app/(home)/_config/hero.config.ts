@@ -6,7 +6,7 @@ export const heroContainerOpacity = (animationProgress: number, gsap: typeof glo
 };
 
 export const heroProfileBar = (animationProgress: number, gsap: typeof globalThis.gsap) => {
-  if (animationProgress >= 0.8) {
+  if (animationProgress >= 0.8 && animationProgress <= 1) {
     const normalizedProgress = (animationProgress - 0.8) / (1 - 0.8);
     const translateZ = 800 - normalizedProgress * 800;
 
