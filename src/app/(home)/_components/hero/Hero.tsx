@@ -7,11 +7,10 @@ import HeroContent from "./HeroContent";
 import HeroCanvas from "./HeroCanvas";
 
 export default function HeroSection() {
-  const { canvasRef, isLoading } = useHero();
-
+  const { canvasRef, isLoading, loadingProgress } = useHero();
   return (
     <div className="hero__section min-h-screen relative">
-      <LoadingOverlay isLoading={isLoading} />
+      <LoadingOverlay isLoading={isLoading} loadingProgress={loadingProgress} />
       <HeroContent />
       <HeroCanvas canvasRef={canvasRef} />
     </div>

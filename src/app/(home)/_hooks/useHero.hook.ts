@@ -9,14 +9,15 @@ const TOTAL_FRAMES = 192;
 const SCROLL_TRIGGER_HEIGHT = 7;
 const currentFrame = (index: number) => `/images/hero/output_${(index + 1).toString().padStart(4, "0")}.jpg`;
 
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
 export const useHero = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   const render = useCallback((frameIdx: number) => {
     const canvas = canvasRef.current;
@@ -68,7 +69,9 @@ export const useHero = () => {
   };
 
   useGSAP(() => {
-    const windowHeight = window?.innerHeight;
+    // Only run on client side to prevent hydration mismatches
+    if (typeof window === "undefined") return;
+
     // Setup Canvas Sizing
     const setCanvasSize = () => {
       const canvas = canvasRef.current;
@@ -78,7 +81,8 @@ export const useHero = () => {
 
       const pixelRatio = window.devicePixelRatio || 1;
       const width = window.innerWidth;
-      const height = windowHeight;
+      // Use dynamic viewport height to handle Safari's changing viewport
+      const height = window.visualViewport?.height || window.innerHeight;
 
       canvas.width = width * pixelRatio;
       canvas.height = height * pixelRatio;
@@ -101,6 +105,9 @@ export const useHero = () => {
 
       const handleLoad = () => {
         loadedCount++;
+        const progress = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+        setLoadingProgress(progress);
+
         if (loadedCount === TOTAL_FRAMES) {
           setIsLoading(false);
           setImagesLoaded(true);
@@ -116,7 +123,8 @@ export const useHero = () => {
 
     // ScrollTrigger Sequence Animation
     function setupScrollTrigger() {
-      const scrollDistance = windowHeight * SCROLL_TRIGGER_HEIGHT;
+      const currentHeight = window.visualViewport?.height || window.innerHeight;
+      const scrollDistance = currentHeight * SCROLL_TRIGGER_HEIGHT;
       // Main hero section pin and animation
       ScrollTrigger.create({
         trigger: ".hero__section",
@@ -171,15 +179,31 @@ export const useHero = () => {
       render(frameRef.current);
       ScrollTrigger.refresh();
     }
+
+    // Handle Safari's dynamic viewport changes
+    function handleViewportChange() {
+      setCanvasSize();
+      render(frameRef.current);
+      ScrollTrigger.refresh();
+    }
+
     window.addEventListener("resize", handleResize, { passive: true });
+
+    // Listen for visual viewport changes (Safari URL bar hide/show)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleViewportChange, { passive: true });
+    }
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleViewportChange);
+      }
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
 
-  return { canvasRef, imagesLoaded, isLoading };
+  return { canvasRef, imagesLoaded, isLoading, loadingProgress };
 };
 
 export default useHero;

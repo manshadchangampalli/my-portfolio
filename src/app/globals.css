@@ -41,6 +41,13 @@ body {
   color: transparent;
 }
 
+@media (max-width: 768px) {
+  .text-outline-white {
+    -webkit-text-stroke: 1px white;
+    text-stroke: 1px white;
+  }
+}
+
 
 .hero_profile_bar {
   will-change: transform;
@@ -77,5 +84,12 @@ canvas {
   .hero__section {
     position: relative;
     overflow: hidden;
+  }
+
+  /* Text outline effect */
+  .text-outline-white {
+    -webkit-text-stroke: 2px white;
+    text-stroke: 2px white;
+    color: transparent;
   }
 }
