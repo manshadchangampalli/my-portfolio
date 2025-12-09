@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import Hero from "./_components/hero/Hero";
 import { Canvas } from "@react-three/fiber";
 import Gallery from "./_components/gallery/gallery";
+import Profile from "./_components/profile/Profile";
+import Experience from "./_components/experience/Experience";
 
 export default function Home() {
   const { isMobile, isClient } = useDevice();
@@ -34,8 +36,11 @@ export default function Home() {
           <Hero />
         </div>
       </main>
-      <div className="w-screen h-[30vh] bg-red-500">
-        <h1 className="text-white text-4xl font-bold">Skills</h1>
+      <Profile />
+      <div className="w-full h-screen bg-black">
+        <Canvas>
+          <Experience />
+        </Canvas>
       </div>
       <div className="w-full bg-black">
         <div className="w-screen h-screen">
