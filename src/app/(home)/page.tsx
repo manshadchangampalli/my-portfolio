@@ -26,6 +26,10 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("isFixed changed:", isFixed);
+  }, [isFixed]);
+
   return (
     <>
       <ReactLenis
@@ -38,8 +42,11 @@ export default function Home() {
         </div>
       </main>
       <Profile />
-      <div className={cn("w-full h-screen bg-black", isFixed ? "fixed top-0 left-0 w-full h-full" : "")}>
-        <Canvas>
+      <div className={cn("w-full bg-black", isFixed ? "fixed inset-0 w-screen h-screen z-50" : "h-screen")}>
+        <Canvas
+          style={{ width: "100%", height: "100%", backgroundColor: "#000000" }}
+          gl={{ alpha: false }}
+          camera={{ position: [0, 0, 5], fov: 50 }}>
           <Experience setIsFixed={setIsFixed} />
         </Canvas>
       </div>

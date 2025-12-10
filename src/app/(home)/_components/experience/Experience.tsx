@@ -1,5 +1,6 @@
-import { Html, MeshPortalMaterial, OrbitControls, RoundedBox, RoundedBoxGeometry } from "@react-three/drei";
-import React, { useState } from "react";
+import { Html, MeshPortalMaterial, OrbitControls, RoundedBox } from "@react-three/drei";
+import React, { useState, useEffect } from "react";
+import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 interface ExperienceProps {
@@ -7,7 +8,14 @@ interface ExperienceProps {
 }
 
 const Experience = ({ setIsFixed }: ExperienceProps) => {
+    const { scene, gl } = useThree();
     const [blend, setBlend] = useState(0);
+
+    useEffect(() => {
+        scene.background = new THREE.Color('#000000');
+        gl.setClearColor('#000000', 1);
+    }, [scene, gl]);
+
     const handleBlend = () => {
         setBlend(blend === 0 ? 1 : 0);
         setIsFixed(blend === 0 ? true : false);
@@ -39,7 +47,7 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
                     blend={blend}
                     resolution={0}
                     blur={0}>
-                    <color attach="background" args={['#ffffff']} />
+                    <color attach="background" args={['#000000']} />
                 </MeshPortalMaterial>
             </RoundedBox>
             <OrbitControls
