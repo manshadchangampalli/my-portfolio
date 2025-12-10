@@ -4,7 +4,7 @@ import "react-ios-liquid-glass/dist/index.css";
 import useDevice from "@/hooks/useDevice";
 import { cn } from "@/utils/classNames";
 import ReactLenis from "lenis/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Hero from "./_components/hero/Hero";
 import { Canvas } from "@react-three/fiber";
 import Gallery from "./_components/gallery/gallery";
@@ -13,6 +13,7 @@ import Experience from "./_components/experience/Experience";
 
 export default function Home() {
   const { isMobile, isClient } = useDevice();
+  const [isFixed, setIsFixed] = useState(false);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -37,9 +38,9 @@ export default function Home() {
         </div>
       </main>
       <Profile />
-      <div className="w-full h-screen bg-black">
+      <div className={cn("w-full h-screen bg-black", isFixed ? "fixed top-0 left-0 w-full h-full" : "")}>
         <Canvas>
-          <Experience />
+          <Experience setIsFixed={setIsFixed} />
         </Canvas>
       </div>
       <div className="w-full bg-black">
