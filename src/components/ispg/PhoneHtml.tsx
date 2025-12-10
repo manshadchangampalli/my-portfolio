@@ -1,5 +1,4 @@
 import { Html } from "@react-three/drei";
-import { angle } from "../../../utils";
 import { Header } from "./components/Header";
 import { Dock } from "./components/Dock";
 import { Notes } from "./components/Notes";
@@ -9,6 +8,7 @@ import { AppType } from "./types";
 import { appConfigs } from "./appConfigs";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
+import { angle } from "@/utils/angle";
 
 const getAppName = (appType: AppType): string => {
     if (appType === AppType.NOTES) return "Notes";
