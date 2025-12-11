@@ -1,21 +1,27 @@
-import { CameraControls, Html, MeshPortalMaterial, RoundedBox } from "@react-three/drei";
+import { CameraControls } from "@react-three/drei";
 import React, { useState, useEffect, useRef } from "react";
-import { RootState, ThreeElements, useFrame } from "@react-three/fiber";
-import { easing } from "maath";
-import { IspgModel } from "@/components/ispg/IspgModel";
+import ExperienceCard from "./experienceCard/ExperienceCard";
+import { experienceCardConfig } from "./experienceCard/experienceCard.config";
 
 interface ExperienceProps {
     setIsFixed: (isFixed: boolean) => void;
 }
 
 const Experience = ({ setIsFixed }: ExperienceProps) => {
-    const meshPortalMaterialRef = useRef<ThreeElements["portalMaterialImpl"] | null>(null);
+    const [activeSlug, setActiveSlug] = useState<string | null>(null);
     const [blend, setBlend] = useState(0);
     const cameraControlsRef = useRef<CameraControls>(null);
 
-    const handleBlend = () => {
-        setBlend(blend === 0 ? 1 : 0);
-        setIsFixed(blend === 0 ? true : false);
+    const handleBlend = (slug: string) => {
+        if (activeSlug === slug) {
+            setActiveSlug(null);
+            setBlend(0);
+            setIsFixed(false);
+        } else {
+            setActiveSlug(slug);
+            setBlend(1);
+            setIsFixed(true);
+        }
     };
 
     useEffect(() => {
@@ -26,66 +32,35 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
     }, []);
 
     useEffect(() => {
-        if (cameraControlsRef.current) {
-            if (blend === 1) {
-                cameraControlsRef.current.setLookAt(0, 2.5, -4, 0, 0, -5.5, true);
-            } else {
-                cameraControlsRef.current.setLookAt(0, 0, 8, 0, 0, -5, true);
+        if (cameraControlsRef.current && activeSlug !== null) {
+            const config = experienceCardConfig.find((item) => item.slug === activeSlug);
+            if (config) {
+                if (blend === 1) {
+                    cameraControlsRef.current.setLookAt(...config.lookAtPosition, true);
+                } else {
+                    // Default camera position when not active
+                    cameraControlsRef.current.setLookAt(0, 0, 8, 0, 0, -5, true);
+                }
             }
+        } else if (cameraControlsRef.current && activeSlug === null) {
+            cameraControlsRef.current.setLookAt(0, 0, 8, 0, 0, -5, true);
         }
-    }, [blend]);
-
-    useFrame((_state: RootState, delta: number) => {
-        if (meshPortalMaterialRef.current) {
-            easing.damp(meshPortalMaterialRef.current, "blend", blend, 0.3, delta);
-        }
-    });
+    }, [blend, activeSlug]);
 
     return (
         <>
-            <RoundedBox
-                args={[2, 3, 0.05]}
-                radius={0.04}
-                onClick={handleBlend}>
-                {false && (
-                    <Html
-                        position={[0, 0, 0.05]}
-                        transform
-                        occlude="blending"
-                        distanceFactor={1}
-                        pointerEvents="none"
-                        style={{
-                            width: "820px",
-                            height: "1200px",
-                            pointerEvents: "none",
-                        }}>
-                        <div
-                            style={{ borderRadius: "50px", border: "solid 5px white" }}
-                            className="w-full h-full bg-black overflow-hidden">
-                            <h1>Hello</h1>
-                        </div>
-                    </Html>
-                )}
-                <MeshPortalMaterial
-                    ref={meshPortalMaterialRef}
-                    resolution={1}
-                    blur={0}>
-                    <color
-                        attach="background"
-                        args={["#373737"]}
-                    />
-                    <mesh
-                        onClick={handleBlend}
-                        position={[0, -1, -5]}>
-                        <IspgModel />
-                    </mesh>
-                </MeshPortalMaterial>
-            </RoundedBox>
+            {experienceCardConfig.map((config) => (
+                <ExperienceCard
+                    key={config.id}
+                    config={config}
+                    blend={activeSlug === config.slug ? blend : 0}
+                    onClick={() => handleBlend(config.slug)}
+                />
+            ))}
             <CameraControls
                 ref={cameraControlsRef}
                 makeDefault
-                maxZoom={1}
-                minZoom={1}
+                enabled={false}
             />
         </>
     );

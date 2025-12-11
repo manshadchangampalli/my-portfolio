@@ -10,7 +10,7 @@ import { PhoneHtml } from "./PhoneHtml";
 import * as THREE from "three";
 import { angle } from "@/utils/angle";
 
-export function IspgModel(props: any) {
+export function IspgModel() {
     const { nodes, materials }: any = useGLTF("/model/ispg/ispg_phone.gltf");
     const cameraControls = useRef<CameraControls>(null);
     const tableTexture = useTexture("/texture/ispg/table.png");
@@ -33,7 +33,6 @@ export function IspgModel(props: any) {
     return (
         <>
             <group
-                {...props}
                 position={[0.1, 0, 0]}
                 rotation={[0, -angle(90), 0]}
                 scale={0.2}
