@@ -115,7 +115,7 @@ export function MessagesContent() {
             </div>
 
             {/* Message Threads List */}
-            <div className="flex-1 max-h-[calc(100vh-20px)] scrollbar-hide overflow-y-auto px-4">
+            <div className="flex-1 max-h-[calc(100vh-100px)] scrollbar-hide overflow-y-auto px-4">
                 {messageThreads.map((thread) => (
                     <div
                         key={thread.id}

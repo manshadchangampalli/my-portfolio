@@ -1,9 +1,10 @@
-import { MeshPortalMaterial, RoundedBox } from "@react-three/drei";
+import { Environment, MeshPortalMaterial, RoundedBox } from "@react-three/drei";
 import React, { useRef } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { ExperienceCardConfig } from "./experienceCard.config";
 import { IspgModel } from "@/components/ispg/IspgModel";
+import { ThirtyDaysModel } from "@/components/thirty-days/ThirtyDays";
 
 interface ExperienceCardProps {
     config: ExperienceCardConfig;
@@ -23,9 +24,8 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
     // Dynamic model loader based on slug
     const renderModel = () => {
         if (config.slug.startsWith("ispg")) {
-            return <IspgModel key={config.slug} />;
+            return <ThirtyDaysModel />;
         }
-
         return null;
     };
 
@@ -39,6 +39,7 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
                 ref={meshPortalMaterialRef}
                 resolution={1}
                 blur={0}>
+                <Environment preset="apartment" />
                 <color
                     attach="background"
                     args={[config.bgColor]}

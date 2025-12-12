@@ -60,7 +60,7 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
             <CameraControls
                 ref={cameraControlsRef}
                 makeDefault
-                enabled={false}
+            // enabled={false}
             />
         </>
     );

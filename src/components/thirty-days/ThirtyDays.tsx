@@ -6,10 +6,10 @@ Command: npx gltfjsx@6.5.3 ./public/model/thirty-days/30days.gltf -k
 
 import { CameraControls, useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
-import { angle } from "../../../utils";
 import { useMemo } from "react";
 import { FirstMonitorHtml } from "./FirstMonitorHtml";
 import { SecondMonitorHtml } from "./SecondMonitorHtml";
+import { angle } from "@/utils/angle";
 
 export function ThirtyDaysModel(props: any) {
     const { nodes, materials }: any = useGLTF("/model/thirty-days/30days.gltf");
@@ -91,7 +91,7 @@ export function ThirtyDaysModel(props: any) {
                 {...props}
                 dispose={null}>
                 <mesh
-                    position={[-0.82, 3.50, 5.65]}
+                    position={[-2.18, 3.50, 5.65]}
                     rotation={[angle(190), angle(12), angle(-2)]}>
                     <planeGeometry args={[2.34, 1.42]} />
                     <meshStandardMaterial

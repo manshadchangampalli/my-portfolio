@@ -1,5 +1,5 @@
 import { Html } from "@react-three/drei";
-import { angle } from "../../../utils";
+import { angle } from "@/utils/angle";
 import { useThirtyDaysStore } from "../../store/thirtyDaysStore";
 import { dayConfig } from "./dayConfig";
 

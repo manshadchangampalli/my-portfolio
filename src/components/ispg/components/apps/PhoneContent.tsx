@@ -161,7 +161,7 @@ export function PhoneContent() {
             </div>
 
             {/* Call History List */}
-            <div className="flex-1 max-h-[calc(100vh-20px)] scrollbar-hide overflow-y-auto px-4">
+            <div className="flex-1 max-h-[calc(100vh-100px)] scrollbar-hide overflow-y-auto px-4">
                 {recentCalls.map((call) => (
                     <div
                         key={call.id}

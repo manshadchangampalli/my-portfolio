@@ -1,5 +1,6 @@
 import { Html } from "@react-three/drei";
-import { angle } from "../../../utils";
+import { angle } from "@/utils/angle";
+import { FigmaDesign } from "./FigmaDesign";
 
 export function SecondMonitorHtml() {
     const handleEventPropagation = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -8,8 +9,8 @@ export function SecondMonitorHtml() {
     return (
         <Html
             transform
-            occlude
-            position={[0, 0, 0.0001]}
+            center
+            position={[0, 0, 0.001]}
             rotation={[angle(180), angle(180), 0]}
             distanceFactor={0.5}
             pointerEvents="auto"
@@ -28,7 +29,8 @@ export function SecondMonitorHtml() {
                 {/* <EcommerceWireframe /> */}
                 {/* <RestaurantRoadmap /> */}
                 {/* <VSCodeShowcaseLight /> */}
-                {/* <FigmaDesign /> */}
+                <FigmaDesign />
+
             </div>
         </Html>
     );

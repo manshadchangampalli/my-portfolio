@@ -116,7 +116,6 @@ export function IspgModel() {
                 position={[-0.015, 1.58, -0.016]}
                 rotation={[angle(90), 0, angle(-1)]}>
                 <planeGeometry args={[0.37, 0.79]} />
-                {/* <meshStandardMaterial color="transparent" side={THREE.DoubleSide} /> */}
                 <PhoneHtml />
             </mesh>
             <Environment preset="apartment" />

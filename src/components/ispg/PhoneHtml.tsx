@@ -35,7 +35,6 @@ export function PhoneHtml() {
     return (
         <Html
             transform
-            occlude
             position={[0, 0, -0.0001]}
             rotation={[0, angle(180), angle(180)]}
             distanceFactor={1}
