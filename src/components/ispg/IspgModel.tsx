@@ -24,6 +24,7 @@ export function IspgModel() {
             map: texture,
         });
     }, [tableTexture]);
+
     useEffect(() => {
         if (cameraControls.current) {
             cameraControls.current.setLookAt(0, 2.5, 0, 0, 0, -0.5, true);
@@ -110,14 +111,16 @@ export function IspgModel() {
                         geometry={nodes.Torx_Flat_Top010_12.geometry}
                         material={materials.Metal_Mesh_Grill}
                     />
+
+                    {/* PhoneHtml mesh - Adjusted position and size */}
+                    <mesh
+                        position={[0, 0.5, -8]}
+                        rotation={[0, 0, angle(90)]}>
+                        <planeGeometry args={[1.85, 3.90]} />
+                        <PhoneHtml />
+                    </mesh>
                 </group>
             </group>
-            <mesh
-                position={[-0.015, 1.58, -0.016]}
-                rotation={[angle(90), 0, angle(-1)]}>
-                <planeGeometry args={[0.37, 0.79]} />
-                <PhoneHtml />
-            </mesh>
             <Environment preset="apartment" />
         </>
     );

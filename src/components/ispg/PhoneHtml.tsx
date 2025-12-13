@@ -8,7 +8,6 @@ import { AppType } from "./types";
 import { appConfigs } from "./appConfigs";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
-import { angle } from "@/utils/angle";
 
 const getAppName = (appType: AppType): string => {
     if (appType === AppType.NOTES) return "Notes";
@@ -26,8 +25,6 @@ export function PhoneHtml() {
         }
     };
 
-
-
     const handleEventPropagation = (e: React.SyntheticEvent) => {
         e.stopPropagation();
     };
@@ -35,11 +32,12 @@ export function PhoneHtml() {
     return (
         <Html
             transform
-            position={[0, 0, -0.0001]}
-            rotation={[0, angle(180), angle(180)]}
+            occlude
+            position={[0, 0, 0.01]}
+            rotation={[0, 0, 0]}
             distanceFactor={1}
             pointerEvents="auto"
-            scale={0.372}
+            scale={1.9}
             style={{
                 width: "390px",
                 height: "844px",

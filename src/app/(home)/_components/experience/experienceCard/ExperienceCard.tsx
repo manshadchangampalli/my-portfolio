@@ -24,7 +24,7 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
     // Dynamic model loader based on slug
     const renderModel = () => {
         if (config.slug.startsWith("ispg")) {
-            return <ThirtyDaysModel />;
+            return <IspgModel />;
         }
         return null;
     };
@@ -46,7 +46,7 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
                 />
                 {blend === 1 && (
                     <mesh
-                        onClick={onClick}
+                        onDoubleClick={onClick}
                         position={config.modelPosition}>
                         {renderModel()}
                     </mesh>
