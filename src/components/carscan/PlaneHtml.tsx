@@ -11,7 +11,7 @@ import {
     Twitter,
     Mail
 } from 'lucide-react';
-import { styles } from './PlaneHtml.styles';
+import './PlaneHtml.css';
 
 // ============================================================================
 // CONSTANTS
@@ -77,11 +77,11 @@ interface HeaderProps {
 
 function Header({ companyName, tagline }: HeaderProps) {
     return (
-        <header style={styles.header}>
-            <div style={styles.headerShine}></div>
-            <div style={{ display: 'grid', gap: '10px' }}>
-                <div style={styles.logoText}>{companyName}</div>
-                <div style={styles.logoSub}>{tagline}</div>
+        <header className="plane-header">
+            <div className="plane-header-shine"></div>
+            <div className="plane-header-content">
+                <div className="plane-logo-text">{companyName}</div>
+                <div className="plane-logo-sub">{tagline}</div>
             </div>
         </header>
     );
@@ -95,11 +95,11 @@ interface NavigationProps {
 
 function Navigation({ items, activeTab, onTabChange }: NavigationProps) {
     return (
-        <nav style={styles.navBar}>
+        <nav className="plane-nav-bar">
             {items.map((item) => (
                 <button
                     key={item}
-                    style={styles.navButton(activeTab === item.toLowerCase())}
+                    className={activeTab === item.toLowerCase() ? 'plane-nav-button plane-nav-button-active' : 'plane-nav-button'}
                     onClick={() => onTabChange(item.toLowerCase())}
                 >
                     {item}
@@ -116,8 +116,8 @@ interface TechItemProps {
 
 function TechItem({ name, icon: Icon }: TechItemProps) {
     return (
-        <li style={styles.techItem}>
-            <div style={styles.iconBox}>
+        <li className="plane-tech-item">
+            <div className="plane-icon-box">
                 <Icon size={14} />
             </div>
             {name}
@@ -131,9 +131,9 @@ interface TechnologiesSectionProps {
 
 function TechnologiesSection({ technologies }: TechnologiesSectionProps) {
     return (
-        <div style={styles.insetPanel}>
-            <h3 style={styles.panelHeader}>Technologies Used</h3>
-            <ul style={styles.techList}>
+        <div className="plane-inset-panel">
+            <h3 className="plane-panel-header">Technologies Used</h3>
+            <ul className="plane-tech-list">
                 {technologies.map((tech) => (
                     <TechItem key={tech.name} name={tech.name} icon={tech.icon} />
                 ))}
@@ -150,10 +150,12 @@ interface ProjectHighlightProps {
 
 function ProjectHighlight({ title, description, icon: Icon }: ProjectHighlightProps) {
     return (
-        <div style={{ display: 'flex', alignItems: 'flex-start', color: '#555', fontSize: '13px', marginBottom: '12px' }}>
-            <Icon size={16} style={{ marginRight: '8px', marginTop: '2px', color: '#360621', flexShrink: 0 }} />
+        <div className="plane-project-highlight">
+            <div className="plane-project-highlight-icon">
+                <Icon size={16} />
+            </div>
             <div>
-                <strong style={{ color: '#333', display: 'block', marginBottom: '4px' }}>{title}</strong>
+                <strong className="plane-project-highlight-title">{title}</strong>
                 <span>{description}</span>
             </div>
         </div>
@@ -167,10 +169,10 @@ interface ExperienceSectionProps {
 
 function ExperienceSection({ highlights, duration }: ExperienceSectionProps) {
     return (
-        <div style={styles.insetPanel}>
-            <h3 style={styles.panelHeader}>Project Highlights</h3>
-            <div style={{ marginBottom: '15px', paddingBottom: '10px', borderBottom: '1px solid #e0e0e0' }}>
-                <strong style={{ color: '#360621', fontSize: '12px' }}>Duration: {duration}</strong>
+        <div className="plane-inset-panel">
+            <h3 className="plane-panel-header">Project Highlights</h3>
+            <div className="plane-duration-section">
+                <strong className="plane-duration-text">Duration: {duration}</strong>
             </div>
             {highlights.map((highlight, index) => (
                 <ProjectHighlight key={index} {...highlight} />
@@ -185,19 +187,19 @@ interface AboutSectionProps {
 
 function AboutSection({ companyInfo }: AboutSectionProps) {
     return (
-        <div style={styles.insetPanel}>
-            <h3 style={styles.panelHeader}>About {companyInfo.name}</h3>
-            <div style={{ color: '#555', fontSize: '14px', lineHeight: '1.6' }}>
-                <p style={{ marginBottom: '12px' }}>
+        <div className="plane-inset-panel">
+            <h3 className="plane-panel-header">About {companyInfo.name}</h3>
+            <div className="plane-about-info">
+                <p className="mb-3">
                     {companyInfo.description}
                 </p>
-                <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #e0e0e0' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px', color: '#333' }}>
-                        <strong style={{ marginRight: '8px' }}>Founded:</strong>
+                <div className="plane-about-divider">
+                    <div className="plane-about-detail">
+                        <strong className="mr-2">Founded:</strong>
                         <span>{companyInfo.founded}</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', color: '#333' }}>
-                        <strong style={{ marginRight: '8px' }}>Location:</strong>
+                    <div className="plane-about-detail">
+                        <strong className="mr-2">Location:</strong>
                         <span>{companyInfo.location}</span>
                     </div>
                 </div>
@@ -213,16 +215,16 @@ interface FooterProps {
 
 function Footer({ companyName, year }: FooterProps) {
     return (
-        <footer style={styles.footer}>
+        <footer className="plane-footer">
             <div>
                 &copy; {year} {companyName}. All Rights Reserved. <br />
-                <span style={{ color: '#666' }}>Privacy Policy | Terms of Service</span>
+                <span className="text-gray-500">Privacy Policy | Terms of Service</span>
             </div>
             <div>
-                <div style={styles.socialIcon} title="Facebook"><Facebook size={14} /></div>
-                <div style={styles.socialIcon} title="LinkedIn"><Linkedin size={14} /></div>
-                <div style={styles.socialIcon} title="Twitter"><Twitter size={14} /></div>
-                <div style={styles.socialIcon} title="Contact"><Mail size={14} /></div>
+                <div className="plane-social-icon" title="Facebook"><Facebook size={14} /></div>
+                <div className="plane-social-icon" title="LinkedIn"><Linkedin size={14} /></div>
+                <div className="plane-social-icon" title="Twitter"><Twitter size={14} /></div>
+                <div className="plane-social-icon" title="Contact"><Mail size={14} /></div>
             </div>
         </footer>
     );
@@ -241,21 +243,21 @@ function ContentRenderer({ activeTab, companyInfo, technologies, highlights, dur
         switch (activeTab) {
             case 'about':
                 return (
-                    <div style={styles.mainCard}>
-                        <h1 style={styles.pageTitle}>About {companyInfo.name}</h1>
+                    <div className="plane-main-card">
+                        <h1 className="plane-page-title">About {companyInfo.name}</h1>
                         <AboutSection companyInfo={companyInfo} />
                     </div>
                 );
 
             case 'experience':
                 return (
-                    <div style={styles.mainCard}>
-                        <h1 style={styles.pageTitle}>My Experience at {companyInfo.name}</h1>
-                        <div style={styles.timelineContainer}>
-                            <div style={styles.timelineLine}></div>
-                            <div style={styles.timelineOrb(true)}>
-                                <div style={styles.orbGloss}></div>
-                                <span style={{ fontSize: '18px', textShadow: '0 2px 2px rgba(0,0,0,0.1)' }}>
+                    <div className="plane-main-card">
+                        <h1 className="plane-page-title">My Experience at {companyInfo.name}</h1>
+                        <div className="plane-timeline-container">
+                            <div className="plane-timeline-line"></div>
+                            <div className="plane-timeline-orb">
+                                <div className="plane-orb-gloss"></div>
+                                <span className="text-lg" style={{ textShadow: '0 2px 2px rgba(0,0,0,0.1)' }}>
                                     {duration}
                                 </span>
                             </div>
@@ -269,18 +271,18 @@ function ContentRenderer({ activeTab, companyInfo, technologies, highlights, dur
 
             case 'technologies':
                 return (
-                    <div style={styles.mainCard}>
-                        <h1 style={styles.pageTitle}>Technologies & Skills</h1>
+                    <div className="plane-main-card">
+                        <h1 className="plane-page-title">Technologies & Skills</h1>
                         <TechnologiesSection technologies={technologies} />
                     </div>
                 );
 
             default:
                 return (
-                    <div style={styles.mainCard}>
-                        <h1 style={styles.pageTitle}>Welcome to {companyInfo.name}</h1>
-                        <div style={{ color: '#555', fontSize: '16px', lineHeight: '1.8', textAlign: 'center', padding: '40px 20px' }}>
-                            <p style={{ marginBottom: '20px' }}>
+                    <div className="plane-main-card">
+                        <h1 className="plane-page-title">Welcome to {companyInfo.name}</h1>
+                        <div className="plane-welcome-content">
+                            <p className="plane-welcome-paragraph">
                                 Experience in AI-powered vehicle inspection technology
                             </p>
                             <p>
@@ -292,12 +294,8 @@ function ContentRenderer({ activeTab, companyInfo, technologies, highlights, dur
         }
     };
 
-    return <div style={styles.contentArea}>{renderContent()}</div>;
+    return <div className="plane-content-area">{renderContent()}</div>;
 }
-
-// ============================================================================
-// MAIN COMPONENT
-// ============================================================================
 
 export function PlaneHtml() {
     const [activeTab, setActiveTab] = useState<string>('home');
@@ -311,13 +309,12 @@ export function PlaneHtml() {
         <Html
             transform
             occlude
-            fullscreen
-            position={[0, 0, 0.01]}
-            distanceFactor={2}
+            position={[-27.65, 0, -0.13]}
+            distanceFactor={2.1}
             pointerEvents="auto"
             style={{
                 width: "1000px",
-                height: "1000px",
+                height: "980px",
                 pointerEvents: "auto",
             }}
         >
@@ -326,41 +323,30 @@ export function PlaneHtml() {
                 onPointerDown={handleEventPropagation}
                 onPointerMove={handleEventPropagation}
                 onPointerUp={handleEventPropagation}
-                style={{ overflow: "auto", height: "100%", width: "100%", padding: "20px" }}
+                className="overflow-auto no-scrollbar h-full w-full"
             >
-                <style>{`
-                    .responsive-grid {
-                        display: grid;
-                        grid-template-columns: 1fr;
-                        gap: 20px;
-                    }
-                    @media (min-width: 768px) {
-                        .responsive-grid {
-                            grid-template-columns: 1fr 1fr;
-                        }
-                    }
-                `}</style>
+                <div className="plane-body">
+                    <div className="plane-main-container flex flex-col justify-between h-[980px]">
+                        <div>
+                            <Header
+                                companyName={COMPANY_INFO.name}
+                                tagline={COMPANY_INFO.tagline}
+                            />
 
-                <div style={styles.body}>
-                    <div style={styles.mainContainer}>
-                        <Header
-                            companyName={COMPANY_INFO.name}
-                            tagline={COMPANY_INFO.tagline}
-                        />
+                            <Navigation
+                                items={NAV_ITEMS}
+                                activeTab={activeTab}
+                                onTabChange={setActiveTab}
+                            />
 
-                        <Navigation
-                            items={NAV_ITEMS}
-                            activeTab={activeTab}
-                            onTabChange={setActiveTab}
-                        />
-
-                        <ContentRenderer
-                            activeTab={activeTab}
-                            companyInfo={COMPANY_INFO}
-                            technologies={TECHNOLOGIES}
-                            highlights={PROJECT_HIGHLIGHTS}
-                            duration={duration}
-                        />
+                            <ContentRenderer
+                                activeTab={activeTab}
+                                companyInfo={COMPANY_INFO}
+                                technologies={TECHNOLOGIES}
+                                highlights={PROJECT_HIGHLIGHTS}
+                                duration={duration}
+                            />
+                        </div>
 
                         <Footer
                             companyName={COMPANY_INFO.name}

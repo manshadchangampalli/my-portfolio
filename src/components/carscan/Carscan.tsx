@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CameraControls, useGLTF, useTexture } from "@react-three/drei";
-import { angle } from "../../utils";
 import * as THREE from "three";
 import { useMemo, useEffect } from "react";
 import { PlaneHtml } from "./PlaneHtml";
+import { angle } from "@/utils/angle";
 
 export function Model(props: any) {
     const { nodes }: any = useGLTF("/model/carscan/scene.gltf");
@@ -51,6 +51,8 @@ export function Model(props: any) {
             map: texture,
         });
     }, [planeTexture]);
+
+
 
     return (
         <group
@@ -102,7 +104,6 @@ export function Model(props: any) {
                     material={computerMaterial}
                 />
             </group>
-
             <mesh
                 position={[-6.067446977675723, 2.8458465985749326, -0.07382322910120898]}
                 rotation={[THREE.MathUtils.degToRad(-150.84102354077692), THREE.MathUtils.degToRad(88.12008907322807), THREE.MathUtils.degToRad(150.8541463136918)]}
@@ -114,7 +115,6 @@ export function Model(props: any) {
                 />
                 <PlaneHtml />
             </mesh>
-            <CameraControls />
         </group>
     );
 }

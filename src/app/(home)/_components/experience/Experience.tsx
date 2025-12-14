@@ -1,5 +1,5 @@
 import { CameraControls } from "@react-three/drei";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import ExperienceCard from "./experienceCard/ExperienceCard";
 import { experienceCardConfig } from "./experienceCard/experienceCard.config";
 
@@ -27,25 +27,24 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
     useEffect(() => {
         if (cameraControlsRef.current) {
             // Disable zoom on scroll - ACTION.NONE = 0
-            cameraControlsRef.current.mouseButtons.wheel = 0;
+            // cameraControlsRef.current.mouseButtons.wheel = 0;
         }
     }, []);
 
-    useEffect(() => {
-        if (cameraControlsRef.current && activeSlug !== null) {
+    const cameraPositionChange = useCallback(() => {
+        if (cameraControlsRef.current) {
             const config = experienceCardConfig.find((item) => item.slug === activeSlug);
             if (config) {
-                if (blend === 1) {
-                    cameraControlsRef.current.setLookAt(...config.lookAtPosition, true);
-                } else {
-                    // Default camera position when not active
-                    cameraControlsRef.current.setLookAt(0, 0, 8, 0, 0, -5, true);
-                }
+                cameraControlsRef.current.setLookAt(...config?.lookAtPosition, true);
+                return;
             }
-        } else if (cameraControlsRef.current && activeSlug === null) {
             cameraControlsRef.current.setLookAt(0, 0, 8, 0, 0, -5, true);
         }
-    }, [blend, activeSlug]);
+    }, [activeSlug, cameraControlsRef]);
+
+    useEffect(() => {
+        cameraPositionChange();
+    }, [activeSlug]);
 
     return (
         <>
@@ -55,6 +54,7 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
                     config={config}
                     blend={activeSlug === config.slug ? blend : 0}
                     onClick={() => handleBlend(config.slug)}
+                    activeSlug={activeSlug}
                 />
             ))}
             <CameraControls

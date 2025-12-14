@@ -1,5 +1,5 @@
 import { Html } from "@react-three/drei";
-import { angle } from "../../../../utils";
+import { angle } from "@/utils/angle";
 import "./kioskCss.css";
 
 export function KioskHtml() {
@@ -7,7 +7,7 @@ export function KioskHtml() {
         <Html
             transform
             occlude
-            position={[0, 0, -0.0001]}
+            position={[1.5, 0, -0.0001]}
             rotation={[0, angle(180), 0]}
             distanceFactor={1}
             pointerEvents="auto"

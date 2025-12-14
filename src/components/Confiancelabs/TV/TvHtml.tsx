@@ -1,5 +1,5 @@
 import { Html } from "@react-three/drei";
-import { angle } from "../../../../utils";
+import { angle } from "@/utils/angle";
 import "./tvCss.css";
 
 export function TvHtml() {
@@ -7,7 +7,7 @@ export function TvHtml() {
         <Html
             transform
             occlude
-            position={[0, 0, -0.0001]}
+            position={[1.5, 0, -0.0001]}
             rotation={[0, angle(180), 0]}
             distanceFactor={2.22}
             pointerEvents="auto"

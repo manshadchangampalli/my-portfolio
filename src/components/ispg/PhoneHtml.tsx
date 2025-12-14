@@ -8,6 +8,7 @@ import { AppType } from "./types";
 import { appConfigs } from "./appConfigs";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
+import { angle } from "@/utils/angle";
 
 const getAppName = (appType: AppType): string => {
     if (appType === AppType.NOTES) return "Notes";
@@ -33,11 +34,10 @@ export function PhoneHtml() {
         <Html
             transform
             occlude
-            position={[0, 0, 0.01]}
-            rotation={[0, 0, 0]}
-            distanceFactor={1}
+            position={[-7.431, 0.08, 0.1]}
+            rotation={[angle(0), angle(180), angle(1)]}
+            distanceFactor={1.85}
             pointerEvents="auto"
-            scale={1.9}
             style={{
                 width: "390px",
                 height: "844px",

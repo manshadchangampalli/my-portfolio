@@ -3,38 +3,29 @@ import React, { useRef } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { ExperienceCardConfig } from "./experienceCard.config";
-import { IspgModel } from "@/components/ispg/IspgModel";
-import { ThirtyDaysModel } from "@/components/thirty-days/ThirtyDays";
 
 interface ExperienceCardProps {
     config: ExperienceCardConfig;
     blend: number;
     onClick: () => void;
+    activeSlug: string | null;
 }
 
-const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
+const ExperienceCard = ({ config, blend, onClick, activeSlug }: ExperienceCardProps) => {
     const meshPortalMaterialRef = useRef<ThreeElements["portalMaterialImpl"] | null>(null);
 
     useFrame((_state, delta: number) => {
         if (meshPortalMaterialRef.current) {
-            easing.damp(meshPortalMaterialRef.current, "blend", blend, 0.3, delta);
+            easing.damp(meshPortalMaterialRef.current, "blend", blend, 0.5, delta);
         }
     });
-
-    // Dynamic model loader based on slug
-    const renderModel = () => {
-        if (config.slug.startsWith("ispg")) {
-            return <IspgModel />;
-        }
-        return null;
-    };
 
     return (
         <RoundedBox
             args={[2, 3, 0.05]}
             radius={0.04}
             position={config.cardPosition}
-            onClick={onClick}>
+            onClick={activeSlug === null ? onClick : undefined}>
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
                 resolution={1}
@@ -42,14 +33,14 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
                 <Environment preset="apartment" />
                 <color
                     attach="background"
-                    args={[config.bgColor]}
+                    args={activeSlug === null ? ['#ffffff'] : [config.bgColor]}
                 />
                 {blend === 1 && (
-                    <mesh
-                        onDoubleClick={onClick}
+                    <group
+                        onDoubleClick={blend === 1 ? onClick : undefined}
                         position={config.modelPosition}>
-                        {renderModel()}
-                    </mesh>
+                        {config.component({})}
+                    </group>
                 )}
             </MeshPortalMaterial>
         </RoundedBox>

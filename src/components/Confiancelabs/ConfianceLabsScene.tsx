@@ -5,7 +5,7 @@ Command: npx gltfjsx@6.5.3 ./public/model/confiancelabs/confiancelabs_model.gltf
 */
 
 import { CameraControls, useGLTF, useTexture } from "@react-three/drei";
-import { angle } from "../../../utils";
+import { angle } from "@/utils/angle";
 import { useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
 import useConfianceStore, { type ConfianceCameraTypes } from "../../store/confianceStore";
@@ -168,12 +168,6 @@ export function ConfianceLabsScene(props: any) {
                     <KdsHtml />
                 </mesh>
             </group>
-            <CameraControls
-                smoothTime={1}
-                makeDefault
-                ref={cameraControls}
-                enabled={false}
-            />
         </>
     );
 }

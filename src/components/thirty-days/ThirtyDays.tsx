@@ -475,7 +475,6 @@ export function ThirtyDaysModel(props: any) {
                     scale={8.326}
                 />
             </group>
-            <CameraControls />
         </>
     );
 }
