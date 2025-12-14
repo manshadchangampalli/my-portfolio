@@ -159,7 +159,7 @@ const VSCodeShowcaseMonokai = () => {
                                 <span className="text-gray-300"> React </span>
                                 <span className="text-[#f92672]">from</span>
                                 {/* Strings ('react') - Yellow/Orange */}
-                                <span className="text-[#e6db74]"> 'react'</span>
+                                <span className="text-[#e6db74]"> &apos;react&apos;</span>
                                 <span className="text-gray-300">;</span>
                             </div>
 
@@ -168,7 +168,7 @@ const VSCodeShowcaseMonokai = () => {
                                 <span className="text-[#f92672]">import</span>
                                 <span className="text-gray-300"> {'{ ShoppingCart, Plus, Minus }'} </span>
                                 <span className="text-[#f92672]">from</span>
-                                <span className="text-[#e6db74]"> 'lucide-react'</span>
+                                <span className="text-[#e6db74]"> &apos;lucide-react&apos;</span>
                                 <span className="text-gray-300">;</span>
                             </div>
 
@@ -277,7 +277,7 @@ const VSCodeShowcaseMonokai = () => {
                                 <span className="text-[#a6e22e]"> className</span>
                                 <span className="text-gray-300">=</span>
                                 {/* Attribute values - Yellow */}
-                                <span className="text-[#e6db74]">"cart-container"</span>
+                                <span className="text-[#e6db74]">&quot;cart-container&quot;</span>
                                 <span className="text-gray-300">&gt;</span>
                             </div>
 

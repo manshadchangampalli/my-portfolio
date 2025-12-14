@@ -7,11 +7,9 @@ export function ThirtyDaysButtons() {
     const [startX, setStartX] = useState(0);
     const [activeNumber, setActiveNumber] = useState(1);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [direction, setDirection] = useState<"left" | "right" | null>(null);
     const setCurrentDate = useThirtyDaysStore((state) => state.setCurrentDate);
 
     const snapToNearest50 = (value: number): number => {
-        console.log(direction)
         return Math.round(value / 50) * 50;
     };
 
@@ -129,7 +127,7 @@ export function ThirtyDaysButtons() {
                 window.removeEventListener("touchend", handleGlobalTouchEnd);
             };
         }
-    }, [isDragging, startX, setCurrentDate]);
+    }, [isDragging, startX, setCurrentDate, snapToNearest50]);
 
     return (
         <div className="fixed bottom-5 left-1/2 -translate-x-1/2 flex flex-col gap-2.5 z-10 select-none">

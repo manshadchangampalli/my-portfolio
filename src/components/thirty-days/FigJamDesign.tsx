@@ -36,7 +36,7 @@ export function FigJamDesign() {
                     <div className="bg-yellow-900/30 border border-yellow-700/50 p-5 rounded-lg">
                         <h3 className="font-bold text-lg mb-2 text-white">Problem Statement</h3>
                         <p className="text-sm text-gray-300">
-                            Customers struggle to order food quickly because the existing systems are slow, confusing, and don't show real-time availability.
+                            Customers struggle to order food quickly because the existing systems are slow, confusing, and don&apos;t show real-time availability.
                         </p>
                     </div>
 

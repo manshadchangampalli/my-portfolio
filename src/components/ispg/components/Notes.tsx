@@ -21,8 +21,8 @@ export function Notes({ isExpanded, onToggle }: NotesProps) {
                         <h2 className="text-white text-2xl font-bold">ISPG</h2>
                         <p className="text-white text-lg font-semibold mb-2">Senior Software Engineer | Aug 2023 - Aug 2025</p>
                         <p className="text-white/80">
-                            ISPG is a team of "solutionists" dedicated to making commerce easy and meaningful by building smart, tailored systems, with their products falling
-                            under brands like Oorjit, Pedal Mobility, and Streamline. They're all about innovation that simplifies your commercial life!
+                            ISPG is a team of &quot;solutionists&quot; dedicated to making commerce easy and meaningful by building smart, tailored systems, with their products falling
+                            under brands like Oorjit, Pedal Mobility, and Streamline. They&apos;re all about innovation that simplifies your commercial life!
                         </p>
                     </div>
                     <div className="p-2">

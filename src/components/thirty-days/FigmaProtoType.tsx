@@ -112,7 +112,7 @@ export function FigmaProtoType() {
                             <div className="absolute inset-0 bg-black opacity-15"></div>
                             <div className="relative z-10 max-w-3xl">
                                 <h2 className="text-5xl font-extrabold mb-4 tracking-tight">Unlock the Future of Tech</h2>
-                                <p className="text-xl mb-8 font-light text-white/90">Exclusive deals on premium electronics. Don't miss out on our limited-time collection!</p>
+                                <p className="text-xl mb-8 font-light text-white/90">Exclusive deals on premium electronics. Don&apos;t miss out on our limited-time collection!</p>
                                 <button className={`bg-white text-indigo-600 px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 shadow-md hover:shadow-xl transition-all`}>
                                     Explore Deals
                                 </button>
