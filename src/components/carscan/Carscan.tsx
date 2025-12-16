@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CameraControls, useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { PlaneHtml } from "./PlaneHtml";
 import { angle } from "@/utils/angle";
+import { useCarscanStore } from "@/store/carscanStore";
 
-export function Model(props: any) {
+interface CarscanProps {
+    cameraControls: CameraControls | null;
+}
+
+export function Model({ cameraControls, ...props }: CarscanProps) {
     const { nodes }: any = useGLTF("/model/carscan/scene.gltf");
+
+    const { scrollValue } = useCarscanStore();
 
     const computerTexture = useTexture("/texture/carscan/computer2.webp");
     const tableTexture = useTexture("/texture/carscan/table.jpg");
@@ -52,7 +59,13 @@ export function Model(props: any) {
         });
     }, [planeTexture]);
 
+    console.log({ scrollValue })
 
+    useEffect(() => {
+        if (cameraControls) {
+            cameraControls.dolly(scrollValue, true);
+        }
+    }, [cameraControls, scrollValue]);
 
     return (
         <group

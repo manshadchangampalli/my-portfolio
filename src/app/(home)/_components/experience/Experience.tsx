@@ -1,5 +1,5 @@
 import { CameraControls, Html } from "@react-three/drei";
-import React, { useEffect, useRef, useCallback, memo } from "react";
+import React, { useEffect, useRef, useCallback, memo, useState } from "react";
 import ExperienceCard from "./experienceCard/ExperienceCard";
 import { experienceCardConfig } from "./experienceCard/experienceCard.config";
 import { useExperienceCardsStore } from "@/store/experienceCards.store";
@@ -11,10 +11,16 @@ interface ExperienceProps {
 const Experience = ({ setIsFixed }: ExperienceProps) => {
     const { activeSlug, blend, toggleActiveSlug } = useExperienceCardsStore();
     const cameraControlsRef = useRef<CameraControls>(null);
+    const [cameraControls, setCameraControls] = useState<CameraControls | null>(null);
 
     const handleBlend = useCallback((slug: string) => {
         toggleActiveSlug(slug);
     }, [toggleActiveSlug]);
+
+    const handleCameraControlsRef = useCallback((controls: CameraControls | null) => {
+        cameraControlsRef.current = controls;
+        setCameraControls(controls);
+    }, []);
 
 
     const cameraPositionChange = useCallback(() => {
@@ -47,10 +53,11 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
                     config={config}
                     blend={activeSlug === config.slug ? blend : 0}
                     onClick={() => handleBlend(config.slug)}
+                    cameraControls={cameraControls}
                 />
             ))}
             <CameraControls
-                ref={cameraControlsRef}
+                ref={handleCameraControlsRef}
                 makeDefault
                 enabled={false}
             />

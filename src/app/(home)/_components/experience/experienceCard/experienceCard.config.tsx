@@ -5,6 +5,7 @@ import { Model as CarscanModel } from "@/components/carscan/Carscan";
 import { ConfianceLabsScene } from "@/components/Confiancelabs/ConfianceLabsScene";
 import { ThirtyDaysModel } from "@/components/thirty-days/ThirtyDays";
 import { angle } from "@/utils/angle";
+import { CameraControls } from "@react-three/drei";
 
 export interface ExperienceCardConfig {
   id: string; // Unique identifier for each card
@@ -15,7 +16,7 @@ export interface ExperienceCardConfig {
   modelPosition: [number, number, number];
   cardPosition: [number, number, number];
   rotation: [number, number, number];
-  component: (props: any) => React.ReactNode;
+  component: (props: { cameraControls: CameraControls | null }) => React.ReactNode;
 }
 
 export const EXPERIENCE_SLUGS = {
@@ -35,7 +36,14 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     modelPosition: [0, -1, -5],
     cardPosition: [-4.5, 0, 0],
     rotation: [0, 0, 0],
-    component: (props: any) => <CarscanModel {...props} />,
+    component: (props: { cameraControls: CameraControls | null }) => {
+      return (
+        <CarscanModel
+          {...props}
+          cameraControls={props?.cameraControls ?? null}
+        />
+      )
+    },
   },
   {
     id: "confiancelabs",

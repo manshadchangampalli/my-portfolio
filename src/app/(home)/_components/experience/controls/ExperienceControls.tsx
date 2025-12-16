@@ -2,20 +2,21 @@ import React from "react";
 import { ArrowLeft, ZoomIn, ZoomOut } from "lucide-react";
 import { useExperienceCardsStore } from "@/store/experienceCards.store";
 import { EXPERIENCE_SLUGS } from "../experienceCard/experienceCard.config";
+import { useCarscanStore } from "@/store/carscanStore";
 
 export const ExperienceControls = () => {
     const { activeSlug, setActiveSlug } = useExperienceCardsStore();
-
+    const { setScrollValue, scrollValue } = useCarscanStore();
     const handleBack = () => {
         setActiveSlug(null);
     };
 
     const handleZoomIn = () => {
-        // TODO: Add zoom in functionality
+        setScrollValue(Number((scrollValue + 1)?.toFixed(1)));
     };
 
     const handleZoomOut = () => {
-        // TODO: Add zoom out functionality
+        setScrollValue(Number((scrollValue - 1)?.toFixed(1)));
     };
 
     return (
@@ -58,4 +59,3 @@ export const ExperienceControls = () => {
         </>
     );
 };
-

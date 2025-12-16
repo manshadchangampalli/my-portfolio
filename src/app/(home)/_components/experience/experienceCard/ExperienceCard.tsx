@@ -1,4 +1,4 @@
-import { Environment, Html, MeshPortalMaterial, RoundedBox } from "@react-three/drei";
+import { CameraControls, Environment, Html, MeshPortalMaterial, RoundedBox } from "@react-three/drei";
 import React, { useRef, memo, useEffect, useState } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
@@ -9,9 +9,10 @@ interface ExperienceCardProps {
     config: ExperienceCardConfig;
     blend: number;
     onClick: () => void;
+    cameraControls: CameraControls | null;
 }
 
-const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
+const ExperienceCard = ({ config, blend, onClick, cameraControls }: ExperienceCardProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const meshPortalMaterialRef = useRef<ThreeElements["portalMaterialImpl"] | null>(null);
 
@@ -75,7 +76,7 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
                         />
                         <group
                             position={config.modelPosition}>
-                            {config.component({})}
+                            {config.component({ cameraControls })}
                         </group>
                     </>
                 )}
