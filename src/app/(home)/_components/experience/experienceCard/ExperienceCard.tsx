@@ -3,6 +3,7 @@ import React, { useRef, memo } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { ExperienceCardConfig } from "./experienceCard.config";
+import { ArrowUpRight } from "lucide-react";
 
 interface ExperienceCardProps {
     config: ExperienceCardConfig;
@@ -31,11 +32,24 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
                 position={[0, 0, 0.026]}
                 rotation={[0, 0, 0]}
                 scale={1}
-                pointerEvents="none"
-                style={{ width: "250px", height: "390px", pointerEvents: "none" }}>
+                pointerEvents="auto"
+                style={{ width: "250px", height: "390px", pointerEvents: "auto" }}>
                 <div
-                    className="absolute top-0 w-[250px] h-[390px] left-0 rounded-[20px] border border-white bg-black/50 flex justify-center items-center pointer-events-none">
+                    className="absolute top-0 w-[250px] h-[390px] left-0 rounded-[20px] border border-white bg-black/50 flex justify-center items-center"
+                    style={{ pointerEvents: "none" }}>
                     <h1 className="text-white text-2xl font-bold">{config.name}</h1>
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onClick();
+                        }}
+                        className="border p-4 w-[95%] gap-2 flex justify-center items-center cursor-pointer border-white text-white absolute bottom-2 group hover:bottom-1 hover:bg-white hover:text-black transition-all duration-300 rounded-2xl left-1/2 -translate-x-1/2"
+                        style={{ pointerEvents: "auto" }}>
+                        <span>
+                            WHAT I DID?
+                        </span>
+                        <ArrowUpRight className="w-6 h-6" />
+                    </div>
                 </div>
             </Html>
             <MeshPortalMaterial
@@ -47,7 +61,7 @@ const ExperienceCard = ({ config, blend, onClick }: ExperienceCardProps) => {
                         <Environment preset="apartment" />
                         <color
                             attach="background"
-                            args={["#000000"]}
+                            args={[config.bgColor]}
                         />
                         <group
                             onClick={onClick}
