@@ -16,7 +16,7 @@ export function FirstMonitorHtml() {
         <Html
             transform
             occlude
-            position={[0, 0, 0.0001]}
+            position={[-4.4, -0.16, -0.95]}
             rotation={[angle(180), angle(180), 0]}
             distanceFactor={0.5}
             pointerEvents="auto"

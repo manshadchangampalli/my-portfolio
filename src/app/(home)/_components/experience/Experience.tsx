@@ -1,5 +1,5 @@
-import { CameraControls } from "@react-three/drei";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { CameraControls, Html, Text } from "@react-three/drei";
+import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import ExperienceCard from "./experienceCard/ExperienceCard";
 import { experienceCardConfig } from "./experienceCard/experienceCard.config";
 
@@ -12,7 +12,7 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
     const [blend, setBlend] = useState(0);
     const cameraControlsRef = useRef<CameraControls>(null);
 
-    const handleBlend = (slug: string) => {
+    const handleBlend = useCallback((slug: string) => {
         if (activeSlug === slug) {
             setActiveSlug(null);
             setBlend(0);
@@ -22,7 +22,7 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
             setBlend(1);
             setIsFixed(true);
         }
-    };
+    }, [activeSlug, setIsFixed]);
 
     useEffect(() => {
         if (cameraControlsRef.current) {
@@ -44,11 +44,14 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
 
     useEffect(() => {
         cameraPositionChange();
-    }, [activeSlug]);
+    }, [activeSlug, cameraPositionChange]);
 
     return (
         <>
-            {experienceCardConfig.map((config) => (
+            <Html fullscreen>
+                <h1 className="text-white text-center text-[56px] font-poller-one font-bold">Experience</h1>
+            </Html>
+            {experienceCardConfig?.map((config) => (
                 <ExperienceCard
                     key={config.id}
                     config={config}
@@ -60,10 +63,10 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
             <CameraControls
                 ref={cameraControlsRef}
                 makeDefault
-            // enabled={false}
+                enabled={false}
             />
         </>
     );
 };
 
-export default Experience;
+export default memo(Experience);

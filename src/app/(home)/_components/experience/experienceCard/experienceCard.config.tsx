@@ -4,6 +4,7 @@ import { IspgModel } from "@/components/ispg/IspgModel";
 import { Model as CarscanModel } from "@/components/carscan/Carscan";
 import { ConfianceLabsScene } from "@/components/Confiancelabs/ConfianceLabsScene";
 import { ThirtyDaysModel } from "@/components/thirty-days/ThirtyDays";
+import { angle } from "@/utils/angle";
 
 export interface ExperienceCardConfig {
   id: string; // Unique identifier for each card
@@ -13,6 +14,7 @@ export interface ExperienceCardConfig {
   slug: string; // Should be unique for each card
   modelPosition: [number, number, number];
   cardPosition: [number, number, number];
+  rotation: [number, number, number];
   component: (props: any) => React.ReactNode;
 }
 
@@ -32,6 +34,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     slug: EXPERIENCE_SLUGS.CARSCAN,
     modelPosition: [0, -1, -5],
     cardPosition: [-4.5, 0, 0],
+    rotation: [0, 0, 0],
     component: (props: any) => <CarscanModel {...props} />,
   },
   {
@@ -42,6 +45,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     slug: EXPERIENCE_SLUGS.CONFIANCE_LABS,
     modelPosition: [0, -1, -5],
     cardPosition: [-1.5, 0, 0],
+    rotation: [0, 0, 0],
     component: (props: any) => <ConfianceLabsScene {...props} />,
   },
   {
@@ -51,6 +55,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     lookAtPosition: [0, 2.5, 0, 0, 0, -5.5],
     slug: EXPERIENCE_SLUGS.ISPG,
     modelPosition: [0, -1, -5],
+    rotation: [0, 0, 0],
     cardPosition: [1.5, 0, 0],
     component: (props: any) => <IspgModel {...props} />,
   },
@@ -62,6 +67,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     slug: EXPERIENCE_SLUGS.THIRTY_DAYS,
     modelPosition: [0, -1, -5],
     cardPosition: [4.5, 0, 0],
+    rotation: [0, 0, 0],
     component: (props: any) => <ThirtyDaysModel {...props} />,
   },
 ];

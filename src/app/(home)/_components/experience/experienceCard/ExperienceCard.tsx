@@ -1,5 +1,5 @@
-import { Environment, MeshPortalMaterial, RoundedBox } from "@react-three/drei";
-import React, { useRef } from "react";
+import { Environment, Html, MeshPortalMaterial, RoundedBox } from "@react-three/drei";
+import React, { useRef, memo } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { ExperienceCardConfig } from "./experienceCard.config";
@@ -22,29 +22,47 @@ const ExperienceCard = ({ config, blend, onClick, activeSlug }: ExperienceCardPr
 
     return (
         <RoundedBox
-            args={[2, 3, 0.05]}
-            radius={0.04}
-            position={config.cardPosition}
-            onClick={activeSlug === null ? onClick : undefined}>
+            args={[2.5, 4, 0.05]}
+            rotation={config.rotation}
+            radius={0.05}
+            position={config.cardPosition}>
+            <Html
+                center
+                position={[0, 0, 0]}
+                rotation={[0, 0, 0]}
+                scale={1}
+                style={{ width: "250px", height: "390px", backgroundColor: "white" }}>
+                <div
+                    onClick={() => {
+                        if (activeSlug === null) {
+                            onClick();
+                        }
+                    }}
+                    className="absolute top-0 w-[250px] h-[390px] left-0 rounded-[20px] border border-white bg-black/50 flex justify-center items-center">
+                    <h1 className="text-white text-2xl font-bold">{config.name}</h1>
+                </div>
+            </Html>
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
                 resolution={1}
                 blur={0}>
-                <Environment preset="apartment" />
-                <color
-                    attach="background"
-                    args={activeSlug === null ? ['#ffffff'] : [config.bgColor]}
-                />
                 {blend === 1 && (
-                    <group
-                        onDoubleClick={blend === 1 ? onClick : undefined}
-                        position={config.modelPosition}>
-                        {config.component({})}
-                    </group>
+                    <>
+                        <Environment preset="apartment" />
+                        <color
+                            attach="background"
+                            args={["#000000"]}
+                        />
+                        <group
+                            onDoubleClick={blend === 1 ? onClick : undefined}
+                            position={config.modelPosition}>
+                            {config.component({})}
+                        </group>
+                    </>
                 )}
             </MeshPortalMaterial>
         </RoundedBox>
     );
 };
 
-export default ExperienceCard;
+export default memo(ExperienceCard);

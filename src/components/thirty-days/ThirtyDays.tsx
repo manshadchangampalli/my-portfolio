@@ -91,14 +91,14 @@ export function ThirtyDaysModel(props: any) {
                 {...props}
                 dispose={null}>
                 <mesh
-                    position={[-2.18, 3.50, 5.65]}
+                    position={[-0.82, 3.50, 5.64]}
                     rotation={[angle(190), angle(12), angle(-2)]}>
                     <planeGeometry args={[2.34, 1.42]} />
                     <meshStandardMaterial
-                        color="black"
+                        color="white"
                         side={THREE.DoubleSide}
                         transparent
-                        opacity={0.3}
+                        opacity={1}
                     />
                     <FirstMonitorHtml />
                 </mesh>

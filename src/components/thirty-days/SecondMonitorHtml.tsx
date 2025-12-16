@@ -9,13 +9,14 @@ export function SecondMonitorHtml() {
     return (
         <Html
             transform
-            center
-            position={[0, 0, 0.001]}
+            occlude
+            position={[-4.39, 0.35, 0.94]}
             rotation={[angle(180), angle(180), 0]}
             distanceFactor={0.5}
             pointerEvents="auto"
             scale={1}
             style={{
+                
                 width: "1090px",
                 height: "710px",
                 pointerEvents: "auto",
