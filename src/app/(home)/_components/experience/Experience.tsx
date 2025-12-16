@@ -1,35 +1,21 @@
-import { CameraControls, Html, Text } from "@react-three/drei";
-import React, { useState, useEffect, useRef, useCallback, memo } from "react";
+import { CameraControls, Html } from "@react-three/drei";
+import React, { useEffect, useRef, useCallback, memo } from "react";
 import ExperienceCard from "./experienceCard/ExperienceCard";
 import { experienceCardConfig } from "./experienceCard/experienceCard.config";
+import { useExperienceCardsStore } from "@/store/experienceCards.store";
 
 interface ExperienceProps {
     setIsFixed: (isFixed: boolean) => void;
 }
 
 const Experience = ({ setIsFixed }: ExperienceProps) => {
-    const [activeSlug, setActiveSlug] = useState<string | null>(null);
-    const [blend, setBlend] = useState(0);
+    const { activeSlug, blend, toggleActiveSlug } = useExperienceCardsStore();
     const cameraControlsRef = useRef<CameraControls>(null);
 
     const handleBlend = useCallback((slug: string) => {
-        if (activeSlug === slug) {
-            setActiveSlug(null);
-            setBlend(0);
-            setIsFixed(false);
-        } else {
-            setActiveSlug(slug);
-            setBlend(1);
-            setIsFixed(true);
-        }
-    }, [activeSlug, setIsFixed]);
+        toggleActiveSlug(slug);
+    }, [toggleActiveSlug]);
 
-    useEffect(() => {
-        if (cameraControlsRef.current) {
-            // Disable zoom on scroll - ACTION.NONE = 0
-            // cameraControlsRef.current.mouseButtons.wheel = 0;
-        }
-    }, []);
 
     const cameraPositionChange = useCallback(() => {
         if (cameraControlsRef.current) {
@@ -45,6 +31,10 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
     useEffect(() => {
         cameraPositionChange();
     }, [activeSlug, cameraPositionChange]);
+
+    useEffect(() => {
+        setIsFixed(activeSlug !== null);
+    }, [activeSlug, setIsFixed]);
 
     return (
         <>

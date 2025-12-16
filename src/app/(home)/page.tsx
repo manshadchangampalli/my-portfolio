@@ -8,6 +8,7 @@ import { lazy, Suspense, useState } from "react";
 import Hero from "./_components/hero/Hero";
 import { Canvas } from "@react-three/fiber";
 import Profile from "./_components/profile/Profile";
+import { ExperienceControls } from "./_components/experience/controls/ExperienceControls";
 
 const Experience = lazy(() => import("./_components/experience/Experience").then((mod) => ({ default: mod.default })));
 const Gallery = lazy(() => import("./_components/gallery/gallery").then((mod) => ({ default: mod.default })));
@@ -20,6 +21,7 @@ export default function Home() {
 
   return (
     <>
+      <ExperienceControls />
       <ReactLenis
         root
         options={{
