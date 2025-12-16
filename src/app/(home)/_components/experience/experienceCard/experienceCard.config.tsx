@@ -52,7 +52,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     id: "ispg",
     name: "ISPG",
     bgColor: "#0060d1",
-    lookAtPosition: [0, 2.5, 0, 0, 0, -5.5],
+    lookAtPosition: [1.5, 2.2, -4.5, 1.5, 0, -5.5],
     slug: EXPERIENCE_SLUGS.ISPG,
     modelPosition: [0, -1, -5],
     rotation: [0, 0, 0],

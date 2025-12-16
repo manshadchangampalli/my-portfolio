@@ -57,7 +57,6 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
                     config={config}
                     blend={activeSlug === config.slug ? blend : 0}
                     onClick={() => handleBlend(config.slug)}
-                    activeSlug={activeSlug}
                 />
             ))}
             <CameraControls
