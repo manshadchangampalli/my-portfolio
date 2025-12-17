@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CameraControls, useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
-import { useMemo, useEffect, useRef } from "react";
+import { useMemo, useEffect } from "react";
 import { PlaneHtml } from "./PlaneHtml";
 import { angle } from "@/utils/angle";
 import { useCarscanStore } from "@/store/carscanStore";
@@ -12,8 +12,7 @@ interface CarscanProps {
 
 export function Model({ cameraControls, ...props }: CarscanProps) {
     const { nodes }: any = useGLTF("/model/carscan/scene.gltf");
-
-    const { scrollValue } = useCarscanStore();
+    const { currentZoom, previousZoom } = useCarscanStore();
 
     const computerTexture = useTexture("/texture/carscan/computer2.webp");
     const tableTexture = useTexture("/texture/carscan/table.jpg");
@@ -59,13 +58,17 @@ export function Model({ cameraControls, ...props }: CarscanProps) {
         });
     }, [planeTexture]);
 
-    console.log({ scrollValue })
-
+    // Calculate zoom difference and apply dolly
     useEffect(() => {
         if (cameraControls) {
-            cameraControls.dolly(scrollValue, true);
+            const zoomDiff = currentZoom - previousZoom;
+            if (Math.abs(zoomDiff) > 0.001) {
+                cameraControls.dolly(-zoomDiff, true);
+            }
         }
-    }, [cameraControls, scrollValue]);
+    }, [cameraControls, currentZoom, previousZoom]);
+
+
 
     return (
         <group
@@ -132,4 +135,4 @@ export function Model({ cameraControls, ...props }: CarscanProps) {
     );
 }
 
-useGLTF.preload("/model/scene.gltf");
+useGLTF.preload("/model/carscan/scene.gltf");

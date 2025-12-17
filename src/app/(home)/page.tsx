@@ -29,7 +29,8 @@ export default function Home() {
           duration: 1.2,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smoothWheel: true,
-          wheelMultiplier: 1,
+          wheelMultiplier: isMobile ? 2 : 1, // Increase scroll speed on mobile
+          touchMultiplier: isMobile ? 2 : 1, // Increase touch scroll speed on mobile
         }}
       />
       <main className="bg-black w-full">
