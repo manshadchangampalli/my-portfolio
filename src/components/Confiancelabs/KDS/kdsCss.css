@@ -1,0 +1,237 @@
+.kds-bg {
+    width: 100%;
+    height: 100%;
+    background-color: #2a2a2a;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+}
+
+.kds-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Header Bar */
+.kds-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #1a1a1a;
+    border-bottom: 2px solid #444;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.header-left,
+.header-right {
+    color: #ffffff;
+}
+
+/* Main Content Area */
+.kds-main {
+    flex: 1;
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    overflow: hidden;
+}
+
+/* Orders Grid */
+.orders-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+    overflow-y: auto;
+}
+
+/* Order Ticket Cards */
+.order-ticket {
+    background-color: #1e1e1e;
+    border-radius: 4px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    border-top: 4px solid;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ticket-green {
+    border-top-color: #4CAF50;
+}
+
+.ticket-yellow {
+    border-top-color: #FFC107;
+}
+
+.ticket-red {
+    border-top-color: #F44336;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.ticket-time {
+    color: #aaa;
+    font-size: 12px;
+}
+
+.ticket-late {
+    color: #F44336;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.ticket-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.order-item {
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 4px;
+}
+
+.order-modifier {
+    color: #ccc;
+    padding-left: 10px;
+    font-size: 11px;
+}
+
+.order-allergy {
+    color: #F44336;
+    font-weight: 700;
+    font-size: 11px;
+    margin-top: 4px;
+    padding-left: 10px;
+}
+
+.order-rush {
+    color: #F44336;
+    font-weight: 700;
+    font-size: 11px;
+    padding-left: 10px;
+}
+
+.flame-icon {
+    font-size: 12px;
+}
+
+/* All Day Counts Sidebar */
+.all-day-counts {
+    width: 180px;
+    background-color: #1a1a1a;
+    border-radius: 4px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid #444;
+}
+
+.counts-header {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #444;
+}
+
+.count-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #1e1e1e;
+}
+
+.count-item.count-highlight {
+    background-color: #2d4a2d;
+}
+
+.count-number {
+    color: #4CAF50;
+    font-weight: 700;
+    font-size: 16px;
+    min-width: 35px;
+}
+
+.count-label {
+    color: #ffffff;
+    font-size: 13px;
+}
+
+/* Footer */
+.kds-footer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 12px;
+    background-color: #1a1a1a;
+    border-top: 2px solid #444;
+    font-size: 13px;
+    color: #aaa;
+}
+
+/* Popup Box */
+.kds-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 0 30px 15px rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    border: 1px solid #ffffff86;
+    z-index: 1000;
+}
+
+.popup-title {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.popup-description {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
+.tech-highlight {
+    color: #4CAF50;
+    font-weight: 600;
+    background-color: rgba(76, 175, 80, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
