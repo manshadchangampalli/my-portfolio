@@ -2,7 +2,7 @@ import React from 'react'
 
 const Profile = () => {
     return (
-        <div className="w-full h-screen flex items-center justify-center bg-black py-16 sm:py-20 md:py-24 lg:py-32 px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="w-full h-[min(100dvh,800px)] flex items-center justify-center bg-black py-16 sm:py-20 md:py-24 lg:py-32 px-4 sm:px-6 md:px-8 lg:px-12">
             <div className="max-w-4xl mx-auto">
                 <div className="flex flex-col items-center text-center ">
                     <h2 className="font-poller-one text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase leading-tight">

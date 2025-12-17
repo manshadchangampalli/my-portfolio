@@ -65,7 +65,7 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls }: ExperienceCa
             </Html>
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
-                resolution={1}
+                resolution={512}
                 blur={0}>
                 {blend === 1 && (
                     <>

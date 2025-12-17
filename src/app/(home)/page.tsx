@@ -38,12 +38,12 @@ export default function Home() {
         </div>
       </main>
       <Profile />
-      <div className={cn("w-full bg-black", isFixed ? "fixed inset-0 w-screen h-screen z-50" : "h-[90vh]")}>
+      <div className={cn("w-full bg-black", isFixed ? "fixed inset-0 w-screen h-screen z-50" : "h-[min(90vh,700px)]")}>
         <Canvas
           style={{ width: "100%", height: "100%", backgroundColor: "#000000" }}
-          gl={{ alpha: false, powerPreference: "high-performance", antialias: false }}
+          gl={{ alpha: false, powerPreference: "high-performance", antialias: true }}
           dpr={[1, 2]}
-          frameloop="demand"
+          frameloop="always"
           camera={{ position: [0, 0, 5], fov: 50 }}>
           <Suspense fallback={null}>
             <Experience setIsFixed={setIsFixed} />
