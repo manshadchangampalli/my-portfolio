@@ -42,7 +42,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
           {...props}
           cameraControls={props?.cameraControls ?? null}
         />
-      )
+      );
     },
   },
   {
@@ -54,7 +54,12 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     modelPosition: [0, -1, -5],
     cardPosition: [-1.5, 0, 0],
     rotation: [0, 0, 0],
-    component: (props: any) => <ConfianceLabsScene {...props} />,
+    component: (props: { cameraControls: CameraControls | null }) => (
+      <ConfianceLabsScene
+        {...props}
+        cameraControls={props?.cameraControls ?? null}
+      />
+    ),
   },
   {
     id: "ispg",

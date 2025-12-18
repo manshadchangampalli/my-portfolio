@@ -1,54 +1,66 @@
 import { Circle, Square, Triangle, X } from "lucide-react";
 import React from "react";
 import { ControlButton } from "../ControlButton";
+import useConfianceStore from "@/store/confianceStore";
 
 type ConfianceLabsControlProps = {
     disabled?: boolean;
 };
 
 export const ConfianceLabsControl = ({ disabled }: ConfianceLabsControlProps) => {
+    const { currentCamera, setCurrentCamera } = useConfianceStore();
+
+    const isTvSelected = currentCamera === "tv";
+    const isKioskSelected = currentCamera === "kiosk";
+    const isKdsSelected = currentCamera === "kds";
+    const isOverviewSelected = currentCamera === "frame";
+
     const handleTriangleClick = () => {
-        // TODO: implement triangle action
+        setCurrentCamera("tv");
     };
 
     const handleSquareClick = () => {
-        // TODO: implement square action
+        setCurrentCamera("kiosk");
     };
 
     const handleCircleClick = () => {
-        // TODO: implement circle action
+        setCurrentCamera("kds");
     };
 
     const handleCloseClick = () => {
-        // TODO: implement close action
+        setCurrentCamera("frame");
     };
 
     return (
         <div className="fixed right-5 items-center bottom-5 w-[200px] z-[9999] flex flex-col">
             <ControlButton
                 onClick={handleTriangleClick}
-                disabled={disabled}
-                ariaLabel="Confiance Labs control">
+                disabled={disabled || isTvSelected}
+                ariaLabel="Switch to Confiance Labs TV menu"
+                title="TV menu">
                 <Triangle />
             </ControlButton>
             <div className="flex gap-10 justify-between">
                 <ControlButton
                     onClick={handleSquareClick}
-                    disabled={disabled}
-                    ariaLabel="Confiance Labs square control">
+                    disabled={disabled || isKioskSelected}
+                    ariaLabel="Switch to Confiance Labs kiosk"
+                    title="Kiosk">
                     <Square />
                 </ControlButton>
                 <ControlButton
                     onClick={handleCircleClick}
-                    disabled={disabled}
-                    ariaLabel="Confiance Labs circle control">
+                    disabled={disabled || isKdsSelected}
+                    ariaLabel="Switch to Confiance Labs kitchen application"
+                    title="Kitchen application">
                     <Circle />
                 </ControlButton>
             </div>
             <ControlButton
                 onClick={handleCloseClick}
-                disabled={disabled}
-                ariaLabel="Confiance Labs close control">
+                disabled={disabled || isOverviewSelected}
+                ariaLabel="Return to Confiance Labs overview"
+                title="Overview">
                 <X />
             </ControlButton>
         </div>

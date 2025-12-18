@@ -15,15 +15,18 @@ import { KioskHtml } from "./Kiosk/KioskHtml";
 import { KdsHtml } from "./KDS/KdsHtml";
 
 const cameraPositions: Record<ConfianceCameraTypes, [number, number, number, number, number, number]> = {
-    frame: [-15, 5.5, -4, -15, 5.5, -10],
-    tv: [-4, 6.5, -4, -4, 6.5, -10],
-    kiosk: [3.5, 6, -5, 3.5, 0, -10],
-    kds: [11.5, 5, -3.5, 11.5, 0, -10],
+    frame: [-16, 5.5, -4, -16, 5.5, -10],
+    tv: [-5.5, 6.5, -4, -5.5, 6.5, -10],
+    kiosk: [2, 6, -7, 2, 2, -13],
+    kds: [10, 5, -7, 10, 1.5, -11],
 };
 
-export function ConfianceLabsScene(props: any) {
+interface ConfianceLabsSceneProps {
+    cameraControls: CameraControls | null;
+}
+
+export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSceneProps) {
     const { nodes, materials }: any = useGLTF("/model/confiancelabs/confiancelabs_model.gltf");
-    const cameraControls = useRef<CameraControls>(null);
 
     const currentCamera = useConfianceStore((state) => state.currentCamera);
 
@@ -84,14 +87,14 @@ export function ConfianceLabsScene(props: any) {
     }, [wallTexture]);
 
     useEffect(() => {
-        if (cameraControls.current) {
-            cameraControls.current.setLookAt(-15, 5.5, -4, -15, 5.5, -10);
+        if (cameraControls) {
+            cameraControls.setLookAt(-16, 5.5, -4, -16, 5.5, -10);
         }
     }, []);
 
     useEffect(() => {
-        if (cameraControls.current) {
-            cameraControls.current.setLookAt(...cameraPositions[currentCamera], true);
+        if (cameraControls) {
+            cameraControls.setLookAt(...cameraPositions[currentCamera], true);
         }
     }, [currentCamera]);
 
@@ -100,8 +103,7 @@ export function ConfianceLabsScene(props: any) {
             <group
                 {...props}
                 rotation={[0, angle(180), 0]}
-                dispose={null}
-            >
+                dispose={null}>
                 <mesh
                     name="wall"
                     geometry={nodes.wall.geometry}
@@ -117,9 +119,16 @@ export function ConfianceLabsScene(props: any) {
                     rotation={[Math.PI / 2, 0, 0]}
                     scale={[0.167, 0.157, 0.152]}
                 />
-                <mesh position={[14.981, 5.685, 7.611]} scale={[1, 1, 1]}>
+                <mesh
+                    position={[14.981, 5.685, 7.611]}
+                    scale={[1, 1, 1]}>
                     <planeGeometry args={[3, 4.6]} />
-                    <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} transparent opacity={0} />
+                    <meshStandardMaterial
+                        color="#ffffff"
+                        side={THREE.DoubleSide}
+                        transparent
+                        opacity={0}
+                    />
                     <FrameHtml />
                 </mesh>
                 <mesh
@@ -129,9 +138,14 @@ export function ConfianceLabsScene(props: any) {
                     position={[4, 6.847, 7.402]}
                     scale={[2.833, 1.529, 0.147]}
                 />
-                <mesh position={[4, 6.847, 7.3]} scale={[1, 1, 1]}>
+                <mesh
+                    position={[4, 6.847, 7.3]}
+                    scale={[1, 1, 1]}>
                     <planeGeometry args={[5.5, 3]} />
-                    <meshStandardMaterial color="black" side={THREE.DoubleSide} />
+                    <meshStandardMaterial
+                        color="black"
+                        side={THREE.DoubleSide}
+                    />
                     <TvHtml />
                 </mesh>
                 <mesh
@@ -142,9 +156,15 @@ export function ConfianceLabsScene(props: any) {
                     rotation={[Math.PI, 0, Math.PI]}
                     scale={4.269}
                 />
-                <mesh position={[-3.722, 4.4, 5.87]} scale={[1, 1, 1]} rotation={[angle(40), 0, 0]}>
+                <mesh
+                    position={[-3.722, 4.4, 5.87]}
+                    scale={[1, 1, 1]}
+                    rotation={[angle(40), 0, 0]}>
                     <planeGeometry args={[1.4, 1.7]} />
-                    <meshStandardMaterial color="black" side={THREE.DoubleSide} />
+                    <meshStandardMaterial
+                        color="black"
+                        side={THREE.DoubleSide}
+                    />
                     <KioskHtml />
                 </mesh>
                 <mesh
@@ -162,9 +182,15 @@ export function ConfianceLabsScene(props: any) {
                     position={[-11.697, 3.375, 4.981]}
                     scale={[1, 0.057, 1]}
                 />
-                <mesh position={[-11.697, 3.45, 4.98]} scale={[1, 1, 1]} rotation={[angle(46.35), 0, 0]}>
+                <mesh
+                    position={[-11.697, 3.45, 4.98]}
+                    scale={[1, 1, 1]}
+                    rotation={[angle(46.35), 0, 0]}>
                     <planeGeometry args={[1.8, 1.9]} />
-                    <meshStandardMaterial color="black" side={THREE.DoubleSide} />
+                    <meshStandardMaterial
+                        color="black"
+                        side={THREE.DoubleSide}
+                    />
                     <KdsHtml />
                 </mesh>
             </group>

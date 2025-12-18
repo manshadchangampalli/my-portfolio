@@ -6,16 +6,18 @@ export type ControlButtonProps = {
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
     ariaLabel: string;
+    title?: string;
     className?: string;
 };
 
-export const ControlButton = ({ children, onClick, disabled, ariaLabel, className }: ControlButtonProps) => {
+export const ControlButton = ({ children, onClick, disabled, ariaLabel, title, className }: ControlButtonProps) => {
     return (
         <button
             type="button"
             onClick={onClick}
             disabled={disabled}
             aria-label={ariaLabel}
+            title={title}
             className={cn(
                 "flex items-center justify-center w-16 h-16 rounded-full border border-white/20 bg-black/30 backdrop-blur-md hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black/30",
                 className

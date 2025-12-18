@@ -204,13 +204,13 @@
     transform: translate(-50%, -50%);
     width: 450px;
     padding: 30px;
-    background-color: rgba(0, 0, 0, 0.55);
+    background-color: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 10px;
     box-shadow: 0 0 30px 15px rgba(0, 0, 0, 0.8);
     color: #ffffff;
-    border: 1px solid #ffffff86;
+    border: 2px solid #ffffff86;
     z-index: 1000;
 }
 
