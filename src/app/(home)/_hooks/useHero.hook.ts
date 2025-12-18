@@ -15,15 +15,22 @@ export const useHero = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef(0);
+  const lastFrameRef = useRef(-1);
+
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
   const render = useCallback((frameIdx: number) => {
+    if (lastFrameRef.current === frameIdx) return;
+    lastFrameRef.current = frameIdx;
+
     const canvas = canvasRef.current;
     if (!canvas || !imagesRef.current[frameIdx]) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", {
+      alpha: false,
+    });
     if (!ctx) return;
 
     const img = imagesRef.current[frameIdx];
