@@ -14,7 +14,6 @@ const Experience = lazy(() => import("./_components/experience/Experience").then
 const Gallery = lazy(() => import("./_components/gallery/gallery").then((mod) => ({ default: mod.default })));
 
 export default function Home() {
-  const { isMobile, isClient } = useDevice();
   const [isFixed, setIsFixed] = useState(false);
 
   // Removed unnecessary resize listener and console.logs for performance
@@ -30,10 +29,13 @@ export default function Home() {
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smoothWheel: true,
           wheelMultiplier: 1,
+          touchMultiplier: 1,
+          prevent: (node) => node.classList.contains('hero__section'),
+
         }}
       />
       <main className="bg-black w-full">
-        <div className={cn(isClient && isMobile ? "" : "h-[800dvh]")}>
+        <div className={cn("h-[800dvh]")}>
           <Hero />
         </div>
       </main>

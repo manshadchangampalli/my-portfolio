@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
-import { heroContainerOpacity, heroProfileBar } from "../_config/hero.config";
+import { heroContainerOpacity } from "../_config/hero.config";
 
 const TOTAL_FRAMES = 192;
 const SCROLL_TRIGGER_HEIGHT = 7;
@@ -15,15 +15,22 @@ export const useHero = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef(0);
+  const lastFrameRef = useRef(-1);
+
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
   const render = useCallback((frameIdx: number) => {
+    if (lastFrameRef.current === frameIdx) return;
+    lastFrameRef.current = frameIdx;
+
     const canvas = canvasRef.current;
     if (!canvas || !imagesRef.current[frameIdx]) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", {
+      alpha: false,
+    });
     if (!ctx) return;
 
     const img = imagesRef.current[frameIdx];
@@ -64,7 +71,6 @@ export const useHero = () => {
     // Use requestAnimationFrame for better iOS performance
     requestAnimationFrame(() => {
       heroContainerOpacity(animationProgress, gsap);
-      heroProfileBar(animationProgress, gsap);
     });
   };
 
@@ -143,34 +149,16 @@ export const useHero = () => {
 
       ScrollTrigger.normalizeScroll(true);
 
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: ".hero__section",
-            start: `bottom-=${window.innerHeight}px top`,
-            end: `bottom top`,
-            scrub: 1,
-            invalidateOnRefresh: true,
-            refreshPriority: -1,
-          },
-        })
-        .to(".hero_profile_bar", { y: 0, ease: "none", duration: 10 })
-        .to(".hero_profile_bar_liquid", {
-          backgroundColor: "white",
-          filter: "none",
-          color: "black",
-          ease: "none",
-          duration: 10,
-          force3D: true,
-          willChange: "background-color, color, filter",
-        })
-        .to(".hero_profile_bar", {
-          opacity: 0,
-          ease: "none",
-          duration: 10,
-          force3D: true,
-          willChange: "opacity",
-        });
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero__section",
+          start: `bottom-=${window.innerHeight}px top`,
+          end: `bottom top`,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          refreshPriority: -1,
+        },
+      });
     }
 
     // Resize/Redraw Handler
