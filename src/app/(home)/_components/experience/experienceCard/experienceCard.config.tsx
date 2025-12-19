@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { IspgModel } from "@/components/ispg/IspgModel";
-import { Model as CarscanModel } from "@/components/carscan/Carscan";
-import { ConfianceLabsScene } from "@/components/Confiancelabs/ConfianceLabsScene";
-import { ThirtyDaysModel } from "@/components/thirty-days/ThirtyDays";
-import { angle } from "@/utils/angle";
 import { CameraControls } from "@react-three/drei";
+import { LazyCarscanModel, LazyConfianceLabsScene, LazyIspgModel, LazyThirtyDaysModel } from "@/components/lazy/LazyModels";
 
 export interface ExperienceCardConfig {
   id: string; // Unique identifier for each card
@@ -38,7 +34,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     rotation: [0, 0, 0],
     component: (props: { cameraControls: CameraControls | null }) => {
       return (
-        <CarscanModel
+        <LazyCarscanModel
           {...props}
           cameraControls={props?.cameraControls ?? null}
         />
@@ -55,7 +51,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     cardPosition: [-1.5, 0, 0],
     rotation: [0, 0, 0],
     component: (props: { cameraControls: CameraControls | null }) => (
-      <ConfianceLabsScene
+      <LazyConfianceLabsScene
         {...props}
         cameraControls={props?.cameraControls ?? null}
       />
@@ -70,7 +66,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     modelPosition: [0, -1, -5],
     rotation: [0, 0, 0],
     cardPosition: [1.5, 0, 0],
-    component: (props: any) => <IspgModel {...props} />,
+    component: (props: any) => <LazyIspgModel {...props} />,
   },
   {
     id: "thirtydays",
@@ -81,6 +77,6 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     modelPosition: [0, -1, -5],
     cardPosition: [4.5, 0, 0],
     rotation: [0, 0, 0],
-    component: (props: any) => <ThirtyDaysModel {...props} />,
+    component: (props: any) => <LazyThirtyDaysModel {...props} />,
   },
 ];
