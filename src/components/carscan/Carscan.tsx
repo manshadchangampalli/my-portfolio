@@ -15,8 +15,8 @@ export function Model({ cameraControls, ...props }: CarscanProps) {
     const { currentZoom, previousZoom } = useCarscanStore();
 
     const computerTexture = useTexture("/texture/carscan/computer2.webp");
-    const tableTexture = useTexture("/texture/carscan/table.jpg");
-    const planeTexture = useTexture("/texture/carscan/wall.jpg");
+    const tableTexture = useTexture("/texture/carscan/table.webp");
+    const planeTexture = useTexture("/texture/carscan/wall.webp");
 
     // Configure computer texture
     useEffect(() => {

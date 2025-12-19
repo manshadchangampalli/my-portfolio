@@ -7,7 +7,7 @@ import { heroContainerOpacity } from "../_config/hero.config";
 
 const TOTAL_FRAMES = 192;
 const SCROLL_TRIGGER_HEIGHT = 7;
-const currentFrame = (index: number) => `/images/hero/output_${(index + 1).toString().padStart(4, "0")}.jpg`;
+const currentFrame = (index: number) => `/images/hero/output_${(index + 1).toString().padStart(4, "0")}.webp`;
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
