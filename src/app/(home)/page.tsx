@@ -52,7 +52,7 @@ export default function Home() {
             antialias: false,
             powerPreference: "high-performance",
             stencil: false,
-            depth: false,
+            // depth: false,
           }}
           dpr={isMobile ? [0.5, 1] : [1, 2]}
           frameloop="demand"
