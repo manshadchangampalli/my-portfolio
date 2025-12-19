@@ -5,10 +5,10 @@ interface DockProps {
 }
 
 const dockApps = [
-    { id: AppType.PHONE, name: "Phone", icon: "/texture/ispg/apps/Phone.png" },
-    { id: AppType.MESSAGES, name: "Messages", icon: "/texture/ispg/apps/Messages.png" },
-    { id: AppType.FACETIME, name: "FaceTime", icon: "/texture/ispg/apps/FaceTime.png" },
-    { id: AppType.WALLET, name: "Wallet", icon: "/texture/ispg/apps/Wallet.png" },
+    { id: AppType.PHONE, name: "Phone", icon: "/texture/ispg/apps/Phone.webp" },
+    { id: AppType.MESSAGES, name: "Messages", icon: "/texture/ispg/apps/Messages.webp" },
+    { id: AppType.FACETIME, name: "FaceTime", icon: "/texture/ispg/apps/FaceTime.webp" },
+    { id: AppType.WALLET, name: "Wallet", icon: "/texture/ispg/apps/Wallet.webp" },
 ];
 
 export function Dock({ onAppClick }: DockProps) {

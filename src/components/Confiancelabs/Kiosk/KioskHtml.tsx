@@ -19,7 +19,7 @@ export function KioskHtml() {
                 backgroundColor: "#ffffff",
             }}>
             <div className="kiosk-bg">
-                <img className="kiosk-image" src="/texture/confiancelabs/kiosk.png" alt="" />
+                <img className="kiosk-image" src="/texture/confiancelabs/kiosk.webp" alt="" />
                 <div className="box">
                     <h2 className="box-title">Interactive Kiosk Ordering System</h2>
                     <p className="box-description">

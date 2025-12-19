@@ -30,11 +30,11 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
 
     const currentCamera = useConfianceStore((state) => state.currentCamera);
 
-    const frameTexture = useTexture("/texture/confiancelabs/frame_bake.png");
-    const tvTexture = useTexture("/texture/confiancelabs/tv_baked.png");
-    const tableTexture = useTexture("/texture/confiancelabs/table_baked.png");
+    const frameTexture = useTexture("/texture/confiancelabs/frame_bake.webp");
+    const tvTexture = useTexture("/texture/confiancelabs/tv_baked.webp");
+    const tableTexture = useTexture("/texture/confiancelabs/table_baked.webp");
     const kdsTexture = useTexture("/texture/confiancelabs/kds_bake.webp");
-    const wallTexture = useTexture("/texture/confiancelabs/wall_bake.png");
+    const wallTexture = useTexture("/texture/confiancelabs/wall_bake.webp");
 
     const frameMaterial = useMemo(() => {
         const texture = frameTexture.clone();

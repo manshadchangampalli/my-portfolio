@@ -14,12 +14,12 @@ import { angle } from "@/utils/angle";
 export function ThirtyDaysModel(props: any) {
     const { nodes, materials }: any = useGLTF("/model/thirty-days/30days.gltf");
 
-    const wallTexture = useTexture("/texture/thirty-days/wall_bake.png");
-    const windowTexture = useTexture("/texture/thirty-days/window_bake.png");
+    const wallTexture = useTexture("/texture/thirty-days/wall_bake.webp");
+    const windowTexture = useTexture("/texture/thirty-days/window_bake.webp");
     const bgTexture = useTexture("/texture/thirty-days/bg.webp");
-    const deskTopTexture = useTexture("/texture/thirty-days/table_top_bake.png");
-    const deskLegTexture = useTexture("/texture/thirty-days/table_leg_bake.png");
-    const monitorTexture = useTexture("/texture/thirty-days/monitor_bake.png");
+    const deskTopTexture = useTexture("/texture/thirty-days/table_top_bake.webp");
+    const deskLegTexture = useTexture("/texture/thirty-days/table_leg_bake.webp");
+    const monitorTexture = useTexture("/texture/thirty-days/monitor_bake.webp");
 
     const monitorMaterial = useMemo(() => {
         const texture = monitorTexture.clone();

@@ -12,7 +12,7 @@ import { angle } from "@/utils/angle";
 
 export function IspgModel() {
     const { nodes, materials }: any = useGLTF("/model/ispg/ispg_phone.gltf");
-    const tableTexture = useTexture("/texture/ispg/table.png");
+    const tableTexture = useTexture("/texture/ispg/table.webp");
 
     const tableMaterial = useMemo(() => {
         const texture = tableTexture.clone();

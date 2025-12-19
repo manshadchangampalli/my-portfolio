@@ -48,7 +48,7 @@ export function PhoneHtml() {
                 onPointerDown={handleEventPropagation}
                 onPointerMove={handleEventPropagation}
                 onPointerUp={handleEventPropagation}
-                className="w-full h-full bg-cover bg-center bg-no-repeat bg-[url(/texture/ispg/bg.png)] relative overflow-hidden rounded-[60px] shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
+                className="w-full h-full bg-cover bg-center bg-no-repeat bg-[url(/texture/ispg/bg.webp)] relative overflow-hidden rounded-[60px] shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
                 {activeApp === AppType.NONE ? (
                     <div className="absolute w-full h-full top-0 left-0 backdrop-blur-3xl">
                         <Header />

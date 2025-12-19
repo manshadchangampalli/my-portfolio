@@ -12,9 +12,9 @@ export const appConfigs: AppConfig[] = [
     {
         id: AppType.ULTIMATE_MOTORS,
         name: "Ultimate Motors",
-        icon: "/texture/ispg/apps/ultimate motors.png",
+        icon: "/texture/ispg/apps/ultimate motors.webp",
         splashScreen: {
-            logo: "/texture/ispg/apps/ultimate motors.png",
+            logo: "/texture/ispg/apps/ultimate motors.webp",
             duration: 1000,
         },
         themeColor: "#000000",
@@ -23,9 +23,9 @@ export const appConfigs: AppConfig[] = [
     {
         id: AppType.NMC,
         name: "NMC",
-        icon: "/texture/ispg/apps/nmc.png",
+        icon: "/texture/ispg/apps/nmc.webp",
         splashScreen: {
-            logo: "/texture/ispg/apps/nmc.png",
+            logo: "/texture/ispg/apps/nmc.webp",
             duration: 1000,
         },
         themeColor: "#2C6D97",
@@ -34,7 +34,7 @@ export const appConfigs: AppConfig[] = [
     {
         id: AppType.MBS,
         name: "MBS",
-        icon: "/texture/ispg/apps/mbs.png",
+        icon: "/texture/ispg/apps/mbs.webp",
         themeColor: "#07443F",
         splashScreen: {
             duration: 1000,
@@ -44,7 +44,7 @@ export const appConfigs: AppConfig[] = [
     {
         id: AppType.MAI_DUBAI,
         name: "Mai Dubai",
-        icon: "/texture/ispg/apps/mai dubai.png",
+        icon: "/texture/ispg/apps/mai dubai.webp",
         splashScreen: {
             duration: 1000,
         },
@@ -54,7 +54,7 @@ export const appConfigs: AppConfig[] = [
     {
         id: AppType.ABER,
         name: "Aber",
-        icon: "/texture/ispg/apps/aber.png",
+        icon: "/texture/ispg/apps/aber.webp",
         splashScreen: {
             duration: 1000,
         },
@@ -64,21 +64,21 @@ export const appConfigs: AppConfig[] = [
     {
         id: AppType.PHONE,
         name: "Phone",
-        icon: "/texture/ispg/apps/Phone.png",
+        icon: "/texture/ispg/apps/Phone.webp",
         themeColor: "#000000",
         content: PhoneContent,
     },
     {
         id: AppType.MESSAGES,
         name: "Messages",
-        icon: "/texture/ispg/apps/Messages.png",
+        icon: "/texture/ispg/apps/Messages.webp",
         themeColor: "#000000",
         content: MessagesContent,
     },
     {
         id: AppType.WALLET,
         name: "Wallet",
-        icon: "/texture/ispg/apps/Wallet.png",
+        icon: "/texture/ispg/apps/Wallet.webp",
         themeColor: "#000000",
         content: WalletContent,
     },

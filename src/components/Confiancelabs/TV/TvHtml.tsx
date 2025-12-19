@@ -19,7 +19,7 @@ export function TvHtml() {
                 backgroundColor: "#ffffff",
             }}>
             <div className="tv-bg">
-                <img className="tv-image" src="/texture/confiancelabs/tv.png" alt="" />
+                <img className="tv-image" src="/texture/confiancelabs/tv.webp" alt="" />
                 <div className="box">
                     <h2 className="box-title">Real-Time Time-Based Menu Management System</h2>
                     <p className="box-description">
