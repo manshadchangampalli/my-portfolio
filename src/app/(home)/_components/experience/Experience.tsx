@@ -1,4 +1,4 @@
-import { CameraControls, Html } from "@react-three/drei";
+import { CameraControls, Html, useProgress } from "@react-three/drei";
 import React, { useEffect, useRef, useCallback, memo, useState } from "react";
 import ExperienceCard from "./experienceCard/ExperienceCard";
 import { experienceCardConfig } from "./experienceCard/experienceCard.config";
@@ -6,12 +6,15 @@ import { useExperienceCardsStore } from "@/store/experienceCards.store";
 
 interface ExperienceProps {
     setIsFixed: (isFixed: boolean) => void;
+    setIsLoading?: (isLoading: boolean) => void;
+    setLoadingProgress?: (progress: number) => void;
 }
 
-const Experience = ({ setIsFixed }: ExperienceProps) => {
+const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: ExperienceProps) => {
     const { activeSlug, blend, toggleActiveSlug } = useExperienceCardsStore();
     const cameraControlsRef = useRef<CameraControls>(null);
     const [cameraControls, setCameraControls] = useState<CameraControls | null>(null);
+    const { progress, active } = useProgress();
 
     const handleBlend = useCallback((slug: string) => {
         toggleActiveSlug(slug);
@@ -41,6 +44,19 @@ const Experience = ({ setIsFixed }: ExperienceProps) => {
     useEffect(() => {
         setIsFixed(activeSlug !== null);
     }, [activeSlug, setIsFixed]);
+
+    // Track loading progress and notify parent
+    useEffect(() => {
+        if (setIsLoading) {
+            setIsLoading(active);
+        }
+    }, [active, setIsLoading]);
+
+    useEffect(() => {
+        if (setLoadingProgress) {
+            setLoadingProgress(Math.round(progress));
+        }
+    }, [progress, setLoadingProgress]);
 
     return (
         <>
