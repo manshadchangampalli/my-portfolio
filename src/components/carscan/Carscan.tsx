@@ -11,7 +11,7 @@ interface CarscanProps {
 }
 
 export function Model({ cameraControls, ...props }: CarscanProps) {
-    const { nodes }: any = useGLTF("/model/carscan/scene.gltf");
+    const { nodes }: any = useGLTF("/model/carscan/scene.glb");
     const { currentZoom, previousZoom } = useCarscanStore();
 
     const computerTexture = useTexture("/texture/carscan/computer2.webp");
@@ -135,4 +135,4 @@ export function Model({ cameraControls, ...props }: CarscanProps) {
     );
 }
 
-useGLTF.preload("/model/carscan/scene.gltf");
+useGLTF.preload("/model/carscan/scene.glb");

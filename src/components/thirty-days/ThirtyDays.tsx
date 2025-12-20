@@ -12,7 +12,7 @@ import { SecondMonitorHtml } from "./SecondMonitorHtml";
 import { angle } from "@/utils/angle";
 
 export function ThirtyDaysModel(props: any) {
-    const { nodes, materials }: any = useGLTF("/model/thirty-days/30days.gltf");
+    const { nodes, materials }: any = useGLTF("/model/thirty-days/30days.glb");
 
     const wallTexture = useTexture("/texture/thirty-days/wall_bake.webp");
     const windowTexture = useTexture("/texture/thirty-days/window_bake.webp");
@@ -479,4 +479,4 @@ export function ThirtyDaysModel(props: any) {
     );
 }
 
-useGLTF.preload("/model/thirty-days/30days.gltf");
+useGLTF.preload("/model/thirty-days/30days.glb");

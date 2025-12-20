@@ -26,7 +26,7 @@ interface ConfianceLabsSceneProps {
 }
 
 export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSceneProps) {
-    const { nodes, materials }: any = useGLTF("/model/confiancelabs/confiancelabs_model.gltf");
+    const { nodes, materials }: any = useGLTF("/model/confiancelabs/confiancelabs_model.glb");
 
     const currentCamera = useConfianceStore((state) => state.currentCamera);
 
@@ -198,4 +198,4 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
     );
 }
 
-useGLTF.preload("/model/confiancelabs/confiancelabs_model.gltf");
+useGLTF.preload("/model/confiancelabs/confiancelabs_model.glb");

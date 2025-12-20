@@ -72,7 +72,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     id: "thirtydays",
     name: "Thirty Days",
     bgColor: "#5c8e93",
-    lookAtPosition: [4.5, -1.5, -0, 4.5, -1.5, -4],
+    lookAtPosition: [4.5, -1, -1.5, 4.5, -1.5, -4],
     slug: EXPERIENCE_SLUGS.THIRTY_DAYS,
     modelPosition: [0, -1, -5],
     cardPosition: [4.5, 0, 0],

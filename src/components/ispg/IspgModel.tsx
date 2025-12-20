@@ -11,7 +11,7 @@ import * as THREE from "three";
 import { angle } from "@/utils/angle";
 
 export function IspgModel() {
-    const { nodes, materials }: any = useGLTF("/model/ispg/ispg_phone.gltf");
+    const { nodes, materials }: any = useGLTF("/model/ispg/ispg_phone.glb");
     const tableTexture = useTexture("/texture/ispg/table.webp");
 
     const tableMaterial = useMemo(() => {
@@ -119,4 +119,4 @@ export function IspgModel() {
     );
 }
 
-useGLTF.preload("/model/ispg/ispg_phone.gltf");
+useGLTF.preload("/model/ispg/ispg_phone.glb");
