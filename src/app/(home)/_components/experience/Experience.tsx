@@ -119,7 +119,7 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
     return (
         <>
             <Html fullscreen>
-                <h1 className="text-white text-center text-[56px] font-poller-one font-bold">Experience</h1>
+                <h1 className="font-poller-one text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase leading-tight text-center">Evolution</h1>
             </Html>
             {experienceCardConfig?.map((config, index) => (
                 <ExperienceCard
