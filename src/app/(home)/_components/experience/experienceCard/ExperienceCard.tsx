@@ -10,9 +10,10 @@ interface ExperienceCardProps {
     blend: number;
     onClick: () => void;
     cameraControls: CameraControls | null;
+    position?: [number, number, number];
 }
 
-const ExperienceCard = ({ config, blend, onClick, cameraControls }: ExperienceCardProps) => {
+const ExperienceCard = ({ config, blend, onClick, cameraControls, position }: ExperienceCardProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const meshPortalMaterialRef = useRef<ThreeElements["portalMaterialImpl"] | null>(null);
 
@@ -36,7 +37,7 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls }: ExperienceCa
             args={[2.5, 4, 0.05]}
             rotation={config.rotation}
             radius={0.05}
-            position={config.cardPosition}
+            position={position || config.cardPosition}
             onPointerOver={() => {
                 setIsHovered(true);
             }}

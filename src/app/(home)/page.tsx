@@ -34,7 +34,7 @@ export default function Home() {
         </div>
       </main>
       <Profile />
-      <div className={cn("w-full bg-black", isFixed ? "fixed inset-0 w-screen h-screen z-50" : "h-[min(90vh,700px)]")}>
+      <div className={cn("w-full bg-black", isFixed ? "fixed inset-0 w-screen h-screen z-50" : "h-[1900px] md:h-[1200px] lg:h-[700px]")}>
         <Suspense fallback={<ExperienceLoadingFallback />}>
           <Canvas
             style={{ width: "100%", height: "100%", backgroundColor: "#000000" }}
@@ -61,7 +61,7 @@ export default function Home() {
               camera={{ position: [0, 0, 5], fov: 50 }}
               gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }}
               dpr={isMobile ? [0.5, 1] : [1, 2]}
-              frameloop="demand">
+              frameloop="always">
               <Suspense fallback={null}>
                 <Gallery />
               </Suspense>
