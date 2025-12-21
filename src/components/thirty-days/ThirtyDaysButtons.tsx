@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useThirtyDaysStore } from "../../store/thirtyDaysStore";
+import { dayConfig } from "./dayConfig";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function ThirtyDaysButtons() {
     const [offset, setOffset] = useState(0);
@@ -72,6 +74,26 @@ export function ThirtyDaysButtons() {
         });
     };
 
+    const handlePrevious = () => {
+        if (activeNumber > 1) {
+            const newActive = activeNumber - 1;
+            const newOffset = -(newActive - 1) * 50;
+            setOffset(newOffset);
+            setActiveNumber(newActive);
+            setCurrentDate(newActive);
+        }
+    };
+
+    const handleNext = () => {
+        if (activeNumber < 30) {
+            const newActive = activeNumber + 1;
+            const newOffset = -(newActive - 1) * 50;
+            setOffset(newOffset);
+            setActiveNumber(newActive);
+            setCurrentDate(newActive);
+        }
+    };
+
     useEffect(() => {
         if (isDragging) {
             const handleGlobalMouseMove = (e: MouseEvent) => {
@@ -128,43 +150,67 @@ export function ThirtyDaysButtons() {
             };
         }
     }, [isDragging, startX, setCurrentDate, snapToNearest50]);
+    const caption = dayConfig[activeNumber].caption;
 
     return (
-        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 flex flex-col gap-2.5 z-[9999] select-none">
-            <div className="point absolute left-1/2 -translate-x-1/2 top-0 -translate-y-full bg-white px-2 text-xs rounded-full">Day</div>
-            <div
-                className="max-w-[300px] overflow-hidden flex gap-[50px] p-2.5 rounded-lg relative"
-                style={{
-                    background: "linear-gradient(to right, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.2) 100%)",
-                }}>
-                {/* Left blur overlay */}
-                <div className="absolute left-0 top-0 bottom-0 w-10 bg-linear-to-r from-black/60 to-transparent pointer-events-none z-1" />
+        <>
+            <div className="fixed bottom-[100px] bg-black/50 backdrop-blur-sm text-white left-1/2 p-4 rounded-lg -translate-x-1/2 flex flex-col gap-2.5 z-[9999] select-none">{caption}</div>
+            <div className="fixed bottom-5 left-1/2 -translate-x-1/2 flex flex-col gap-2.5 z-[9999] select-none">
+                <div className="point absolute left-1/2 -translate-x-1/2 top-0 -translate-y-full bg-white px-2 text-xs rounded-full">Day</div>
+                <div className="flex items-center gap-2">
+                    {/* Left Arrow Button */}
+                    <button
+                        onClick={handlePrevious}
+                        disabled={activeNumber === 1}
+                        className="text-white hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity p-1"
+                        aria-label="Previous day">
+                        <ChevronLeft size={20} />
+                    </button>
 
-                {/* Right blur overlay */}
-                <div className="absolute right-0 top-0 bottom-0 w-10 bg-linear-to-l from-black/60  to-transparent pointer-events-none z-1" />
+                    <div
+                        className="max-w-[300px] overflow-hidden flex gap-[50px] p-2.5 rounded-lg relative"
+                        style={{
+                            background: "linear-gradient(to right, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.2) 100%)",
+                        }}>
+                        {/* Left blur overlay */}
+                        <div className="absolute left-0 top-0 bottom-0 w-10 bg-linear-to-r from-black/60 to-transparent pointer-events-none z-1" />
 
-                <div
-                    ref={containerRef}
-                    className="flex gap-[25px] ml-[calc(50%-12.5px)] transition-transform duration-100 relative z-0 cursor-grab active:cursor-grabbing"
-                    style={{
-                        transform: `translateX(${offset}px)`,
-                    }}
-                    onMouseDown={handleMouseDown}
-                    onTouchStart={handleTouchStart}
-                    onMouseMove={handleMouseMove}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    onMouseUp={handleMouseUp}>
-                    {Array.from({ length: 30 }, (_, i) => i + 1).map((number) => (
+                        {/* Right blur overlay */}
+                        <div className="absolute right-0 top-0 bottom-0 w-10 bg-linear-to-l from-black/60  to-transparent pointer-events-none z-1" />
+
                         <div
-                            key={number}
-                            className={`min-w-fit text-black w-[25px] font-semibold aspect-square bg-white text-xs rounded-full flex items-center justify-center select-none transition-all duration-500 ${number === activeNumber ? "opacity-100 scale-120" : "opacity-50 scale-90"
-                                }`}>
-                            {number}
+                            ref={containerRef}
+                            className="flex gap-[25px] ml-[calc(50%-12.5px)] transition-transform duration-100 relative z-0 cursor-grab active:cursor-grabbing"
+                            style={{
+                                transform: `translateX(${offset}px)`,
+                            }}
+                            onMouseDown={handleMouseDown}
+                            onTouchStart={handleTouchStart}
+                            onMouseMove={handleMouseMove}
+                            onTouchMove={handleTouchMove}
+                            onTouchEnd={handleTouchEnd}
+                            onMouseUp={handleMouseUp}>
+                            {Array.from({ length: 30 }, (_, i) => i + 1).map((number) => (
+                                <div
+                                    key={number}
+                                    className={`min-w-fit text-black w-[25px] font-semibold aspect-square bg-white text-xs rounded-full flex items-center justify-center select-none transition-all duration-500 ${number === activeNumber ? "opacity-100 scale-120" : "opacity-50 scale-90"
+                                        }`}>
+                                    {number}
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+
+                    {/* Right Arrow Button */}
+                    <button
+                        onClick={handleNext}
+                        disabled={activeNumber === 30}
+                        className="text-white hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity p-1"
+                        aria-label="Next day">
+                        <ChevronRight size={20} />
+                    </button>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

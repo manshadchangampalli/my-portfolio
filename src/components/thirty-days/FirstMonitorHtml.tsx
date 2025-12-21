@@ -9,12 +9,12 @@ export function FirstMonitorHtml() {
     const currentDate = useThirtyDaysStore((state) => state.currentDate);
     const config = dayConfig[currentDate] || dayConfig[1];
     const Component = config.component;
-    const caption = config.caption;
+    const caption = config.shortCaption;
     const { isMd, isLg } = useBreakpoints();
 
     const getPosition = useMemo((): [number, number, number] => {
         if (isLg) {
-            return [-4.4, -0.16, -0.95];
+            return [-4.4, -0.165, -0.95];
         } else if (isMd) {
             return [-0.98, 1.146, -0.39];
         } else {
@@ -41,7 +41,9 @@ export function FirstMonitorHtml() {
                 overflow: "auto",
                 backgroundColor: "black",
             }}>
-            <div onWheel={handleEventPropagation} className="relative w-full h-full">
+            <div
+                onWheel={handleEventPropagation}
+                className="relative w-full h-full">
                 <Component />
                 {/* Caption overlay */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-lg text-sm font-medium backdrop-blur-sm">
