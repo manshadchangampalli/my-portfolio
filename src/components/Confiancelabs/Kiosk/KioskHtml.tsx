@@ -1,13 +1,27 @@
 import { Html } from "@react-three/drei";
+import { useMemo } from "react";
 import { angle } from "@/utils/angle";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 import "./kioskCss.css";
 
 export function KioskHtml() {
+    const { isMd, isLg } = useBreakpoints();
+
+    const getPosition = useMemo((): [number, number, number] => {
+        if (isLg) {
+            return [1.5, 0, -0.0001];
+        } else if (isMd) {
+            return [-1, 1.1, -0.98];
+        } else {
+            return [0, 0.6, -0.58];
+        }
+    }, [isMd, isLg]);
+
     return (
         <Html
             transform
             occlude
-            position={[1.5, 0, -0.0001]}
+            position={getPosition}
             rotation={[0, angle(180), 0]}
             distanceFactor={1}
             pointerEvents="auto"

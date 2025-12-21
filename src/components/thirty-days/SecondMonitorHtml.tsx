@@ -1,8 +1,22 @@
 import { Html } from "@react-three/drei";
+import { useMemo } from "react";
 import { angle } from "@/utils/angle";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 import { FigmaDesign } from "./FigmaDesign";
 
 export function SecondMonitorHtml() {
+    const { isMd, isLg } = useBreakpoints();
+
+    const getPosition = useMemo((): [number, number, number] => {
+        if (isLg) {
+            return [-4.39, 0.35, 0.94];
+        } else if (isMd) {
+            return [-0.966, 1.215, -0.1851];
+        } else {
+            return [0.01, 2.54, -0.9168];
+        }
+    }, [isMd, isLg]);
+
     const handleEventPropagation = (e: React.WheelEvent<HTMLDivElement>) => {
         e.stopPropagation();
     };
@@ -10,13 +24,13 @@ export function SecondMonitorHtml() {
         <Html
             transform
             occlude
-            position={[-4.39, 0.35, 0.94]}
+            position={getPosition}
             rotation={[angle(180), angle(180), 0]}
             distanceFactor={0.5}
             pointerEvents="auto"
             scale={1}
             style={{
-                
+
                 width: "1090px",
                 height: "710px",
                 pointerEvents: "auto",

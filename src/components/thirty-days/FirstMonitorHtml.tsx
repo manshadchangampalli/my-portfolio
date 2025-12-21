@@ -1,5 +1,7 @@
 import { Html } from "@react-three/drei";
+import { useMemo } from "react";
 import { angle } from "@/utils/angle";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 import { useThirtyDaysStore } from "../../store/thirtyDaysStore";
 import { dayConfig } from "./dayConfig";
 
@@ -8,6 +10,17 @@ export function FirstMonitorHtml() {
     const config = dayConfig[currentDate] || dayConfig[1];
     const Component = config.component;
     const caption = config.caption;
+    const { isMd, isLg } = useBreakpoints();
+
+    const getPosition = useMemo((): [number, number, number] => {
+        if (isLg) {
+            return [-4.4, -0.16, -0.95];
+        } else if (isMd) {
+            return [-0.98, 1.146, -0.39];
+        } else {
+            return [0, 2.67, -0.435];
+        }
+    }, [isMd, isLg]);
 
     const handleEventPropagation = (e: React.WheelEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -16,14 +29,14 @@ export function FirstMonitorHtml() {
         <Html
             transform
             occlude
-            position={[-4.4, -0.16, -0.95]}
+            position={getPosition}
             rotation={[angle(180), angle(180), 0]}
             distanceFactor={0.5}
             pointerEvents="auto"
             scale={1}
             style={{
                 width: "1884px",
-                height: "1131px",
+                height: "1150px",
                 pointerEvents: "auto",
                 overflow: "auto",
                 backgroundColor: "black",

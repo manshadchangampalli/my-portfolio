@@ -303,31 +303,14 @@ export function PlaneHtml() {
     const duration = 'jun 2022 to sep 2022';
     const { isMd, isLg } = useBreakpoints();
 
-    // Calculate position and dimensions based on breakpoints
     const getPosition = useMemo((): [number, number, number] => {
         if (isLg) {
-            // Large screens (>= 1024px): original position
             return [-27.65, 0, -0.13];
+        } else if (isMd) {
+            return [-6.2, 10.7, 0.389];
+        } else {
+            return [-0.1, 18.6, 0.725];
         }
-        if (isMd) {
-            // Medium screens (768px - 1024px): adjusted position
-            return [-20, 0, -0.13];
-        }
-        // Small screens (< 768px): mobile position
-        return [-15, 0, -0.13];
-    }, [isMd, isLg]);
-
-    const getDimensions = useMemo(() => {
-        if (isLg) {
-            // Large screens: original size
-            return { width: "1000px", height: "980px" };
-        }
-        if (isMd) {
-            // Medium screens: slightly smaller
-            return { width: "800px", height: "780px" };
-        }
-        // Small screens: mobile size
-        return { width: "600px", height: "580px" };
     }, [isMd, isLg]);
 
     const handleEventPropagation = (e: React.SyntheticEvent) => {
@@ -355,7 +338,7 @@ export function PlaneHtml() {
                 className="overflow-auto no-scrollbar h-full w-full"
             >
                 <div className="plane-body">
-                    <div className="plane-main-container flex flex-col justify-between" style={{ height: getDimensions.height }}>
+                    <div className="plane-main-container flex flex-col justify-between h-[980px]">
                         <div>
                             <Header
                                 companyName={COMPANY_INFO.name}

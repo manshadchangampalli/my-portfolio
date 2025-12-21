@@ -1,4 +1,5 @@
 import { Html } from "@react-three/drei";
+import { useState, useMemo } from "react";
 import { Header } from "./components/Header";
 import { Dock } from "./components/Dock";
 import { Notes } from "./components/Notes";
@@ -7,8 +8,8 @@ import { AppDetail } from "./components/AppDetail";
 import { AppType } from "./types";
 import { appConfigs } from "./appConfigs";
 import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
 import { angle } from "@/utils/angle";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 
 const getAppName = (appType: AppType): string => {
     if (appType === AppType.NOTES) return "Notes";
@@ -18,6 +19,18 @@ const getAppName = (appType: AppType): string => {
 
 export function PhoneHtml() {
     const [activeApp, setActiveApp] = useState<AppType>(AppType.NONE);
+    const { isMd, isLg } = useBreakpoints();
+
+    const getPosition = useMemo((): [number, number, number] => {
+        if (isLg) {
+            return [-7.431, 0.08, 0.1];
+        } else if (isMd) {
+            return [5.07, -0.08, 6.11];
+        } else {
+            return [.075, -0.08, 4.6];
+        }
+    }, [isMd, isLg]);
+
     const handleAppClick = (app: AppType) => {
         if (activeApp === app) {
             setActiveApp(AppType.NONE);
@@ -34,7 +47,7 @@ export function PhoneHtml() {
         <Html
             transform
             occlude
-            position={[-7.431, 0.08, 0.1]}
+            position={getPosition}
             rotation={[angle(0), angle(180), angle(1)]}
             distanceFactor={1.85}
             pointerEvents="auto"

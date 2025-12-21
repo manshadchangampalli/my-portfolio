@@ -1,13 +1,27 @@
 import { Html } from "@react-three/drei";
+import { useMemo } from "react";
 import { angle } from "@/utils/angle";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 import "./frameCss.css";
 
 export function FrameHtml() {
+    const { isMd, isLg } = useBreakpoints();
+
+    const getPosition = useMemo((): [number, number, number] => {
+        if (isLg) {
+            return [1.5, 0, -0.005];
+        } else if (isMd) {
+            return [-1, 1.5, -0.108];
+        } else {
+            return [0, 0.86, -0.108];
+        }
+    }, [isMd, isLg]);
+
     return (
         <Html
             transform
             occlude
-            position={[1.5, 0, -0.005]}
+            position={getPosition}
             rotation={[angle(0), angle(180), 0]}
             distanceFactor={1}
             pointerEvents="auto"

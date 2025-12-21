@@ -1,5 +1,7 @@
 import { Html } from "@react-three/drei";
+import { useMemo } from "react";
 import { angle } from "@/utils/angle";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 import "./kdsCss.css";
 
 type OrderItemType = "item" | "modifier" | "allergy" | "rush";
@@ -25,6 +27,18 @@ interface DayCount {
 }
 
 export function KdsHtml() {
+    const { isMd, isLg } = useBreakpoints();
+
+    const getPosition = useMemo((): [number, number, number] => {
+        if (isLg) {
+            return [1.5, 0, -0.0001];
+        } else if (isMd) {
+            return [-1, 1, -1.1];
+        } else {
+            return [0, 0.5, -0.65];
+        }
+    }, [isMd, isLg]);
+
     const renderOrderItem = (item: OrderItem, index: number) => {
         const prefix = item.type === "modifier" || item.type === "rush" ? "- " : "";
         const className = `order-${item.type}`;
@@ -44,7 +58,7 @@ export function KdsHtml() {
         <Html
             transform
             occlude
-            position={[1.5, 0, -0.0001]}
+            position={getPosition}
             rotation={[0, angle(180), 0]}
             distanceFactor={1}
             pointerEvents="auto"

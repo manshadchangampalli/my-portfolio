@@ -11,10 +11,9 @@ export const useBreakpoints = (options?: UseBreakpointsOptions) => {
     if (typeof window === "undefined") return { isMd: false, isLg: false };
     const mdQuery = window.matchMedia("(min-width: 768px)");
     const lgQuery = window.matchMedia("(min-width: 1024px)");
-    const isLg = lgQuery.matches;
     return {
-      isMd: mdQuery.matches && !isLg,
-      isLg: isLg,
+      isMd: mdQuery.matches,
+      isLg: lgQuery.matches,
     };
   };
 
@@ -34,8 +33,8 @@ export const useBreakpoints = (options?: UseBreakpointsOptions) => {
     const lgQuery = window.matchMedia("(min-width: 1024px)");
 
     const updateBreakpoints = () => {
+      const newIsMd = mdQuery.matches;
       const newIsLg = lgQuery.matches;
-      const newIsMd = mdQuery.matches && !newIsLg;
 
       setIsMd(newIsMd);
       setIsLg(newIsLg);
