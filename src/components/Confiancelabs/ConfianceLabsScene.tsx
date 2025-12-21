@@ -6,7 +6,7 @@ Command: npx gltfjsx@6.5.3 ./public/model/confiancelabs/confiancelabs_model.gltf
 
 import { CameraControls, useGLTF, useTexture } from "@react-three/drei";
 import { angle } from "@/utils/angle";
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import useConfianceStore, { type ConfianceCameraTypes } from "../../store/confianceStore";
 import { FrameHtml } from "./Frame/FrameHtml";
@@ -88,15 +88,9 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
 
     useEffect(() => {
         if (cameraControls) {
-            cameraControls.setLookAt(-16, 5.5, -4, -16, 5.5, -10);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (cameraControls) {
             cameraControls.setLookAt(...cameraPositions[currentCamera], true);
         }
-    }, [currentCamera]);
+    }, [currentCamera, cameraControls]);
 
     return (
         <>
