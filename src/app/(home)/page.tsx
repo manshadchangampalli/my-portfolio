@@ -55,7 +55,7 @@ export default function Home() {
           </Canvas>
         </Suspense>
       </div>
-      <div className="w-full bg-black">
+      {/* <div className="w-full bg-black">
         <div className="w-screen h-screen">
           <Suspense fallback={<GalleryLoadingFallback />}>
             <Canvas
@@ -69,7 +69,7 @@ export default function Home() {
             </Canvas>
           </Suspense>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
