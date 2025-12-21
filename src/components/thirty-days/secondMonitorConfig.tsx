@@ -1,50 +1,133 @@
-import { FigJamDesign } from "./FigJamDesign";
-import RestaurantRoadmap from "./notion";
-import { EcommerceWireframe } from "./EcommerceWireframe";
-import { FigmaDesign } from "./FigmaDesign";
-import { FigmaProtoType } from "./FigmaProtoType";
-import VSCodeShowcaseMonokai from "./vscode";
-import Dashboard from "./dashboard";
-import { ProjectLive } from "./ProjectLive";
-import { ProjectHandover } from "./ProjectHandover";
-import { MeetHtml } from "./MeetHtml";
-import React from "react";
+export type SecondMonitorType = "text" | "iframe" | "gif";
 
 export interface SecondMonitorConfig {
-    component: React.ComponentType;
-    caption: string;
+    type: SecondMonitorType;
+    text?: string;
+    description?: string;
+    url?: string;
+    gifUrl?: string;
 }
 
 export const secondMonitorConfig: Record<number, SecondMonitorConfig> = {
-    1: { component: FigJamDesign, caption: "Planning Notes" },
-    2: { component: FigJamDesign, caption: "Planning Notes" },
-    3: { component: RestaurantRoadmap, caption: "Initial Roadmap" },
-    4: { component: RestaurantRoadmap, caption: "Project Planning" },
-    5: { component: RestaurantRoadmap, caption: "Project Planning" },
-    6: { component: EcommerceWireframe, caption: "Wireframe Sketches" },
-    7: { component: EcommerceWireframe, caption: "Task Breakdown" },
-    8: { component: EcommerceWireframe, caption: "Task Breakdown" },
-    9: { component: EcommerceWireframe, caption: "Task Breakdown" },
-    10: { component: FigmaDesign, caption: "Design System" },
-    11: { component: FigmaDesign, caption: "Component Library" },
-    12: { component: FigmaDesign, caption: "Component Library" },
-    13: { component: FigmaDesign, caption: "Component Library" },
-    14: { component: FigmaDesign, caption: "Component Library" },
-    15: { component: FigmaProtoType, caption: "Interactive Prototype" },
-    16: { component: FigmaProtoType, caption: "Prototype Testing" },
-    17: { component: FigmaProtoType, caption: "Prototype Testing" },
-    18: { component: FigmaProtoType, caption: "Prototype Testing" },
-    19: { component: FigmaProtoType, caption: "Prototype Testing" },
-    20: { component: VSCodeShowcaseMonokai, caption: "Code Setup" },
-    21: { component: VSCodeShowcaseMonokai, caption: "Development" },
-    22: { component: VSCodeShowcaseMonokai, caption: "Development" },
-    23: { component: VSCodeShowcaseMonokai, caption: "Testing & QA" },
-    24: { component: VSCodeShowcaseMonokai, caption: "Testing & QA" },
-    25: { component: VSCodeShowcaseMonokai, caption: "Testing & QA" },
-    26: { component: Dashboard, caption: "Performance Reports" },
-    27: { component: Dashboard, caption: "Analytics Dashboard" },
-    28: { component: Dashboard, caption: "Metrics Overview" },
-    29: { component: ProjectHandover, caption: "Documentation" },
-    30: { component: ProjectLive, caption: "Deployment Status" },
+    1: {
+        type: "text",
+        text: "Where Ideas Come Alive",
+        description: "Drag the days below to see how your product takes shape, step by step.",
+    },
+    2: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    3: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    4: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    5: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    6: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    7: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    8: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    9: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    10: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    11: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    12: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    13: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    14: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    15: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    16: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    17: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    18: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    19: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    20: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    21: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    22: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    23: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    24: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    25: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    26: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    27: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    28: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    29: {
+        type: "iframe",
+        url: "https://www.thirtydays.ai/",
+    },
+    30: {
+        type: "gif",
+        gifUrl: "", // Will be set later when you have the gif
+    },
 };
-

@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import { useThirtyDaysStore } from "../../store/thirtyDaysStore";
 import { dayConfig } from "./dayConfig";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { cn } from "@/utils/classNames";
 
 export function ThirtyDaysButtons() {
     const [offset, setOffset] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [activeNumber, setActiveNumber] = useState(1);
+    const [isPlaying, setIsPlaying] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const setCurrentDate = useThirtyDaysStore((state) => state.setCurrentDate);
 
     const snapToNearest50 = (value: number): number => {
@@ -17,6 +20,7 @@ export function ThirtyDaysButtons() {
 
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
+        setIsPlaying(false); // Stop auto-play when user starts dragging
         setStartX(e.clientX - offset);
     };
 
@@ -75,7 +79,8 @@ export function ThirtyDaysButtons() {
     };
 
     const handlePrevious = () => {
-        if (activeNumber > 1) {
+        if (activeNumber > 1 && !isPlaying) {
+            setIsPlaying(false); // Stop auto-play when user manually navigates
             const newActive = activeNumber - 1;
             const newOffset = -(newActive - 1) * 50;
             setOffset(newOffset);
@@ -84,13 +89,36 @@ export function ThirtyDaysButtons() {
         }
     };
 
+    const navigateToNext = () => {
+        setActiveNumber((prev) => {
+            if (prev < 30) {
+                const newActive = prev + 1;
+                const newOffset = -(newActive - 1) * 50;
+                setOffset(newOffset);
+                setCurrentDate(newActive);
+
+                if (newActive >= 30) {
+                    setIsPlaying(false);
+                }
+                return newActive;
+            }
+            return prev;
+        });
+    };
+
     const handleNext = () => {
-        if (activeNumber < 30) {
-            const newActive = activeNumber + 1;
-            const newOffset = -(newActive - 1) * 50;
-            setOffset(newOffset);
-            setActiveNumber(newActive);
-            setCurrentDate(newActive);
+        setIsPlaying(false); // Stop auto-play when user manually navigates
+        navigateToNext();
+    };
+
+    const handlePlayPause = () => {
+        if (isPlaying) {
+            setIsPlaying(false);
+        } else {
+            // Don't start if already at day 30
+            if (activeNumber < 30) {
+                setIsPlaying(true);
+            }
         }
     };
 
@@ -150,19 +178,54 @@ export function ThirtyDaysButtons() {
             };
         }
     }, [isDragging, startX, setCurrentDate, snapToNearest50]);
+
+    // Auto-play interval
+    useEffect(() => {
+        if (isPlaying && activeNumber < 30) {
+            intervalRef.current = setInterval(() => {
+                navigateToNext();
+            }, 2000); // Change day every 3 seconds
+
+            return () => {
+                if (intervalRef.current) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
+            };
+        } else {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+            if (activeNumber >= 30) {
+                setIsPlaying(false);
+            }
+        }
+    }, [isPlaying, activeNumber, setCurrentDate]);
+
     const caption = dayConfig[activeNumber].caption;
 
     return (
         <>
-            <div className="fixed bottom-[100px] bg-black/50 backdrop-blur-sm text-white left-1/2 p-4 rounded-lg -translate-x-1/2 flex flex-col gap-2.5 z-[9999] select-none">{caption}</div>
+            <div className="fixed bottom-[100px] bg-black/50 backdrop-blur-sm text-white left-1/2 p-4 rounded-lg -translate-x-1/2 flex flex-col gap-2.5 z-[9999] select-none">
+                {caption}
+            </div>
             <div className="fixed bottom-5 left-1/2 -translate-x-1/2 flex flex-col gap-2.5 z-[9999] select-none">
-                <div className="point absolute left-1/2 -translate-x-1/2 top-0 -translate-y-full bg-white px-2 text-xs rounded-full">Day</div>
+                <div className="point absolute left-1/2 grid place-items-center -translate-x-1/2 top-0 -translate-y-full bg-white p-2 rounded-2xl">
+                    <button
+                        onClick={handlePlayPause}
+                        disabled={activeNumber === 30}
+                        className="text-black cursor-pointer hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 "
+                        aria-label={isPlaying ? "Pause" : "Play"}>
+                        {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+                    </button>
+                </div>
                 <div className="flex items-center gap-2">
                     {/* Left Arrow Button */}
                     <button
                         onClick={handlePrevious}
-                        disabled={activeNumber === 1}
-                        className="text-white hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity p-1"
+                        disabled={activeNumber === 1 || isPlaying}
+                        className="text-white cursor-pointer hover:scale-150 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 p-1"
                         aria-label="Previous day">
                         <ChevronLeft size={20} />
                     </button>
@@ -180,7 +243,10 @@ export function ThirtyDaysButtons() {
 
                         <div
                             ref={containerRef}
-                            className="flex gap-[25px] ml-[calc(50%-12.5px)] transition-transform duration-100 relative z-0 cursor-grab active:cursor-grabbing"
+                            className={cn(
+                                "flex gap-[25px] ml-[calc(50%-12.5px)] transition-transform  relative z-0 cursor-grab active:cursor-grabbing",
+                                isPlaying ? "duration-1000" : "duration-100"
+                            )}
                             style={{
                                 transform: `translateX(${offset}px)`,
                             }}
@@ -204,8 +270,8 @@ export function ThirtyDaysButtons() {
                     {/* Right Arrow Button */}
                     <button
                         onClick={handleNext}
-                        disabled={activeNumber === 30}
-                        className="text-white hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity p-1"
+                        disabled={activeNumber === 30 || isPlaying}
+                        className="text-white cursor-pointer hover:scale-150 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 p-1"
                         aria-label="Next day">
                         <ChevronRight size={20} />
                     </button>
