@@ -7,19 +7,16 @@ interface UseBreakpointsOptions {
 }
 
 export const useBreakpoints = (options?: UseBreakpointsOptions) => {
-  const getInitialValues = () => {
-    if (typeof window === "undefined") return { isMd: false, isLg: false };
-    const mdQuery = window.matchMedia("(min-width: 768px)");
-    const lgQuery = window.matchMedia("(min-width: 1024px)");
-    return {
-      isMd: mdQuery.matches,
-      isLg: lgQuery.matches,
-    };
-  };
-
-  const initialValues = getInitialValues();
-  const [isMd, setIsMd] = useState<boolean>(initialValues.isMd);
-  const [isLg, setIsLg] = useState<boolean>(initialValues.isLg);
+  const [isMd, setIsMd] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    const mdMatches = window.matchMedia("(min-width: 768px)").matches;
+    const lgMatches = window.matchMedia("(min-width: 1024px)").matches;
+    return mdMatches && !lgMatches;
+  });
+  const [isLg, setIsLg] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(min-width: 1024px)").matches;
+  });
   const callbackRef = useRef(options?.onBreakpointChange);
 
   useEffect(() => {
@@ -33,8 +30,8 @@ export const useBreakpoints = (options?: UseBreakpointsOptions) => {
     const lgQuery = window.matchMedia("(min-width: 1024px)");
 
     const updateBreakpoints = () => {
-      const newIsMd = mdQuery.matches;
       const newIsLg = lgQuery.matches;
+      const newIsMd = mdQuery.matches && !newIsLg;
 
       setIsMd(newIsMd);
       setIsLg(newIsLg);

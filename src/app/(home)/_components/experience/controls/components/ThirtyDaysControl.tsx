@@ -1,6 +1,6 @@
 import React from "react";
+import { ThirtyDaysButtons } from "@/components/thirty-days/ThirtyDaysButtons";
 
 export const ThirtyDaysControl = () => {
-    return null; // Add Thirty Days specific controls here when needed
+    return <ThirtyDaysButtons />;
 };
-

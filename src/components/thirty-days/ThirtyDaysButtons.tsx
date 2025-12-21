@@ -130,7 +130,7 @@ export function ThirtyDaysButtons() {
     }, [isDragging, startX, setCurrentDate, snapToNearest50]);
 
     return (
-        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 flex flex-col gap-2.5 z-10 select-none">
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 flex flex-col gap-2.5 z-[9999] select-none">
             <div className="point absolute left-1/2 -translate-x-1/2 top-0 -translate-y-full bg-white px-2 text-xs rounded-full">Day</div>
             <div
                 className="max-w-[300px] overflow-hidden flex gap-[50px] p-2.5 rounded-lg relative"
