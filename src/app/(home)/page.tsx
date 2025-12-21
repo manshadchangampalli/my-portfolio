@@ -21,6 +21,7 @@ export default function Home() {
 
   useEffect(() => {
     document.body.style.overflow = isFixed ? "hidden" : "auto";
+    document.body.style.maxHeight = isFixed ? "100dvh" : "auto";
   }, [isFixed]);
 
   return (
@@ -34,7 +35,7 @@ export default function Home() {
         </div>
       </main>
       <Profile />
-      <div className={cn("w-full bg-black", isFixed ? "fixed inset-0 w-screen h-screen z-50" : "h-[1900px] md:h-[1200px] lg:h-[700px]")}>
+      <div className={cn("w-full bg-black", isFixed ? "fixed inset-0 w-screen h-screen z-50" : "h-[1800px] md:h-[1200px] lg:h-[700px]")}>
         <Suspense fallback={<ExperienceLoadingFallback />}>
           <Canvas
             style={{ width: "100%", height: "100%", backgroundColor: "#000000" }}

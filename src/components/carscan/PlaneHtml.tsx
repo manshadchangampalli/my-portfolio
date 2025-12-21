@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Html } from "@react-three/drei";
 import {
     Monitor,
@@ -11,6 +11,7 @@ import {
     Twitter,
     Mail
 } from 'lucide-react';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 import './PlaneHtml.css';
 
 // ============================================================================
@@ -300,6 +301,34 @@ function ContentRenderer({ activeTab, companyInfo, technologies, highlights, dur
 export function PlaneHtml() {
     const [activeTab, setActiveTab] = useState<string>('home');
     const duration = 'jun 2022 to sep 2022';
+    const { isMd, isLg } = useBreakpoints();
+
+    // Calculate position and dimensions based on breakpoints
+    const getPosition = useMemo((): [number, number, number] => {
+        if (isLg) {
+            // Large screens (>= 1024px): original position
+            return [-27.65, 0, -0.13];
+        }
+        if (isMd) {
+            // Medium screens (768px - 1024px): adjusted position
+            return [-20, 0, -0.13];
+        }
+        // Small screens (< 768px): mobile position
+        return [-15, 0, -0.13];
+    }, [isMd, isLg]);
+
+    const getDimensions = useMemo(() => {
+        if (isLg) {
+            // Large screens: original size
+            return { width: "1000px", height: "980px" };
+        }
+        if (isMd) {
+            // Medium screens: slightly smaller
+            return { width: "800px", height: "780px" };
+        }
+        // Small screens: mobile size
+        return { width: "600px", height: "580px" };
+    }, [isMd, isLg]);
 
     const handleEventPropagation = (e: React.SyntheticEvent) => {
         e.stopPropagation();
@@ -309,7 +338,7 @@ export function PlaneHtml() {
         <Html
             transform
             occlude
-            position={[-27.65, 0, -0.13]}
+            position={getPosition}
             distanceFactor={2.1}
             pointerEvents="auto"
             style={{
@@ -326,7 +355,7 @@ export function PlaneHtml() {
                 className="overflow-auto no-scrollbar h-full w-full"
             >
                 <div className="plane-body">
-                    <div className="plane-main-container flex flex-col justify-between h-[980px]">
+                    <div className="plane-main-container flex flex-col justify-between" style={{ height: getDimensions.height }}>
                         <div>
                             <Header
                                 companyName={COMPANY_INFO.name}
