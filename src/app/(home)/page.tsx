@@ -68,6 +68,7 @@ export default function Home() {
           </Canvas>
         </Suspense>
       </div>
+      <div className="h-screen w-full bg-black"></div>
       {/* <div className="w-full bg-black">
         <div className="w-screen h-screen">
           <Suspense fallback={<GalleryLoadingFallback />}>
