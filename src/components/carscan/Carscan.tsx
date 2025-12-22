@@ -134,5 +134,3 @@ export function Model({ cameraControls, ...props }: CarscanProps) {
         </group>
     );
 }
-
-useGLTF.preload("/model/carscan/scene.glb");

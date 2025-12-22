@@ -321,6 +321,7 @@ export function PlaneHtml() {
         <Html
             transform
             occlude
+            prepend
             position={getPosition}
             distanceFactor={2.1}
             pointerEvents="auto"

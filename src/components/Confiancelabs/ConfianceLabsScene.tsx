@@ -191,5 +191,3 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
         </>
     );
 }
-
-useGLTF.preload("/model/confiancelabs/confiancelabs_model.glb");

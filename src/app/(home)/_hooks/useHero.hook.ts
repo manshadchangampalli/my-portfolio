@@ -16,71 +16,136 @@ export const useHero = () => {
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef(0);
   const lastFrameRef = useRef(-1);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const rafIdRef = useRef<number | null>(null);
+  const opacityRafIdRef = useRef<number | null>(null);
+  const pendingFrameRef = useRef<number | null>(null);
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
   const render = useCallback((frameIdx: number) => {
-    if (lastFrameRef.current === frameIdx) return;
-    lastFrameRef.current = frameIdx;
-
-    const canvas = canvasRef.current;
-    if (!canvas || !imagesRef.current[frameIdx]) return;
-
-    const ctx = canvas.getContext("2d", {
-      alpha: false,
-      desynchronized: true,
-      willReadFrequently: false,
-    });
-    if (!ctx) return;
-
-    const img = imagesRef.current[frameIdx];
-    if (!img.complete || !img.naturalWidth) return;
-
-    const canvasWidth = canvas.clientWidth;
-    const canvasHeight = canvas.clientHeight;
-
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-    const aspectRatio = img.naturalWidth / img.naturalHeight;
-    const canvasRatio = canvasWidth / canvasHeight;
-
-    let drawWidth, drawHeight, drawX, drawY;
-    if (aspectRatio > canvasRatio) {
-      drawHeight = canvasHeight;
-      drawWidth = canvasHeight * aspectRatio;
-      drawY = 0;
-      drawX = (canvasWidth - drawWidth) / 2;
-    } else {
-      drawWidth = canvasWidth;
-      drawHeight = canvasWidth / aspectRatio;
-      drawX = 0;
-      drawY = (canvasHeight - drawHeight) / 2;
+    // Cancel any pending render
+    if (rafIdRef.current !== null) {
+      cancelAnimationFrame(rafIdRef.current);
     }
 
-    ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+    // Store the frame to render
+    pendingFrameRef.current = frameIdx;
+
+    // Use requestAnimationFrame to throttle rendering
+    rafIdRef.current = requestAnimationFrame(() => {
+      const frameToRender = pendingFrameRef.current;
+      if (frameToRender === null || lastFrameRef.current === frameToRender) {
+        rafIdRef.current = null;
+        return;
+      }
+      lastFrameRef.current = frameToRender;
+
+      const canvas = canvasRef.current;
+      if (!canvas || !imagesRef.current[frameToRender]) {
+        rafIdRef.current = null;
+        return;
+      }
+
+      // Cache context to avoid recreating on every render
+      if (!ctxRef.current) {
+        ctxRef.current = canvas.getContext("2d", {
+          alpha: false,
+          desynchronized: true,
+          willReadFrequently: false,
+        });
+      }
+
+      const ctx = ctxRef.current;
+      if (!ctx) {
+        rafIdRef.current = null;
+        return;
+      }
+
+      const img = imagesRef.current[frameToRender];
+      if (!img.complete || !img.naturalWidth) {
+        rafIdRef.current = null;
+        return;
+      }
+
+      const canvasWidth = canvas.clientWidth;
+      const canvasHeight = canvas.clientHeight;
+
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      const aspectRatio = img.naturalWidth / img.naturalHeight;
+      const canvasRatio = canvasWidth / canvasHeight;
+
+      let drawWidth, drawHeight, drawX, drawY;
+      if (aspectRatio > canvasRatio) {
+        drawHeight = canvasHeight;
+        drawWidth = canvasHeight * aspectRatio;
+        drawY = 0;
+        drawX = (canvasWidth - drawWidth) / 2;
+      } else {
+        drawWidth = canvasWidth;
+        drawHeight = canvasWidth / aspectRatio;
+        drawX = 0;
+        drawY = (canvasHeight - drawHeight) / 2;
+      }
+
+      ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+      rafIdRef.current = null;
+    });
   }, []);
 
-  const scrollUpdate = (self: ScrollTrigger) => {
+  const scrollUpdate = useCallback((self: ScrollTrigger) => {
     const progress = self.progress;
     const animationProgress = Math.min(progress / 0.9, 1);
     const targetFrame = Math.round(animationProgress * (TOTAL_FRAMES - 1));
     const reversedFrame = TOTAL_FRAMES - targetFrame - 1;
-    frameRef.current = reversedFrame;
-    render(reversedFrame);
-    heroContainerOpacity(animationProgress, gsap);
-  };
+    
+    // Only update if frame actually changed
+    if (frameRef.current !== reversedFrame) {
+      frameRef.current = reversedFrame;
+      render(reversedFrame);
+    }
+    
+    // Throttle opacity updates using separate RAF
+    if (opacityRafIdRef.current === null) {
+      opacityRafIdRef.current = requestAnimationFrame(() => {
+        heroContainerOpacity(animationProgress, gsap);
+        opacityRafIdRef.current = null;
+      });
+    }
+  }, [render]);
 
   useGSAP(() => {
     // Only run on client side to prevent hydration mismatches
     if (typeof window === "undefined") return;
+    
+    // Initialize context early
+    const canvas = canvasRef.current;
+    if (canvas && !ctxRef.current) {
+      ctxRef.current = canvas.getContext("2d", {
+        alpha: false,
+        desynchronized: true,
+        willReadFrequently: false,
+      });
+    }
 
     // Setup Canvas Sizing
     const setCanvasSize = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const ctx = canvas.getContext("2d");
+      
+      // Use cached context or create new one
+      if (!ctxRef.current) {
+        ctxRef.current = canvas.getContext("2d", {
+          alpha: false,
+          desynchronized: true,
+          willReadFrequently: false,
+        });
+      }
+      
+      const ctx = ctxRef.current;
       if (!ctx) return;
 
       const pixelRatio = window.devicePixelRatio || 1;
@@ -136,7 +201,7 @@ export const useHero = () => {
         end: `+=${scrollDistance}px`,
         pin: true,
         pinSpacing: true,
-        scrub: 0.5,
+        scrub: 1, // Increased from 0.5 to reduce update frequency
         invalidateOnRefresh: true,
         refreshPriority: -1,
         onUpdate: scrollUpdate,
@@ -152,7 +217,7 @@ export const useHero = () => {
           trigger: ".hero__section",
           start: `bottom-=${window.innerHeight}px top`,
           end: `bottom top`,
-          scrub: 0.5,
+          scrub: 1, // Increased from 0.5 to reduce update frequency
           invalidateOnRefresh: true,
           refreshPriority: -1,
         },
@@ -191,11 +256,18 @@ export const useHero = () => {
     return () => {
       clearTimeout(resizeTimeout);
       clearTimeout(viewportTimeout);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+      if (opacityRafIdRef.current !== null) {
+        cancelAnimationFrame(opacityRafIdRef.current);
+      }
       window.removeEventListener("resize", handleResize);
       if (window.visualViewport) {
         window.visualViewport.removeEventListener("resize", handleViewportChange);
       }
       ScrollTrigger.getAll().forEach((st) => st.kill());
+      ctxRef.current = null;
     };
   }, []);
 

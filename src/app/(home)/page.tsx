@@ -4,12 +4,19 @@ import "react-ios-liquid-glass/dist/index.css";
 import useDevice from "@/hooks/useDevice";
 import { cn } from "@/utils/classNames";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { useGLTF } from "@react-three/drei";
 import Hero from "./_components/hero/Hero";
 import { Canvas } from "@react-three/fiber";
 import Profile from "./_components/profile/Profile";
 import { ExperienceControls } from "./_components/experience/controls/ExperienceControls";
 import SmoothScrollProvider from "@/components/SmoothScroll/SmoothScrollProvider";
 import { ExperienceLoadingFallback, GalleryLoadingFallback } from "@/components/LoadingStates/SceneLoadingFallback";
+
+// Preload all experience models immediately on page load for instant loading when user clicks
+useGLTF.preload("/model/thirty-days/30days.glb");
+useGLTF.preload("/model/carscan/scene.glb");
+useGLTF.preload("/model/confiancelabs/confiancelabs_model.glb");
+useGLTF.preload("/model/ispg/ispg_phone.glb");
 
 const Experience = lazy(() => import("./_components/experience/Experience").then((mod) => ({ default: mod.default })));
 const Gallery = lazy(() => import("./_components/gallery/gallery").then((mod) => ({ default: mod.default })));
@@ -22,6 +29,12 @@ export default function Home() {
   useEffect(() => {
     document.body.style.overflow = isFixed ? "hidden" : "auto";
     document.body.style.maxHeight = isFixed ? "100dvh" : "auto";
+
+    return () => {
+      // Cleanup on unmount
+      document.body.style.overflow = "";
+      document.body.style.maxHeight = "";
+    };
   }, [isFixed]);
 
   return (

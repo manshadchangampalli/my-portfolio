@@ -118,5 +118,3 @@ export function IspgModel() {
         </>
     );
 }
-
-useGLTF.preload("/model/ispg/ispg_phone.glb");

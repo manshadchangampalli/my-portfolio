@@ -47,19 +47,22 @@ export default function SmoothScrollProvider({
         return null;
     }
 
-    // Load Lenis with optimized settings
+    // Load Lenis with optimized settings for better scroll performance
     return (
         <ReactLenis
             root
             options={{
-                lerp: isMobile ? 0.08 : 0.05, // Faster on mobile
-                duration: isMobile ? 0.8 : 1,
+                lerp: isMobile ? 0.1 : 0.08, // Slightly increased for smoother performance
+                duration: isMobile ? 1.2 : 1.5, // Increased duration for smoother feel
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                 smoothWheel: !isMobile, // Disable smooth wheel on mobile for better performance
-                wheelMultiplier: 1,
-                touchMultiplier: isMobile ? 1.5 : 2,
+                wheelMultiplier: 0.8, // Reduced for less aggressive scrolling
+                touchMultiplier: isMobile ? 1.2 : 1.5, // Reduced for smoother touch scrolling
                 infinite: false,
                 prevent: (node) => node.classList.contains("hero__section"),
+                // Performance optimizations
+                syncTouch: true,
+                syncTouchLerp: 0.075,
             }}
         />
     );

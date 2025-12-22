@@ -478,5 +478,3 @@ export function ThirtyDaysModel(props: any) {
         </>
     );
 }
-
-useGLTF.preload("/model/thirty-days/30days.glb");

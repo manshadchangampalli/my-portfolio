@@ -1,5 +1,5 @@
 import { CameraControls, Html, useProgress } from "@react-three/drei";
-import React, { useEffect, useRef, useCallback, memo, useState } from "react";
+import React, { useEffect, useRef, useCallback, memo, useState, useMemo } from "react";
 import ExperienceCard from "./experienceCard/ExperienceCard";
 import { experienceCardConfig } from "./experienceCard/experienceCard.config";
 import { useExperienceCardsStore } from "@/store/experienceCards.store";
@@ -18,7 +18,7 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
     const { progress, active } = useProgress();
     const { isMd, isLg } = useBreakpoints();
 
-    const getCardConfig = useCallback(() => {
+    const { positions: cardPositions, args: boxArgs } = useMemo(() => {
         const cards = experienceCardConfig;
         let positions: [number, number, number][];
         let args: [number, number, number];
@@ -60,7 +60,6 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
     }, []);
 
     const cameraPositionChange = useCallback(() => {
-        console.log({ isLg, isMd });
         if (cameraControlsRef.current) {
             const config = experienceCardConfig.find((item) => item.slug === activeSlug);
             if (config) {
@@ -70,11 +69,11 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
             }
             cameraControlsRef.current.setLookAt(0, 0, 8, 0, 0, -5, true);
         }
-    }, [activeSlug, cameraControlsRef, isLg, isMd]);
+    }, [activeSlug, isLg, isMd]);
 
     useEffect(() => {
         cameraPositionChange();
-    }, [activeSlug, cameraPositionChange]);
+    }, [cameraPositionChange]);
 
     useEffect(() => {
         setIsFixed(activeSlug !== null);
@@ -91,8 +90,6 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
             setLoadingProgress(Math.round(progress));
         }
     }, [progress, setLoadingProgress]);
-
-    const { positions: cardPositions, args: boxArgs } = getCardConfig();
 
     return (
         <>

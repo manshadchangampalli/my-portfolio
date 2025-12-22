@@ -10,7 +10,6 @@ import { ThirtyDaysControl } from "./components/ThirtyDaysControl";
 
 export const ExperienceControls = () => {
     const { activeSlug, setActiveSlug } = useExperienceCardsStore();
-    console.log("🚀 ~ ExperienceControls ~ activeSlug:", activeSlug);
     const { setCurrentZoom, setPreviousZoom } = useCarscanStore();
 
     const handleBack = () => {
