@@ -7,7 +7,7 @@ import { heroContainerOpacity } from "../_config/hero.config";
 
 const TOTAL_FRAMES = 192;
 const SCROLL_TRIGGER_HEIGHT = 7;
-const currentFrame = (index: number) => `/images/hero/output_${(index + 1).toString().padStart(4, "0")}.webp`;
+const currentFrame = (index: number) => `/images/hero/frames/frames_mobile_portrait/frame_${(index + 1).toString().padStart(4, "0")}.webp`;
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -96,31 +96,34 @@ export const useHero = () => {
     });
   }, []);
 
-  const scrollUpdate = useCallback((self: ScrollTrigger) => {
-    const progress = self.progress;
-    const animationProgress = Math.min(progress / 0.9, 1);
-    const targetFrame = Math.round(animationProgress * (TOTAL_FRAMES - 1));
-    const reversedFrame = TOTAL_FRAMES - targetFrame - 1;
-    
-    // Only update if frame actually changed
-    if (frameRef.current !== reversedFrame) {
-      frameRef.current = reversedFrame;
-      render(reversedFrame);
-    }
-    
-    // Throttle opacity updates using separate RAF
-    if (opacityRafIdRef.current === null) {
-      opacityRafIdRef.current = requestAnimationFrame(() => {
-        heroContainerOpacity(animationProgress, gsap);
-        opacityRafIdRef.current = null;
-      });
-    }
-  }, [render]);
+  const scrollUpdate = useCallback(
+    (self: ScrollTrigger) => {
+      const progress = self.progress;
+      const animationProgress = Math.min(progress / 0.9, 1);
+      const targetFrame = Math.round(animationProgress * (TOTAL_FRAMES - 1));
+      const reversedFrame = TOTAL_FRAMES - targetFrame - 1;
+
+      // Only update if frame actually changed
+      if (frameRef.current !== reversedFrame) {
+        frameRef.current = reversedFrame;
+        render(reversedFrame);
+      }
+
+      // Throttle opacity updates using separate RAF
+      if (opacityRafIdRef.current === null) {
+        opacityRafIdRef.current = requestAnimationFrame(() => {
+          heroContainerOpacity(animationProgress, gsap);
+          opacityRafIdRef.current = null;
+        });
+      }
+    },
+    [render]
+  );
 
   useGSAP(() => {
     // Only run on client side to prevent hydration mismatches
     if (typeof window === "undefined") return;
-    
+
     // Initialize context early
     const canvas = canvasRef.current;
     if (canvas && !ctxRef.current) {
@@ -135,7 +138,7 @@ export const useHero = () => {
     const setCanvasSize = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      
+
       // Use cached context or create new one
       if (!ctxRef.current) {
         ctxRef.current = canvas.getContext("2d", {
@@ -144,7 +147,7 @@ export const useHero = () => {
           willReadFrequently: false,
         });
       }
-      
+
       const ctx = ctxRef.current;
       if (!ctx) return;
 
