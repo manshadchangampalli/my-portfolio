@@ -7,7 +7,15 @@ import { heroContainerOpacity } from "../_config/hero.config";
 
 const TOTAL_FRAMES = 192;
 const SCROLL_TRIGGER_HEIGHT = 7;
-const currentFrame = (index: number) => `/images/hero/frames/frames_mobile_portrait/frame_${(index + 1).toString().padStart(4, "0")}.webp`;
+
+// Get frame path based on window width
+const getFramePath = (index: number, width: number) => {
+  const frameNumber = (index + 1).toString().padStart(4, "0");
+  if (width < 500) {
+    return `/images/hero/frames/frames_mobile_portrait/frame_${frameNumber}.webp`;
+  }
+  return `/images/hero/frames/frames_webp/frame_${frameNumber}.webp`;
+};
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -24,6 +32,7 @@ export const useHero = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const windowWidthRef = useRef<number>(typeof window !== "undefined" ? window.innerWidth : 0);
 
   const render = useCallback((frameIdx: number) => {
     // Cancel any pending render
@@ -167,31 +176,42 @@ export const useHero = () => {
     };
     setCanvasSize();
 
-    // Load Images
-    let loadedCount = 0;
-    imagesRef.current = new Array(TOTAL_FRAMES);
+    // Load Images based on current window width
+    let loadImages: () => void;
+    loadImages = () => {
+      const currentWidth = window.innerWidth;
+      windowWidthRef.current = currentWidth;
 
-    for (let i = 0; i < TOTAL_FRAMES; i++) {
-      const img = new window.Image();
-      img.src = currentFrame(i);
+      let loadedCount = 0;
+      imagesRef.current = new Array(TOTAL_FRAMES);
+      setIsLoading(true);
+      setImagesLoaded(false);
+      setLoadingProgress(0);
 
-      const handleLoad = () => {
-        loadedCount++;
-        const progress = Math.round((loadedCount / TOTAL_FRAMES) * 100);
-        setLoadingProgress(progress);
+      for (let i = 0; i < TOTAL_FRAMES; i++) {
+        const img = new window.Image();
+        img.src = getFramePath(i, currentWidth);
 
-        if (loadedCount === TOTAL_FRAMES) {
-          setIsLoading(false);
-          setImagesLoaded(true);
-          render(frameRef.current);
-          setupScrollTrigger();
-        }
-      };
+        const handleLoad = () => {
+          loadedCount++;
+          const progress = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+          setLoadingProgress(progress);
 
-      img.onload = handleLoad;
-      img.onerror = handleLoad;
-      imagesRef.current[i] = img;
-    }
+          if (loadedCount === TOTAL_FRAMES) {
+            setIsLoading(false);
+            setImagesLoaded(true);
+            render(frameRef.current);
+            setupScrollTrigger();
+          }
+        };
+
+        img.onload = handleLoad;
+        img.onerror = handleLoad;
+        imagesRef.current[i] = img;
+      }
+    };
+
+    loadImages();
 
     // ScrollTrigger Sequence Animation
     function setupScrollTrigger() {
@@ -232,6 +252,19 @@ export const useHero = () => {
     function handleResize() {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
+        const newWidth = window.innerWidth;
+        const oldWidth = windowWidthRef.current;
+
+        // Reload images if width crosses the 500px threshold
+        const wasMobile = oldWidth < 500;
+        const isMobile = newWidth < 500;
+
+        if (wasMobile !== isMobile) {
+          // Width threshold crossed, reload images
+          loadImages();
+        }
+
+        windowWidthRef.current = newWidth;
         setCanvasSize();
         render(frameRef.current);
         ScrollTrigger.refresh();
