@@ -177,8 +177,7 @@ export const useHero = () => {
     setCanvasSize();
 
     // Load Images based on current window width
-    let loadImages: () => void;
-    loadImages = () => {
+    const loadImages = () => {
       const currentWidth = window.innerWidth;
       windowWidthRef.current = currentWidth;
 
