@@ -101,6 +101,46 @@ export const useHero = () => {
       }
 
       ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+
+      // Add grain effect to the full image using canvas
+      const grainHeight = drawHeight;
+      const grainY = drawY;
+      const grainWidth = Math.round(drawWidth);
+      const grainHeightPx = Math.round(grainHeight);
+
+      // Create a temporary canvas for grain
+      const grainCanvas = document.createElement("canvas");
+      grainCanvas.width = grainWidth;
+      grainCanvas.height = grainHeightPx;
+      const grainCtx = grainCanvas.getContext("2d");
+
+      if (grainCtx) {
+        // Generate grain pattern
+        const imageData = grainCtx.createImageData(grainWidth, grainHeightPx);
+        const data = imageData.data;
+        const grainIntensity = 750; // Increased grain intensity
+
+        for (let i = 0; i < data.length; i += 4) {
+          // Create grain noise - centered around 128 (neutral gray)
+          const noise = (Math.random() - 0.45) * grainIntensity;
+          const grainValue = Math.max(0, Math.min(255, 128 + noise));
+
+          data[i] = grainValue; // R
+          data[i + 1] = grainValue; // G
+          data[i + 2] = grainValue; // B
+          data[i + 3] = 255; // A
+        }
+
+        grainCtx.putImageData(imageData, 0, 0);
+
+        // Apply grain overlay to the main canvas
+        ctx.save();
+        ctx.globalCompositeOperation = "overlay";
+        ctx.globalAlpha = 0.6; // Increased opacity for more visible grain
+        ctx.drawImage(grainCanvas, drawX, grainY, grainWidth, grainHeightPx);
+        ctx.restore();
+      }
+
       rafIdRef.current = null;
     });
   }, []);
