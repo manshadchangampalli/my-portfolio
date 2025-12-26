@@ -9,13 +9,7 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 
 export default function HeroSection() {
-  const {
-    canvasRef,
-    canvasContainerRef,
-    backgroundRef,
-    isLoading,
-    loadingProgress
-  } = useHero();
+  const { canvasRef, canvasContainerRef, backgroundRef, isLoading, loadingProgress } = useHero();
 
   return (
     <div className="hero__section min-h-dvh relative">
@@ -23,13 +17,19 @@ export default function HeroSection() {
         isLoading={isLoading}
         loadingProgress={loadingProgress}
       />
-      <div ref={backgroundRef} className="w-full z-10 h-screen relative bg-black">
-        <div ref={canvasContainerRef} className="w-full h-full">
-          <Canvas camera={{ position: [0, -1.5, 5], fov: 50 }}>
-            <Physics>
-              <HeroContent />
-            </Physics>
-          </Canvas>
+      <div
+        ref={backgroundRef}
+        className="w-full z-10 h-screen relative bg-black">
+        <div
+          ref={canvasContainerRef}
+          className="w-full h-full">
+          {!isLoading && (
+            <Canvas camera={{ position: [0, -1.5, 5], fov: 50 }}>
+              <Physics>
+                <HeroContent />
+              </Physics>
+            </Canvas>
+          )}
         </div>
       </div>
       <HeroCanvas canvasRef={canvasRef} />

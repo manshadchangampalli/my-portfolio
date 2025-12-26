@@ -3,7 +3,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
-import { heroContainerOpacity } from "../_config/hero.config";
 
 const TOTAL_FRAMES = 192;
 const SCROLL_TRIGGER_HEIGHT = 7;
@@ -158,14 +157,6 @@ export const useHero = () => {
       if (frameRef.current !== reversedFrame) {
         frameRef.current = reversedFrame;
         render(reversedFrame);
-      }
-
-      // Throttle opacity updates using separate RAF
-      if (opacityRafIdRef.current === null) {
-        opacityRafIdRef.current = requestAnimationFrame(() => {
-          heroContainerOpacity(animationProgress, gsap);
-          opacityRafIdRef.current = null;
-        });
       }
     },
     [render]

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Poller_One, Great_Vibes } from "next/font/google";
+import { Poller_One, Great_Vibes, Orbitron } from "next/font/google";
 import { cn } from "@/utils/classNames";
 
 export const metadata: Metadata = {
@@ -12,6 +12,12 @@ const pollerOne = Poller_One({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-poller-one",
+});
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-orbitron",
 });
 
 const greatVibes = Great_Vibes({
@@ -26,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(pollerOne.variable, greatVibes.variable, "font-sans")}>
+      <body className={cn(pollerOne.variable, greatVibes.variable, orbitron.variable, "font-sans")}>
         <div>{children}</div>
       </body>
     </html>
