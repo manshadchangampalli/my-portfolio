@@ -1,11 +1,16 @@
 import { Environment, Text3D } from "@react-three/drei";
-import { BallCollider, RigidBody } from "@react-three/rapier";
+import { RigidBody } from "@react-three/rapier";
 import { useThree } from "@react-three/fiber";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
+import gsap from "gsap";
+import { SPHERES_CONFIG, TEXT3D_CONFIG } from "../../_config/heroContent.config";
 
 export default function HeroContent() {
     const { camera, size } = useThree();
+
+    // Create refs for all spheres dynamically
+    const sphereRefs = useRef<{ [key: string]: THREE.Mesh | null }>({});
 
     // Calculate bottom position based on camera's view frustum
     // This ensures consistent positioning across all devices
@@ -18,51 +23,61 @@ export default function HeroContent() {
         return bottomY + 0.25;
     }, [camera, size]);
 
+    const handlePlaneCollision = () => {
+        console.log("collision");
+        // Animate all spheres to their end positions while scaling down
+        SPHERES_CONFIG.forEach((sphere) => {
+            const sphereRef = sphereRefs.current[sphere.id];
+            if (sphereRef) {
+                // Animate position
+                gsap.to(sphereRef.position, {
+                    x: sphere.targetPosition.x,
+                    y: sphere.targetPosition.y,
+                    z: sphere.targetPosition.z,
+                    duration: sphere.duration,
+                    ease: sphere.ease || "power2.inOut",
+                });
+                // Animate scale
+                gsap.to(sphereRef.scale, {
+                    x: sphere.targetScale || 1,
+                    y: sphere.targetScale || 1,
+                    z: sphere.targetScale || 1,
+                    duration: sphere.duration,
+                    ease: sphere.ease || "power2.inOut",
+                });
+            }
+        });
+    };
+
     return (
         <>
+            {TEXT3D_CONFIG.map((textConfig) => (
+                <RigidBody
+                    key={textConfig.id}
+                    type="dynamic"
+                    position={[textConfig.x, -bottomPosition + textConfig.yOffset, 0]}
+                    restitution={textConfig.restitution}
+                    {...(textConfig.gravityScale !== undefined && { gravityScale: textConfig.gravityScale })}
+                    linearDamping={textConfig.linearDamping}
+                    angularDamping={textConfig.angularDamping}>
+                    <Text3D
+                        font="/fonts/Orbitron_Regular.json"
+                        size={textConfig.size}
+                        height={textConfig.height}
+                        curveSegments={textConfig.curveSegments || 12}
+                        bevelEnabled={textConfig.bevelEnabled ?? true}
+                        bevelThickness={textConfig.bevelThickness || 0.02}
+                        bevelSize={textConfig.bevelSize || 0.02}
+                        bevelSegments={textConfig.bevelSegments || 5}
+                        position={[0, 0, 0]}
+                        rotation={[0, 0, 0]}>
+                        {textConfig.text}
+                        <meshNormalMaterial />
+                    </Text3D>
+                </RigidBody>
+            ))}
             <RigidBody
-                type="dynamic"
-                position={[-1.5, -bottomPosition - 1, 0]}
-                restitution={0.6}
-                linearDamping={0.5}
-                angularDamping={0.5}>
-                <Text3D
-                    font="/fonts/Orbitron_Regular.json"
-                    size={0.5}
-                    height={0.2}
-                    curveSegments={12}
-                    bevelEnabled={true}
-                    bevelThickness={0.02}
-                    bevelSize={0.02}
-                    bevelSegments={5}
-                    position={[0, 0, 0]}
-                    rotation={[0, 0, 0]}>
-                    HELLO
-                    <meshNormalMaterial />
-                </Text3D>
-            </RigidBody>
-            <RigidBody
-                type="dynamic"
-                position={[-1.5, -bottomPosition, 0]}
-                restitution={0.6}
-                linearDamping={0.5}
-                angularDamping={0.5}>
-                <Text3D
-                    font="/fonts/Orbitron_Regular.json"
-                    size={0.5}
-                    height={0.2}
-                    curveSegments={12}
-                    bevelEnabled={true}
-                    bevelThickness={0.02}
-                    bevelSize={0.02}
-                    bevelSegments={5}
-                    position={[0, 0, 0]}
-                    rotation={[0, 0, 0]}>
-                    HELLO
-                    <meshNormalMaterial />
-                </Text3D>
-            </RigidBody>
-            <RigidBody
+                onCollisionEnter={handlePlaneCollision}
                 type="fixed"
                 position={[0, bottomPosition, 0]}>
                 <mesh rotation={[Math.PI / 2, 0, 0]}>
@@ -70,6 +85,18 @@ export default function HeroContent() {
                     <meshStandardMaterial color="black" />
                 </mesh>
             </RigidBody>
+            {SPHERES_CONFIG.map((sphere) => (
+                <mesh
+                    key={sphere.id}
+                    ref={(el) => {
+                        sphereRefs.current[sphere.id] = el;
+                    }}
+                    position={[0, bottomPosition + sphere.initialYOffset, 0]}
+                    scale={sphere.initialScale || 1}>
+                    <sphereGeometry args={[sphere.radius, 32, 32]} />
+                    <meshStandardMaterial color="white" />
+                </mesh>
+            ))}
             <Environment preset="sunset" />
         </>
     );

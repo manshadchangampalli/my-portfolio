@@ -28,6 +28,8 @@ export const useHero = () => {
   const rafIdRef = useRef<number | null>(null);
   const opacityRafIdRef = useRef<number | null>(null);
   const pendingFrameRef = useRef<number | null>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -284,6 +286,33 @@ export const useHero = () => {
           refreshPriority: -1,
         },
       });
+
+      // Setup Canvas and Background opacity animations
+      if (canvasContainerRef.current && backgroundRef.current) {
+        // Animate Canvas opacity: fade out when scroll > 10px
+        ScrollTrigger.create({
+          trigger: canvasContainerRef.current,
+          start: "top top",
+          end: "top+=10px top",
+          scrub: true,
+          onUpdate: (self) => {
+            const opacity = 1 - self.progress;
+            gsap.set(canvasContainerRef.current, { opacity });
+          },
+        });
+
+        // Animate background: fade out when scroll > 10px
+        ScrollTrigger.create({
+          trigger: backgroundRef.current,
+          start: "top top",
+          end: "top+=10px top",
+          scrub: true,
+          onUpdate: (self) => {
+            const opacity = 1 - self.progress;
+            gsap.set(backgroundRef.current, { backgroundColor: `rgba(0, 0, 0, ${opacity})` });
+          },
+        });
+      }
     }
 
     // Resize/Redraw Handler with throttling
@@ -346,7 +375,14 @@ export const useHero = () => {
     };
   }, []);
 
-  return { canvasRef, imagesLoaded, isLoading, loadingProgress };
+  return {
+    canvasRef,
+    canvasContainerRef,
+    backgroundRef,
+    imagesLoaded,
+    isLoading,
+    loadingProgress,
+  };
 };
 
 export default useHero;
