@@ -1,5 +1,5 @@
 import { Environment, Text3D } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
+import { BallCollider, RigidBody } from "@react-three/rapier";
 import { useThree } from "@react-three/fiber";
 import { useMemo } from "react";
 import * as THREE from "three";
@@ -22,10 +22,34 @@ export default function HeroContent() {
         <>
             <RigidBody
                 type="dynamic"
-                position={[-2.5, -0.5, 0]}>
+                position={[-1.5, -bottomPosition - 1, 0]}
+                restitution={0.6}
+                linearDamping={0.5}
+                angularDamping={0.5}>
                 <Text3D
                     font="/fonts/Orbitron_Regular.json"
-                    size={1}
+                    size={0.5}
+                    height={0.2}
+                    curveSegments={12}
+                    bevelEnabled={true}
+                    bevelThickness={0.02}
+                    bevelSize={0.02}
+                    bevelSegments={5}
+                    position={[0, 0, 0]}
+                    rotation={[0, 0, 0]}>
+                    HELLO
+                    <meshNormalMaterial />
+                </Text3D>
+            </RigidBody>
+            <RigidBody
+                type="dynamic"
+                position={[-1.5, -bottomPosition, 0]}
+                restitution={0.6}
+                linearDamping={0.5}
+                angularDamping={0.5}>
+                <Text3D
+                    font="/fonts/Orbitron_Regular.json"
+                    size={0.5}
                     height={0.2}
                     curveSegments={12}
                     bevelEnabled={true}
@@ -41,9 +65,9 @@ export default function HeroContent() {
             <RigidBody
                 type="fixed"
                 position={[0, bottomPosition, 0]}>
-                <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                <mesh rotation={[Math.PI / 2, 0, 0]}>
                     <planeGeometry args={[10, 10]} />
-                    <meshStandardMaterial color="red" />
+                    <meshStandardMaterial color="black" />
                 </mesh>
             </RigidBody>
             <Environment preset="sunset" />

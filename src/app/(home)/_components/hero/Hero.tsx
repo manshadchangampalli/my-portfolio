@@ -18,7 +18,7 @@ export default function HeroSection() {
         loadingProgress={loadingProgress}
       />
       <div className="w-full z-10 h-screen relative bg-black/30">
-        <Canvas>
+        <Canvas camera={{ position: [0, -1.5, 5], fov: 50 }}>
           <Physics>
             <HeroContent />
           </Physics>
