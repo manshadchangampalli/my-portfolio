@@ -1,10 +1,11 @@
 import { Environment, Text3D } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
+import { CollisionEnterPayload, RigidBody } from "@react-three/rapier";
 import { useThree } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { SPHERES_CONFIG, TEXT3D_CONFIG } from "../../_config/heroContent.config";
+import { audioManager } from "@/utils/audioManager";
 
 export default function HeroContent() {
     const { camera, size } = useThree();
@@ -23,44 +24,61 @@ export default function HeroContent() {
         return bottomY + 0.25;
     }, [camera, size]);
 
+    useEffect(() => {
+        // Preload collision sound to avoid delay
+        audioManager.preload("/sounds/collision-sound.mp3");
+        audioManager.preload("/sounds/water-sound.mp3");
+
+        setTimeout(() => {
+            handlePlaneCollision();
+        }, 100);
+    }, []);
+
     const handlePlaneCollision = () => {
-        new Audio("/sounds/water-sound.mp3")
-            .play()
-            .then(() => {
-                console.log("Water sound played");
-            })
-            .catch((error) => {
-                console.error("Error playing water sound", error);
+        audioManager.play("/sounds/water-sound.mp3");
+        setTimeout(() => {
+            SPHERES_CONFIG.forEach((sphere) => {
+                const sphereRef = sphereRefs.current[sphere.id];
+                if (sphereRef) {
+                    // Animate position
+                    gsap.to(sphereRef.position, {
+                        x: sphere.targetPosition.x,
+                        y: sphere.targetPosition.y,
+                        z: sphere.targetPosition.z,
+                        duration: sphere.duration,
+                        ease: sphere.ease || "power2.inOut",
+                    });
+                    // Animate scale
+                    gsap.to(sphereRef.scale, {
+                        x: sphere.targetScale || 1,
+                        y: sphere.targetScale || 1,
+                        z: sphere.targetScale || 1,
+                        duration: sphere.duration,
+                        ease: sphere.ease || "power2.inOut",
+                    });
+                }
             });
-        SPHERES_CONFIG.forEach((sphere) => {
-            const sphereRef = sphereRefs.current[sphere.id];
-            if (sphereRef) {
-                // Animate position
-                gsap.to(sphereRef.position, {
-                    x: sphere.targetPosition.x,
-                    y: sphere.targetPosition.y,
-                    z: sphere.targetPosition.z,
-                    duration: sphere.duration,
-                    ease: sphere.ease || "power2.inOut",
-                });
-                // Animate scale
-                gsap.to(sphereRef.scale, {
-                    x: sphere.targetScale || 1,
-                    y: sphere.targetScale || 1,
-                    z: sphere.targetScale || 1,
-                    duration: sphere.duration,
-                    ease: sphere.ease || "power2.inOut",
-                });
-            }
-        });
+        }, 100);
+    };
+
+    const handleTextCollision = (index: number, e: CollisionEnterPayload) => {
+        const vel = e.target.rigidBody?.linvel();
+        if (vel) {
+            const speed = Math.sqrt(vel.x ** 2 + vel.y ** 2 + vel.z ** 2);
+            const volume = Math.min(speed / 5, 1);
+            // if (index === 2) {
+            audioManager.play("/sounds/collision-sound.mp3", volume);
+            // }
+        }
     };
 
     return (
         <>
-            {TEXT3D_CONFIG.map((textConfig) => (
+            {TEXT3D_CONFIG.map((textConfig, index) => (
                 <RigidBody
                     key={textConfig.id}
                     type="dynamic"
+                    onCollisionEnter={(e) => handleTextCollision(index, e)}
                     position={[textConfig.x, -bottomPosition + textConfig.yOffset, 0]}
                     restitution={textConfig.restitution}
                     {...(textConfig.gravityScale !== undefined && { gravityScale: textConfig.gravityScale })}
@@ -83,7 +101,6 @@ export default function HeroContent() {
                 </RigidBody>
             ))}
             <RigidBody
-                onCollisionEnter={handlePlaneCollision}
                 type="fixed"
                 position={[0, bottomPosition, 0]}>
                 <mesh rotation={[Math.PI / 2, 0, 0]}>

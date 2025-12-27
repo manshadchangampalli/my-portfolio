@@ -9,21 +9,23 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 
 export default function HeroSection() {
-  const { canvasRef, canvasContainerRef, backgroundRef, isLoading, loadingProgress } = useHero();
-
+  const { canvasRef, canvasContainerRef, backgroundRef, isLoading, loadingProgress, showLoadingPage, setLoadingPage } = useHero();
   return (
     <div className="hero__section min-h-dvh relative">
-      <LoadingOverlay
-        isLoading={isLoading}
-        loadingProgress={loadingProgress}
-      />
+      {showLoadingPage && (
+        <LoadingOverlay
+          isLoading={isLoading}
+          setLoadingPage={setLoadingPage}
+          loadingProgress={loadingProgress}
+        />
+      )}
       <div
         ref={backgroundRef}
         className="w-full z-10 h-screen relative bg-black">
         <div
           ref={canvasContainerRef}
           className="w-full h-full">
-          {!isLoading && (
+          {!showLoadingPage && (
             <Canvas camera={{ position: [0, -1.5, 5], fov: 50 }}>
               <Physics>
                 <HeroContent />

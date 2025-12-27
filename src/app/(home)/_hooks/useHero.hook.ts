@@ -19,6 +19,7 @@ const getFramePath = (index: number, width: number) => {
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 export const useHero = () => {
+  const [showLoadingPage, setLoadingPage] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef(0);
@@ -216,7 +217,6 @@ export const useHero = () => {
 
       let loadedCount = 0;
       imagesRef.current = new Array(TOTAL_FRAMES);
-      const startTime = new Date().getTime();
       setIsLoading(true);
       setImagesLoaded(false);
       setLoadingProgress(0);
@@ -224,18 +224,13 @@ export const useHero = () => {
       for (let i = 0; i < TOTAL_FRAMES; i++) {
         const img = new window.Image();
         img.src = getFramePath(i, currentWidth);
-
         const handleLoad = () => {
           loadedCount++;
           const progress = Math.round((loadedCount / TOTAL_FRAMES) * 100);
           setLoadingProgress(progress);
 
           if (loadedCount === TOTAL_FRAMES) {
-            const endTime = new Date().getTime();
-            const duration = endTime - startTime;
-            setTimeout(() => {
-              setIsLoading(false);
-            }, 2000 - duration);
+            setIsLoading(false);
             setImagesLoaded(true);
             render(frameRef.current);
             setupScrollTrigger();
@@ -378,6 +373,8 @@ export const useHero = () => {
     imagesLoaded,
     isLoading,
     loadingProgress,
+    showLoadingPage,
+    setLoadingPage,
   };
 };
 

@@ -9,27 +9,62 @@ class AudioManager {
 
     const audio = new Audio();
     audio.volume = 0;
-    audio.play().catch(() => {});
+    const playPromise = audio.play();
 
-    this.unlocked = true;
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.unlocked = true;
+          console.log("Audio unlocked");
+        })
+        .catch(() => {
+          console.log("Audio unlock failed");
+        });
+    }
   }
 
-  play(src: string) {
-    if (!this.unlocked || this.muted) return;
+  preload(src: string) {
+    if (this.sounds.has(src)) return;
+
+    const audio = new Audio(src);
+    audio.preload = "auto";
+    audio.load(); // Force immediate loading
+
+    this.sounds.set(src, audio);
+  }
+
+  play(src: string, volume: number = 1) {
+    if (this.muted) return;
 
     let audio = this.sounds.get(src);
     if (!audio) {
       audio = new Audio(src);
+      audio.preload = "auto";
+      audio.volume = volume;
       this.sounds.set(src, audio);
+    } else {
+      audio.volume = volume;
     }
 
     audio.currentTime = 0;
-    audio.play().catch(() => {});
+    audio.muted = this.muted;
+    audio.play().catch((err) => {
+      console.error("Failed to play audio:", err);
+    });
   }
 
   mute(value: boolean) {
     this.muted = value;
-    this.sounds.forEach((a) => (a.muted = value));
+    this.sounds.forEach((audio) => {
+      audio.muted = value;
+    });
+  }
+
+  setVolume(src: string, volume: number) {
+    const audio = this.sounds.get(src);
+    if (audio) {
+      audio.volume = Math.max(0, Math.min(1, volume));
+    }
   }
 }
 
