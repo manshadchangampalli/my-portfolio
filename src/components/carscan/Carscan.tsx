@@ -5,12 +5,9 @@ import { useMemo, useEffect } from "react";
 import { PlaneHtml } from "./PlaneHtml";
 import { angle } from "@/utils/angle";
 import { useCarscanStore } from "@/store/carscanStore";
+import { ExperienceCardComponentProps } from "@/app/(home)/_components/experience/experienceCard/experienceCard.config";
 
-interface CarscanProps {
-    cameraControls: CameraControls | null;
-}
-
-export function Model({ cameraControls, ...props }: CarscanProps) {
+export function Model({ cameraControls, ...props }: ExperienceCardComponentProps) {
     const { nodes }: any = useGLTF("/model/carscan/scene.glb");
     const { currentZoom, previousZoom } = useCarscanStore();
 
@@ -67,8 +64,6 @@ export function Model({ cameraControls, ...props }: CarscanProps) {
             }
         }
     }, [cameraControls, currentZoom, previousZoom]);
-
-
 
     return (
         <group
@@ -129,7 +124,7 @@ export function Model({ cameraControls, ...props }: CarscanProps) {
                     color="#ffffff"
                     side={THREE.DoubleSide}
                 />
-                <PlaneHtml />
+                {props?.blend === 1 && <PlaneHtml />}
             </mesh>
         </group>
     );

@@ -10,8 +10,9 @@ import { useMemo } from "react";
 import { FirstMonitorHtml } from "./FirstMonitorHtml";
 import { SecondMonitorHtml } from "./SecondMonitorHtml";
 import { angle } from "@/utils/angle";
+import { ExperienceCardComponentProps } from "@/app/(home)/_components/experience/experienceCard/experienceCard.config";
 
-export function ThirtyDaysModel(props: any) {
+export function ThirtyDaysModel(props: ExperienceCardComponentProps) {
     const { nodes, materials }: any = useGLTF("/model/thirty-days/30days.glb");
 
     const wallTexture = useTexture("/texture/thirty-days/wall_bake.webp");
@@ -91,7 +92,7 @@ export function ThirtyDaysModel(props: any) {
                 {...props}
                 dispose={null}>
                 <mesh
-                    position={[-0.82, 3.50, 5.64]}
+                    position={[-0.82, 3.5, 5.64]}
                     rotation={[angle(190), angle(12), angle(-2)]}>
                     <planeGeometry args={[2.34, 1.42]} />
                     <meshStandardMaterial
@@ -100,7 +101,7 @@ export function ThirtyDaysModel(props: any) {
                         transparent
                         opacity={1}
                     />
-                    <FirstMonitorHtml />
+                    {props?.blend === 1 && <FirstMonitorHtml />}
                 </mesh>
                 <group
                     name="monitor"
@@ -211,14 +212,13 @@ export function ThirtyDaysModel(props: any) {
                         transparent
                         opacity={0.3}
                     />
-                    <SecondMonitorHtml />
+                    {props?.blend === 1 && <SecondMonitorHtml />}
                 </mesh>
                 <group
                     name="macbook"
                     position={[0.899, 2.273, 4.927]}
                     rotation={[Math.PI / 2, 0, 2.911]}
                     scale={0.045}>
-
                     <mesh
                         name="AQdtiiJfiakvCKx"
                         geometry={nodes.AQdtiiJfiakvCKx.geometry}

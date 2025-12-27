@@ -9,8 +9,9 @@ import { useMemo } from "react";
 import { PhoneHtml } from "./PhoneHtml";
 import * as THREE from "three";
 import { angle } from "@/utils/angle";
+import { ExperienceCardComponentProps } from "@/app/(home)/_components/experience/experienceCard/experienceCard.config";
 
-export function IspgModel() {
+export function IspgModel(props: ExperienceCardComponentProps) {
     const { nodes, materials }: any = useGLTF("/model/ispg/ispg_phone.glb");
     const tableTexture = useTexture("/texture/ispg/table.webp");
 
@@ -105,13 +106,14 @@ export function IspgModel() {
                         material={materials.Metal_Mesh_Grill}
                     />
 
-                    {/* PhoneHtml mesh - Adjusted position and size */}
-                    <mesh
-                        position={[0, 0.5, -8]}
-                        rotation={[0, 0, angle(90)]}>
-                        <planeGeometry args={[1.85, 3.9]} />
-                        <PhoneHtml />
-                    </mesh>
+                    {props?.blend === 1 && (
+                        <mesh
+                            position={[0, 0.5, -8]}
+                            rotation={[0, 0, angle(90)]}>
+                            <planeGeometry args={[1.85, 3.9]} />
+                            <PhoneHtml />
+                        </mesh>
+                    )}
                 </group>
             </group>
             <Environment preset="apartment" />

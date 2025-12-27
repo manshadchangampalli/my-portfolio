@@ -31,9 +31,9 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
                     <Sparkles
                         count={100}
                         speed={1}
-                        size={100}
-                        scale={5}
-                        noise={3}
+                        size={80}
+                        scale={6}
+                        noise={10}
                         color="#06415c"
                     />
                     <OrbitControls enableZoom={false} />

@@ -13,6 +13,7 @@ import { FrameHtml } from "./Frame/FrameHtml";
 import { TvHtml } from "./TV/TvHtml";
 import { KioskHtml } from "./Kiosk/KioskHtml";
 import { KdsHtml } from "./KDS/KdsHtml";
+import { ExperienceCardComponentProps } from "@/app/(home)/_components/experience/experienceCard/experienceCard.config";
 
 const cameraPositions: Record<ConfianceCameraTypes, [number, number, number, number, number, number]> = {
     frame: [-16, 5.5, -4, -16, 5.5, -10],
@@ -21,11 +22,7 @@ const cameraPositions: Record<ConfianceCameraTypes, [number, number, number, num
     kds: [10, 5, -7, 10, 1.5, -11],
 };
 
-interface ConfianceLabsSceneProps {
-    cameraControls: CameraControls | null;
-}
-
-export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSceneProps) {
+export function ConfianceLabsScene({ cameraControls, ...props }: ExperienceCardComponentProps) {
     const { nodes, materials }: any = useGLTF("/model/confiancelabs/confiancelabs_model.glb");
 
     const currentCamera = useConfianceStore((state) => state.currentCamera);
@@ -123,7 +120,7 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
                         transparent
                         opacity={0}
                     />
-                    <FrameHtml />
+                    {props?.blend === 1 && <FrameHtml />}
                 </mesh>
                 <mesh
                     name="tv"
@@ -140,7 +137,7 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
                         color="black"
                         side={THREE.DoubleSide}
                     />
-                    <TvHtml />
+                    {props?.blend === 1 && <TvHtml />}
                 </mesh>
                 <mesh
                     name="kiosk"
@@ -159,7 +156,7 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
                         color="black"
                         side={THREE.DoubleSide}
                     />
-                    <KioskHtml />
+                    {props?.blend === 1 && <KioskHtml />}
                 </mesh>
                 <mesh
                     name="table"
@@ -185,7 +182,7 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ConfianceLabsSc
                         color="black"
                         side={THREE.DoubleSide}
                     />
-                    <KdsHtml />
+                    {props?.blend === 1 && <KdsHtml />}
                 </mesh>
             </group>
         </>

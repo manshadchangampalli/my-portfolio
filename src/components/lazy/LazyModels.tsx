@@ -4,19 +4,16 @@
  */
 
 import dynamic from "next/dynamic";
-import { CameraControls } from "@react-three/drei";
 import { ModelLoadingFallback } from "@/components/LoadingStates/SceneLoadingFallback";
+import { ExperienceCardComponentProps } from "@/app/(home)/_components/experience/experienceCard/experienceCard.config";
 
 // Lazy load each 3D model component with proper typing
-export const LazyCarscanModel = dynamic<{ cameraControls: CameraControls | null }>(
-    () => import("@/components/carscan/Carscan").then((mod) => ({ default: mod.Model })),
-    {
-        ssr: false,
-        loading: () => <ModelLoadingFallback />,
-    }
-);
+export const LazyCarscanModel = dynamic<ExperienceCardComponentProps>(() => import("@/components/carscan/Carscan").then((mod) => ({ default: mod.Model })), {
+    ssr: false,
+    loading: () => <ModelLoadingFallback />,
+});
 
-export const LazyConfianceLabsScene = dynamic<{ cameraControls: CameraControls | null }>(
+export const LazyConfianceLabsScene = dynamic<ExperienceCardComponentProps>(
     () => import("@/components/Confiancelabs/ConfianceLabsScene").then((mod) => ({ default: mod.ConfianceLabsScene })),
     {
         ssr: false,
@@ -24,12 +21,15 @@ export const LazyConfianceLabsScene = dynamic<{ cameraControls: CameraControls |
     }
 );
 
-export const LazyIspgModel = dynamic(() => import("@/components/ispg/IspgModel").then((mod) => ({ default: mod.IspgModel })), {
+export const LazyIspgModel = dynamic<ExperienceCardComponentProps>(() => import("@/components/ispg/IspgModel").then((mod) => ({ default: mod.IspgModel })), {
     ssr: false,
     loading: () => <ModelLoadingFallback />,
 });
 
-export const LazyThirtyDaysModel = dynamic(() => import("@/components/thirty-days/ThirtyDays").then((mod) => ({ default: mod.ThirtyDaysModel })), {
-    ssr: false,
-    loading: () => <ModelLoadingFallback />,
-});
+export const LazyThirtyDaysModel = dynamic<ExperienceCardComponentProps>(
+    () => import("@/components/thirty-days/ThirtyDays").then((mod) => ({ default: mod.ThirtyDaysModel })),
+    {
+        ssr: false,
+        loading: () => <ModelLoadingFallback />,
+    }
+);
