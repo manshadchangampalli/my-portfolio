@@ -19,38 +19,20 @@ useGLTF.preload("/model/confiancelabs/confiancelabs_model.glb");
 useGLTF.preload("/model/ispg/ispg_phone.glb");
 
 const Experience = lazy(() => import("./_components/experience/Experience").then((mod) => ({ default: mod.default })));
-const Gallery = lazy(() => import("./_components/gallery/gallery").then((mod) => ({ default: mod.default })));
 
 export default function Home() {
   const [isFixed, setIsFixed] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const { isMobile } = useDevice();
-  // Removed unnecessary resize listener and console.logs for performance
-
-  useEffect(() => {
-    // Don't touch body styles during loading page
-    if (isLoadingPage) return;
-
-    if (isFixed) {
-      document.body.style.overflow = "hidden";
-      document.body.style.maxHeight = "100dvh";
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.maxHeight = "";
-    }
-
-    return () => {
-      // Cleanup on unmount
-      document.body.style.overflow = "";
-      document.body.style.maxHeight = "";
-    };
-  }, [isFixed, isLoadingPage]);
 
   return (
     <>
       {isFixed && <ExperienceControls />}
       {/* Conditional Lenis loading - disabled on mobile and during loading for better performance */}
-      <SmoothScrollProvider enableOnMobile={false} disabled={isLoadingPage} />
+      <SmoothScrollProvider
+        enableOnMobile={false}
+        disabled={isLoadingPage}
+      />
       <main className="bg-black w-full">
         <div className={cn("h-[800dvh]")}>
           <Hero onLoadingChange={setIsLoadingPage} />
@@ -78,21 +60,6 @@ export default function Home() {
         </Suspense>
       </div>
       <div className="h-screen w-full bg-black"></div>
-      {/* <div className="w-full bg-black">
-        <div className="w-screen h-screen">
-          <Suspense fallback={<GalleryLoadingFallback />}>
-            <Canvas
-              camera={{ position: [0, 0, 5], fov: 50 }}
-              gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }}
-              dpr={isMobile ? [0.5, 1] : [1, 2]}
-              frameloop="always">
-              <Suspense fallback={null}>
-                <Gallery />
-              </Suspense>
-            </Canvas>
-          </Suspense>
-        </div>
-      </div> */}
     </>
   );
 }
