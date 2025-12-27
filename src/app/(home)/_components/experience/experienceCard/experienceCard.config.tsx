@@ -54,26 +54,26 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       );
     },
   },
-  // {
-  //   id: "confiancelabs",
-  //   name: "Confiance Labs",
-  //   bgColor: "#264b4c",
-  //   lookAtPosition: {
-  //     sm: [0, 0.85, 4, 0, 0.85, -2],
-  //     md: [0, 1, -4, 0, 0.5, -6],
-  //     lg: [-15, 5.5, -4, -15, 5.5, -10],
-  //   },
-  //   slug: EXPERIENCE_SLUGS.CONFIANCE_LABS,
-  //   modelPosition: [0, -1, -5],
-  //   cardPosition: [-1.5, 0, 0],
-  //   rotation: [0, 0, 0],
-  //   component: (props: ExperienceCardComponentProps) => (
-  //     <LazyConfianceLabsScene
-  //       {...props}
-  //       cameraControls={props?.cameraControls ?? null}
-  //     />
-  //   ),
-  // },
+  {
+    id: "confiancelabs",
+    name: "Confiance Labs",
+    bgColor: "#264b4c",
+    lookAtPosition: {
+      sm: [0, 0.85, 4, 0, 0.85, -2],
+      md: [0, 1, -4, 0, 0.5, -6],
+      lg: [-15, 5.5, -4, -15, 5.5, -10],
+    },
+    slug: EXPERIENCE_SLUGS.CONFIANCE_LABS,
+    modelPosition: [0, -1, -5],
+    cardPosition: [-1.5, 0, 0],
+    rotation: [0, 0, 0],
+    component: (props: ExperienceCardComponentProps) => (
+      <LazyConfianceLabsScene
+        {...props}
+        cameraControls={props?.cameraControls ?? null}
+      />
+    ),
+  },
   {
     id: "ispg",
     name: "ISPG",

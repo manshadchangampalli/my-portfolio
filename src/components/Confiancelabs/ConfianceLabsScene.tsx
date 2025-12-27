@@ -6,7 +6,7 @@ Command: npx gltfjsx@6.5.3 ./public/model/confiancelabs/confiancelabs_model.gltf
 
 import { CameraControls, useGLTF, useTexture } from "@react-three/drei";
 import { angle } from "@/utils/angle";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import useConfianceStore, { type ConfianceCameraTypes } from "../../store/confianceStore";
 import { FrameHtml } from "./Frame/FrameHtml";
@@ -26,6 +26,9 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ExperienceCardC
     const { nodes, materials }: any = useGLTF("/model/confiancelabs/confiancelabs_model.glb");
 
     const currentCamera = useConfianceStore((state) => state.currentCamera);
+    const previousCameraRef = useRef<ConfianceCameraTypes | null>(null);
+    const isInitialMountRef = useRef(true);
+    const previousBlendRef = useRef<number>(0);
 
     const frameTexture = useTexture("/texture/confiancelabs/frame_bake.webp");
     const tvTexture = useTexture("/texture/confiancelabs/tv_baked.webp");
@@ -84,10 +87,26 @@ export function ConfianceLabsScene({ cameraControls, ...props }: ExperienceCardC
     }, [wallTexture]);
 
     useEffect(() => {
-        if (cameraControls) {
-            cameraControls.setLookAt(...cameraPositions[currentCamera], true);
+        if (isInitialMountRef.current) {
+            isInitialMountRef.current = false;
+            previousCameraRef.current = currentCamera;
+            previousBlendRef.current = props.blend;
+            return;
         }
-    }, [currentCamera, cameraControls]);
+
+        if (previousBlendRef.current < 1 && props.blend === 1) {
+            previousBlendRef.current = props.blend;
+            previousCameraRef.current = currentCamera;
+            return;
+        }
+
+        if (cameraControls && props.blend === 1 && previousCameraRef.current !== currentCamera) {
+            cameraControls.setLookAt(...cameraPositions[currentCamera], true);
+            previousCameraRef.current = currentCamera;
+        }
+
+        previousBlendRef.current = props.blend;
+    }, [currentCamera, cameraControls, props.blend]);
 
     return (
         <>
