@@ -15,15 +15,23 @@ const ReactLenis = dynamic(
 
 interface SmoothScrollProviderProps {
     enableOnMobile?: boolean; // Option to disable on mobile for better performance
+    disabled?: boolean; // Disable Lenis entirely (e.g., during loading)
 }
 
 export default function SmoothScrollProvider({
-    enableOnMobile = false
+    enableOnMobile = false,
+    disabled = false
 }: SmoothScrollProviderProps) {
     const { isMobile, isClient } = useDevice();
     const [shouldLoadLenis, setShouldLoadLenis] = useState(false);
 
     useEffect(() => {
+        // Don't load Lenis if disabled (e.g., during loading overlay)
+        if (disabled) {
+            setShouldLoadLenis(false);
+            return;
+        }
+
         // Only load Lenis if:
         // 1. We're on the client
         // 2. Either we're not on mobile, or mobile smooth scroll is explicitly enabled
@@ -40,7 +48,7 @@ export default function SmoothScrollProvider({
                 return () => clearTimeout(timer);
             }
         }
-    }, [isMobile, isClient, enableOnMobile]);
+    }, [isMobile, isClient, enableOnMobile, disabled]);
 
     // If we shouldn't load Lenis, don't render anything
     if (!shouldLoadLenis) {

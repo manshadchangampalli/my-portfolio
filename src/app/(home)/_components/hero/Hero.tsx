@@ -7,9 +7,19 @@ import HeroContent from "./HeroContent";
 import HeroCanvas from "./HeroCanvas";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
+import { useEffect } from "react";
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  onLoadingChange?: (isLoading: boolean) => void;
+}
+
+export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
   const { canvasRef, canvasContainerRef, backgroundRef, isLoading, loadingProgress, showLoadingPage, setLoadingPage } = useHero();
+
+  // Notify parent when loading state changes
+  useEffect(() => {
+    onLoadingChange?.(showLoadingPage);
+  }, [showLoadingPage, onLoadingChange]);
   return (
     <div className="hero__section min-h-dvh relative">
       {showLoadingPage && (

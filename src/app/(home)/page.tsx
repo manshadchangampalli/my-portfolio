@@ -23,28 +23,37 @@ const Gallery = lazy(() => import("./_components/gallery/gallery").then((mod) =>
 
 export default function Home() {
   const [isFixed, setIsFixed] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
   const { isMobile } = useDevice();
   // Removed unnecessary resize listener and console.logs for performance
 
   useEffect(() => {
-    document.body.style.overflow = isFixed ? "hidden" : "auto";
-    document.body.style.maxHeight = isFixed ? "100dvh" : "auto";
+    // Don't touch body styles during loading page
+    if (isLoadingPage) return;
+
+    if (isFixed) {
+      document.body.style.overflow = "hidden";
+      document.body.style.maxHeight = "100dvh";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.maxHeight = "";
+    }
 
     return () => {
       // Cleanup on unmount
       document.body.style.overflow = "";
       document.body.style.maxHeight = "";
     };
-  }, [isFixed]);
+  }, [isFixed, isLoadingPage]);
 
   return (
     <>
       {isFixed && <ExperienceControls />}
-      {/* Conditional Lenis loading - disabled on mobile for better performance */}
-      <SmoothScrollProvider enableOnMobile={false} />
+      {/* Conditional Lenis loading - disabled on mobile and during loading for better performance */}
+      <SmoothScrollProvider enableOnMobile={false} disabled={isLoadingPage} />
       <main className="bg-black w-full">
         <div className={cn("h-[800dvh]")}>
-          <Hero />
+          <Hero onLoadingChange={setIsLoadingPage} />
         </div>
       </main>
       <Profile />

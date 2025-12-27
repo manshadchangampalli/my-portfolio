@@ -12,6 +12,12 @@ interface LoadingOverlayProps {
 }
 
 export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoadingPage }: LoadingOverlayProps) {
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, []);
     return (
         <div
             className="fixed overflow-hidden flex justify-items-end md:text-4xl sm:text-3xl text-2xl font-orbitron p-6 text-white top-0 z-[9999] left-0 w-full h-dvh bg-black"
