@@ -24,7 +24,14 @@ export default function HeroContent() {
     }, [camera, size]);
 
     const handlePlaneCollision = () => {
-        new Audio("/sounds/water-sound.mp3").play();
+        new Audio("/sounds/water-sound.mp3")
+            .play()
+            .then(() => {
+                console.log("Water sound played");
+            })
+            .catch((error) => {
+                console.error("Error playing water sound", error);
+            });
         SPHERES_CONFIG.forEach((sphere) => {
             const sphereRef = sphereRefs.current[sphere.id];
             if (sphereRef) {
@@ -93,7 +100,13 @@ export default function HeroContent() {
                     position={[0, bottomPosition + sphere.initialYOffset, 0]}
                     scale={sphere.initialScale || 1}>
                     <sphereGeometry args={[sphere.radius, 32, 32]} />
-                    <meshStandardMaterial color="white" />
+                    <meshStandardMaterial
+                        emissive="white"
+                        emissiveIntensity={2}
+                        roughness={0}
+                        metalness={0.3}
+                        color="white"
+                    />
                 </mesh>
             ))}
             <Environment preset="sunset" />

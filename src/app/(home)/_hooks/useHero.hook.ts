@@ -216,6 +216,7 @@ export const useHero = () => {
 
       let loadedCount = 0;
       imagesRef.current = new Array(TOTAL_FRAMES);
+      const startTime = new Date().getTime();
       setIsLoading(true);
       setImagesLoaded(false);
       setLoadingProgress(0);
@@ -230,7 +231,11 @@ export const useHero = () => {
           setLoadingProgress(progress);
 
           if (loadedCount === TOTAL_FRAMES) {
-            setIsLoading(false);
+            const endTime = new Date().getTime();
+            const duration = endTime - startTime;
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 2000 - duration);
             setImagesLoaded(true);
             render(frameRef.current);
             setupScrollTrigger();

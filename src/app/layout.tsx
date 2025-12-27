@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Poller_One, Great_Vibes, Orbitron } from "next/font/google";
 import { cn } from "@/utils/classNames";
+import Sound from "@/components/sound/Sound";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -33,7 +34,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(pollerOne.variable, greatVibes.variable, orbitron.variable, "font-sans")}>
-        <div>{children}</div>
+        <div>
+          <Sound />
+          {children}
+        </div>
       </body>
     </html>
   );
