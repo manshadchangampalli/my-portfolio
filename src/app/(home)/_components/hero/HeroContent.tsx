@@ -25,17 +25,14 @@ export default function HeroContent() {
     }, [camera, size]);
 
     useEffect(() => {
-        // Preload collision sound to avoid delay
         audioManager.preload("/sounds/collision-sound.mp3");
         audioManager.preload("/sounds/water-sound.mp3");
-
         setTimeout(() => {
             handlePlaneCollision();
         }, 100);
     }, []);
 
     const handlePlaneCollision = () => {
-        audioManager.play("/sounds/water-sound.mp3");
         setTimeout(() => {
             SPHERES_CONFIG.forEach((sphere) => {
                 const sphereRef = sphereRefs.current[sphere.id];

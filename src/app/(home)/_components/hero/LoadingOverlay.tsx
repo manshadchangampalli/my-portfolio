@@ -14,7 +14,7 @@ interface LoadingOverlayProps {
 export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoadingPage }: LoadingOverlayProps) {
     return (
         <div
-            className="fixed flex justify-items-end md:text-4xl sm:text-3xl text-2xl font-orbitron p-6 text-white top-0 z-[9999] left-0 w-full h-dvh bg-black"
+            className="fixed overflow-hidden flex justify-items-end md:text-4xl sm:text-3xl text-2xl font-orbitron p-6 text-white top-0 z-[9999] left-0 w-full h-dvh bg-black"
             style={{ right: 0, bottom: 0 }}>
             <div>
                 <h2 className="font-orbitron">{loadingProgress}</h2>
