@@ -94,7 +94,7 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
     return (
         <>
             <Html fullscreen>
-                <h1 className="font-poller-one text-white text-3xl sm:text-4xl md:text-5xl md:mt-10 lg:mt-0 lg:text-6xl uppercase leading-tight text-center">
+                <h1 className="font-poller-one text-white text-3xl sm:text-4xl md:text-5xl md:mt-10 lg:mt-10 lg:text-6xl uppercase leading-tight text-center">
                     My Evolution
                 </h1>
             </Html>
