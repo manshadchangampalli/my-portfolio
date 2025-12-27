@@ -24,8 +24,7 @@ export default function HeroContent() {
     }, [camera, size]);
 
     const handlePlaneCollision = () => {
-        console.log("collision");
-        // Animate all spheres to their end positions while scaling down
+        new Audio("/sounds/water-sound.mp3").play();
         SPHERES_CONFIG.forEach((sphere) => {
             const sphereRef = sphereRefs.current[sphere.id];
             if (sphereRef) {

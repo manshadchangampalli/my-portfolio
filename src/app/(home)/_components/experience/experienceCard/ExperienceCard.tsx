@@ -1,4 +1,4 @@
-import { CameraControls, Environment, Html, MeshPortalMaterial, RoundedBox } from "@react-three/drei";
+import { CameraControls, Environment, Html, MeshPortalMaterial, Preload, RoundedBox } from "@react-three/drei";
 import React, { useRef, memo, useEffect, useState } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
@@ -77,6 +77,7 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                 ref={meshPortalMaterialRef}
                 resolution={512}
                 blur={0}>
+                <Preload all />
                 {blend === 1 && (
                     <>
                         <Environment preset="apartment" />
