@@ -1,4 +1,4 @@
-import { CameraControls, Environment, Html, MeshPortalMaterial, Preload, RoundedBox } from "@react-three/drei";
+import { CameraControls, Environment, Html, MeshPortalMaterial, Preload, RoundedBox, Text, Text3D } from "@react-three/drei";
 import React, { useRef, memo, useEffect, useState } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
@@ -56,12 +56,30 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                 e.stopPropagation();
                 onClick();
             }}>
+            <Html
+                position={[0, 0, 0.1]}
+                center
+                transform
+                pointerEvents="none"
+                occlude
+                className="pointer-events-none select-none">
+                <div className="font-orbitron lg:text-[8px] sm:text-[5px] text-[3px] font-black text-white uppercase text-center whitespace-nowrap">{config.name}</div>
+            </Html>
+            {/* <Text
+                font="/fonts/Orbitron-VariableFont_wght.ttf"
+                characters="abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?`~"
+                fontSize={0.25}
+                fontWeight={500}
+                color="white"
+                position={[0, 0, 0.1]}>
+                {config.name}
+            </Text> */}
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
                 resolution={512}
                 blur={0}>
                 <Preload all />
-                <Environment preset="apartment" />
+                <Environment preset="sunset" />
                 <color
                     attach="background"
                     args={[config.bgColor]}

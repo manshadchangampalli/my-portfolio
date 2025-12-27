@@ -3,6 +3,7 @@
 import { Cloud, Clouds, OrbitControls, Sparkles, Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import * as THREE from "three";
 
 interface LoadingOverlayProps {
@@ -13,20 +14,62 @@ interface LoadingOverlayProps {
 
 export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoadingPage }: LoadingOverlayProps) {
     useEffect(() => {
-        document.body.style.overflow = "hidden";
+        // Prevent scrolling on both html and body
+        const html = document.documentElement;
+        const body = document.body;
+
+        // Store original values and scroll position
+        const originalHtmlOverflow = html.style.overflow;
+        const originalBodyOverflow = body.style.overflow;
+        const originalBodyHeight = body.style.height;
+        const originalHtmlHeight = html.style.height;
+        const scrollY = window.scrollY;
+
+        // Prevent scrolling
+        html.style.overflow = "hidden";
+        html.style.height = "100%";
+        body.style.overflow = "hidden";
+        body.style.height = "100%";
+
+        // Also prevent touch scrolling on mobile by fixing body position
+        // Save scroll position to prevent jump when overlay closes
+        body.style.position = "fixed";
+        body.style.width = "100%";
+        body.style.top = `-${scrollY}px`;
+        body.style.left = "0";
+
         return () => {
-            document.body.style.overflow = "";
+            // Restore original values
+            html.style.overflow = originalHtmlOverflow;
+            html.style.height = originalHtmlHeight;
+            body.style.overflow = originalBodyOverflow;
+            body.style.height = originalBodyHeight;
+            body.style.position = "";
+            body.style.width = "";
+            body.style.top = "";
+            body.style.left = "";
+
+            // Restore scroll position
+            window.scrollTo(0, scrollY);
         };
     }, []);
-    return (
+    // Use portal to render at root level, outside any scrollable containers
+    const overlayContent = (
         <div
-            className="fixed overflow-hidden flex justify-items-end md:text-4xl sm:text-3xl text-2xl font-orbitron p-6 text-white top-0 z-[9999] left-0 w-full h-dvh bg-black"
-            style={{ right: 0, bottom: 0 }}>
+            className="fixed overflow-hidden flex justify-items-end md:text-4xl sm:text-3xl text-2xl font-orbitron p-6 text-white top-0 z-[9999] left-0 w-full h-screen bg-black"
+            style={{
+                right: 0,
+                bottom: 0,
+                position: 'fixed',
+                inset: 0,
+                width: '100vw',
+                height: '100vh'
+            }}>
             <div>
                 <h2 className="font-orbitron">{loadingProgress}</h2>
                 <h2 className="animate-pulse text-lg font-orbitron"> {loadingProgress === 100 ? "Ready" : "Loading..."}</h2>
             </div>
-            <div className="absolute left-0 top-0 w-screen h-dvh ">
+            <div className="absolute left-0 top-0 w-screen h-screen">
                 <Canvas>
                     <Sparkles
                         count={100}
@@ -51,4 +94,11 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
             )}
         </div>
     );
+
+    // Render using portal to ensure it's at the root level
+    if (typeof window !== 'undefined') {
+        return createPortal(overlayContent, document.body);
+    }
+
+    return overlayContent;
 }
