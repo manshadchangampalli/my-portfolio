@@ -5,6 +5,8 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import * as THREE from "three";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
+import useDevice from "@/hooks/useDevice";
 
 interface LoadingOverlayProps {
     isLoading: boolean;
@@ -13,6 +15,8 @@ interface LoadingOverlayProps {
 }
 
 export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoadingPage }: LoadingOverlayProps) {
+    const { isLg, isMd } = useBreakpoints();
+    const { isMobile } = useDevice();
     useEffect(() => {
         // Prevent scrolling on both html and body
         const html = document.documentElement;
@@ -60,26 +64,34 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
             style={{
                 right: 0,
                 bottom: 0,
-                position: 'fixed',
+                position: "fixed",
                 inset: 0,
-                width: '100vw',
-                height: '100vh'
+                width: "100vw",
+                height: "100vh",
             }}>
             <div>
                 <h2 className="font-orbitron">{loadingProgress}</h2>
                 <h2 className="animate-pulse text-lg font-orbitron"> {loadingProgress === 100 ? "Ready" : "Loading..."}</h2>
             </div>
             <div className="absolute left-0 top-0 w-screen h-screen">
-                <Canvas>
+                <Canvas
+                    dpr={isMobile ? [0.5, 1] : [1, 2]}
+                    frameloop="always"
+                    gl={{
+                        alpha: false,
+                        antialias: !isMobile,
+                        powerPreference: "high-performance",
+                        stencil: false,
+                    }}>
                     <Sparkles
-                        count={50}
-                        speed={1.5}
-                        size={90}
-                        scale={[10, 6, 5]}
-                        noise={1}
+                        count={isLg ? 50 : isMd ? 25 : 10}
+                        speed={isLg ? 1.5 : isMd ? 1 : 0.4}
+                        size={isMobile ? 60 : 90}
+                        scale={isLg ? [10, 6, 5] : isMd ? [8, 4, 3] : [4, 6, 2]}
+                        noise={isLg ? 1 : isMd ? 0.5 : 0.2}
                         color="#094409"
                     />
-                    <OrbitControls enableZoom={false} />
+                    {!isMobile && <OrbitControls enableZoom={false} />}
                 </Canvas>
             </div>
             {!isLoading && (
@@ -96,7 +108,7 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
     );
 
     // Render using portal to ensure it's at the root level
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
         return createPortal(overlayContent, document.body);
     }
 
