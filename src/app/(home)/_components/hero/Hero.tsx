@@ -7,8 +7,9 @@ import HeroContent from "./HeroContent";
 import HeroCanvas from "./HeroCanvas";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { cn } from "@/utils/classNames";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 
 interface HeroSectionProps {
   onLoadingChange?: (isLoading: boolean) => void;
@@ -17,11 +18,18 @@ interface HeroSectionProps {
 export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
   const { canvasRef, canvasContainerRef, backgroundRef, isLoading, loadingProgress, showLoadingPage, setLoadingPage } = useHero();
   const [removeBlackOverlay, setRemoveBlackOverlay] = useState(false);
+  const { isLg, isMd } = useBreakpoints();
 
   // Notify parent when loading state changes
   useEffect(() => {
     onLoadingChange?.(showLoadingPage);
   }, [showLoadingPage, onLoadingChange]);
+
+  // Adjust camera Y position for mobile devices
+  const cameraY = useMemo(() => {
+    return (!isLg && !isMd) ? -2 : -1.5;
+  }, [isLg, isMd]);
+
   return (
     <div className="hero__section min-h-dvh relative">
       {showLoadingPage && (
@@ -38,10 +46,10 @@ export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
           ref={canvasContainerRef}
           className="w-full h-full">
           {!showLoadingPage && (
-            <Canvas camera={{ position: [0, -1.5, 5], fov: 50 }}>
+            <Canvas camera={{ position: [0, cameraY, 5], fov: 50 }}>
               <Physics>
-                  <HeroContent setRemoveBlackOverlay={() => setRemoveBlackOverlay(true)} />
-                </Physics>
+                <HeroContent setRemoveBlackOverlay={() => setRemoveBlackOverlay(true)} />
+              </Physics>
             </Canvas>
           )}
         </div>
