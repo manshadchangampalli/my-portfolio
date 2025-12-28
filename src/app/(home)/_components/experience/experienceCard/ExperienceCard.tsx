@@ -75,7 +75,19 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                 pointerEvents="none"
                 occlude
                 className="pointer-events-none select-none">
-                <div className="font-orbitron mix-blend-difference lg:text-[8px] sm:text-[5px] text-[3px] font-semibold text-white uppercase text-center whitespace-nowrap">{config.name}</div>
+                <div
+                    className="font-orbitron mix-blend-difference lg:text-[8px] sm:text-[5px] text-[3px] font-semibold text-white uppercase text-center whitespace-nowrap"
+                    style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        MozOsxFontSmoothing: 'grayscale',
+                        textRendering: 'optimizeLegibility',
+                        transform: 'translateZ(0)',
+                        WebkitTransform: 'translateZ(0)',
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                    }}>
+                    {config.name}
+                </div>
             </Html>
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
