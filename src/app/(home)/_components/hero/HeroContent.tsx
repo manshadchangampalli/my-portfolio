@@ -5,11 +5,9 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { SPHERES_CONFIG, TEXT3D_CONFIG } from "../../_config/heroContent.config";
-import useDevice from "@/hooks/useDevice";
 
 export default function HeroContent() {
     const { camera, size } = useThree();
-    const { isMobile } = useDevice();
 
     // Create refs for all spheres dynamically
     const sphereRefs = useRef<{ [key: string]: THREE.Mesh | null }>({});
@@ -53,38 +51,31 @@ export default function HeroContent() {
 
     return (
         <>
-            {TEXT3D_CONFIG.map((textConfig) => {
-                // Reduce complexity on mobile for better performance (keep original size)
-                const curveSegments = isMobile ? 6 : (textConfig.curveSegments || 12);
-                const bevelEnabled = isMobile ? false : (textConfig.bevelEnabled ?? true);
-                const bevelSegments = isMobile ? 3 : (textConfig.bevelSegments || 5);
-
-                return (
-                    <RigidBody
-                        key={textConfig.id}
-                        type="dynamic"
-                        position={[textConfig.x, -bottomPosition + textConfig.yOffset, 0]}
-                        restitution={textConfig.restitution}
-                        {...(textConfig.gravityScale !== undefined && { gravityScale: textConfig.gravityScale })}
-                        linearDamping={textConfig.linearDamping}
-                        angularDamping={textConfig.angularDamping}>
-                        <Text3D
-                            font="/fonts/Orbitron_Regular.json"
-                            size={textConfig.size}
-                            height={textConfig.height}
-                            curveSegments={curveSegments}
-                            bevelEnabled={bevelEnabled}
-                            bevelThickness={textConfig.bevelThickness || 0.02}
-                            bevelSize={textConfig.bevelSize || 0.02}
-                            bevelSegments={bevelSegments}
-                            position={[0, 0, 0]}
-                            rotation={[0, 0, 0]}>
-                            {textConfig.text}
-                            <meshNormalMaterial />
-                        </Text3D>
-                    </RigidBody>
-                );
-            })}
+            {TEXT3D_CONFIG.map((textConfig) => (
+                <RigidBody
+                    key={textConfig.id}
+                    type="dynamic"
+                    position={[textConfig.x, -bottomPosition + textConfig.yOffset, 0]}
+                    restitution={textConfig.restitution}
+                    {...(textConfig.gravityScale !== undefined && { gravityScale: textConfig.gravityScale })}
+                    linearDamping={textConfig.linearDamping}
+                    angularDamping={textConfig.angularDamping}>
+                    <Text3D
+                        font="/fonts/Orbitron_Regular.json"
+                        size={textConfig.size}
+                        height={textConfig.height}
+                        curveSegments={textConfig.curveSegments || 12}
+                        bevelEnabled={textConfig.bevelEnabled ?? true}
+                        bevelThickness={textConfig.bevelThickness || 0.02}
+                        bevelSize={textConfig.bevelSize || 0.02}
+                        bevelSegments={textConfig.bevelSegments || 5}
+                        position={[0, 0, 0]}
+                        rotation={[0, 0, 0]}>
+                        {textConfig.text}
+                        <meshNormalMaterial />
+                    </Text3D>
+                </RigidBody>
+            ))}
             <RigidBody
                 onCollisionEnter={handlePlaneCollision}
                 type="fixed"
@@ -94,23 +85,18 @@ export default function HeroContent() {
                     <meshStandardMaterial color="black" />
                 </mesh>
             </RigidBody>
-            {SPHERES_CONFIG.map((sphere) => {
-                // Reduce sphere geometry segments on mobile for better performance
-                const segments = isMobile ? 16 : 32;
-
-                return (
-                    <mesh
-                        key={sphere.id}
-                        ref={(el) => {
-                            sphereRefs.current[sphere.id] = el;
-                        }}
-                        position={[0, bottomPosition + sphere.initialYOffset, 0]}
-                        scale={sphere.initialScale || 1}>
-                        <sphereGeometry args={[sphere.radius, segments, segments]} />
-                        <meshStandardMaterial color="white" />
-                    </mesh>
-                );
-            })}
+            {SPHERES_CONFIG.map((sphere) => (
+                <mesh
+                    key={sphere.id}
+                    ref={(el) => {
+                        sphereRefs.current[sphere.id] = el;
+                    }}
+                    position={[0, bottomPosition + sphere.initialYOffset, 0]}
+                    scale={sphere.initialScale || 1}>
+                    <sphereGeometry args={[sphere.radius, 32, 32]} />
+                    <meshStandardMaterial color="white" />
+                </mesh>
+            ))}
             <Environment preset="sunset" />
         </>
     );

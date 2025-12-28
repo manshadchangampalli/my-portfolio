@@ -8,7 +8,6 @@ import HeroCanvas from "./HeroCanvas";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { useEffect } from "react";
-import useDevice from "@/hooks/useDevice";
 
 interface HeroSectionProps {
   onLoadingChange?: (isLoading: boolean) => void;
@@ -16,7 +15,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
   const { canvasRef, canvasContainerRef, backgroundRef, isLoading, loadingProgress, showLoadingPage, setLoadingPage } = useHero();
-  const { isMobile } = useDevice();
+
   // Notify parent when loading state changes
   useEffect(() => {
     onLoadingChange?.(showLoadingPage);
@@ -37,9 +36,7 @@ export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
           ref={canvasContainerRef}
           className="w-full h-full">
           {!showLoadingPage && (
-            <Canvas
-              dpr={[1, 2]}
-              camera={{ position: [0, -1.5, 5], fov: 50 }}>
+            <Canvas camera={{ position: [0, -1.5, 5], fov: 50 }}>
               <Physics>
                 <HeroContent />
               </Physics>
