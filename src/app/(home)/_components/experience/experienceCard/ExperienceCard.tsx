@@ -63,17 +63,8 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                 pointerEvents="none"
                 occlude
                 className="pointer-events-none select-none">
-                <div className="font-orbitron lg:text-[8px] sm:text-[5px] text-[3px] font-black text-white uppercase text-center whitespace-nowrap">{config.name}</div>
+                <div className="font-orbitron lg:text-[8px] sm:text-[5px] text-[3px] font-semibold text-white uppercase text-center whitespace-nowrap">{config.name}</div>
             </Html>
-            {/* <Text
-                font="/fonts/Orbitron-VariableFont_wght.ttf"
-                characters="abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?`~"
-                fontSize={0.25}
-                fontWeight={500}
-                color="white"
-                position={[0, 0, 0.1]}>
-                {config.name}
-            </Text> */}
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
                 resolution={512}

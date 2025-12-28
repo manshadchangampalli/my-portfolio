@@ -72,12 +72,12 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
             <div className="absolute left-0 top-0 w-screen h-screen">
                 <Canvas>
                     <Sparkles
-                        count={100}
-                        speed={1}
-                        size={80}
-                        scale={6}
-                        noise={10}
-                        color="#06415c"
+                        count={50}
+                        speed={1.5}
+                        size={90}
+                        scale={[10, 6, 5]}
+                        noise={1}
+                        color="#094409"
                     />
                     <OrbitControls enableZoom={false} />
                 </Canvas>
