@@ -68,7 +68,7 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                 e.stopPropagation();
                 onClick();
             }}>
-            <Html
+            {/* <Html
                 position={[0, 0, 0.1]}
                 center
                 transform
@@ -76,7 +76,7 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                 occlude
                 className="pointer-events-none select-none">
                 <div
-                    className="font-orbitron mix-blend-difference lg:text-[8px] sm:text-[5px] text-[3px] font-semibold text-white uppercase text-center whitespace-nowrap"
+                    className="font-orbitron mix-blend-difference lg:text-[8px] sm:text-[5px] text-[3px] font-semibold text-white uppercase text-center"
                     style={{
                         WebkitFontSmoothing: 'antialiased',
                         MozOsxFontSmoothing: 'grayscale',
@@ -88,7 +88,15 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                     }}>
                     {config.name}
                 </div>
-            </Html>
+            </Html> */}
+            <Text
+                fontSize={isLg ? 0.25 : isMd ? 0.18 : 0.13}
+                position={[0, 0, 0.1]}
+                color="white"
+                fontWeight={'bold'}
+                rotation={[0, 0, 0]}>
+                {config.name}
+            </Text>
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
                 resolution={512}

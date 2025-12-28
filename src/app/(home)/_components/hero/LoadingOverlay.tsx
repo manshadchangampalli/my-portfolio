@@ -1,10 +1,9 @@
 "use client";
 
-import { Cloud, Clouds, OrbitControls, Sparkles, Stars } from "@react-three/drei";
+import { OrbitControls, Sparkles, } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import * as THREE from "three";
 import { useBreakpoints } from "@/hooks/useBreakpoints";
 import useDevice from "@/hooks/useDevice";
 import { audioManager } from "@/utils/audioManager";
@@ -19,6 +18,9 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
     const { isLg, isMd } = useBreakpoints();
     const { isMobile } = useDevice();
     useEffect(() => {
+
+        audioManager.preload("/sounds/collision-sound.mp3");
+
         // Prevent scrolling on both html and body
         const html = document.documentElement;
         const body = document.body;
@@ -57,6 +59,7 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
             window.scrollTo(0, scrollY);
         };
     }, []);
+
     // Use portal to render at root level, outside any scrollable containers
     const overlayContent = (
         <div

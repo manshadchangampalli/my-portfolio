@@ -3,6 +3,7 @@ import { useThirtyDaysStore } from "../../store/thirtyDaysStore";
 import { dayConfig } from "./dayConfig";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { cn } from "@/utils/classNames";
+import { audioManager } from "@/utils/audioManager";
 
 export function ThirtyDaysButtons() {
     const [offset, setOffset] = useState(0);
@@ -16,6 +17,10 @@ export function ThirtyDaysButtons() {
 
     const snapToNearest50 = (value: number): number => {
         return Math.round(value / 50) * 50;
+    };
+
+    const playSound = () => {
+        audioManager.play("/sounds/tic-sound.mp3", 1, false);
     };
 
     const handleMouseDown = (e: React.MouseEvent) => {
@@ -96,7 +101,6 @@ export function ThirtyDaysButtons() {
                 const newOffset = -(newActive - 1) * 50;
                 setOffset(newOffset);
                 setCurrentDate(newActive);
-
                 if (newActive >= 30) {
                     setIsPlaying(false);
                 }
@@ -122,49 +126,49 @@ export function ThirtyDaysButtons() {
         }
     };
 
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+        if (startX - e.clientX >= 0 && startX - e.clientX <= 1450) {
+            const newOffset = e.clientX - startX;
+            setOffset(newOffset);
+            updateActiveNumber(newOffset);
+        }
+    };
+
+    const handleGlobalMouseUp = () => {
+        setIsDragging(false);
+        // Snap to nearest multiple of 50 on mouse up
+        setOffset((prevOffset) => {
+            const snapped = snapToNearest50(prevOffset);
+            const active = Math.floor(Math.abs(snapped) / 50 + 1);
+            updateActiveNumber(snapped);
+            setCurrentDate(active);
+            return snapped;
+        });
+    };
+
+    const handleGlobalTouchMove = (e: TouchEvent) => {
+        e.preventDefault();
+        if (startX - e.touches[0].clientX >= 0 && startX - e.touches[0].clientX <= 1450) {
+            const newOffset = e.touches[0].clientX - startX;
+            setOffset(newOffset);
+            updateActiveNumber(newOffset);
+        }
+    };
+
+    const handleGlobalTouchEnd = () => {
+        setIsDragging(false);
+        // Snap to nearest multiple of 50 on touch end
+        setOffset((prevOffset) => {
+            const snapped = snapToNearest50(prevOffset);
+            const active = Math.floor(Math.abs(snapped) / 50 + 1);
+            updateActiveNumber(snapped);
+            setCurrentDate(active);
+            return snapped;
+        });
+    };
+
     useEffect(() => {
         if (isDragging) {
-            const handleGlobalMouseMove = (e: MouseEvent) => {
-                if (startX - e.clientX >= 0 && startX - e.clientX <= 1450) {
-                    const newOffset = e.clientX - startX;
-                    setOffset(newOffset);
-                    updateActiveNumber(newOffset);
-                }
-            };
-
-            const handleGlobalMouseUp = () => {
-                setIsDragging(false);
-                // Snap to nearest multiple of 50 on mouse up
-                setOffset((prevOffset) => {
-                    const snapped = snapToNearest50(prevOffset);
-                    const active = Math.floor(Math.abs(snapped) / 50 + 1);
-                    updateActiveNumber(snapped);
-                    setCurrentDate(active);
-                    return snapped;
-                });
-            };
-
-            const handleGlobalTouchMove = (e: TouchEvent) => {
-                e.preventDefault();
-                if (startX - e.touches[0].clientX >= 0 && startX - e.touches[0].clientX <= 1450) {
-                    const newOffset = e.touches[0].clientX - startX;
-                    setOffset(newOffset);
-                    updateActiveNumber(newOffset);
-                }
-            };
-
-            const handleGlobalTouchEnd = () => {
-                setIsDragging(false);
-                // Snap to nearest multiple of 50 on touch end
-                setOffset((prevOffset) => {
-                    const snapped = snapToNearest50(prevOffset);
-                    const active = Math.floor(Math.abs(snapped) / 50 + 1);
-                    updateActiveNumber(snapped);
-                    setCurrentDate(active);
-                    return snapped;
-                });
-            };
-
             window.addEventListener("mousemove", handleGlobalMouseMove);
             window.addEventListener("mouseup", handleGlobalMouseUp);
             window.addEventListener("touchmove", handleGlobalTouchMove, { passive: false });
@@ -202,6 +206,12 @@ export function ThirtyDaysButtons() {
             }
         }
     }, [isPlaying, activeNumber, setCurrentDate]);
+
+    useEffect(() => {
+        if (activeNumber) {
+            playSound();
+        }
+    }, [activeNumber]);
 
     const caption = dayConfig[activeNumber].caption;
 

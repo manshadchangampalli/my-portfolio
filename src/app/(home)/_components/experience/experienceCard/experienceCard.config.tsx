@@ -76,13 +76,13 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     name: "Confiance Labs",
     bgColor: "#264b4c",
     lookAtPosition: {
-      sm: [-15, 5.5, -7, -15, 5.5, -10],
+      sm: [-16.5, 5.5, -4, -16.5, 5.5, -10],
       md: [-15, 6, -5, -15, 6, -10],
       lg: [-31, -9, -6, -31, -9, -10],
     },
     slug: EXPERIENCE_SLUGS.CONFIANCE_LABS,
     modelPosition: {
-      sm: [0, -1, -10],
+      sm: [-1.5, -1, -5],
       md: [0, -1, -5],
       lg: [-15, -15, -5],
     },

@@ -16,10 +16,10 @@ import { KdsHtml } from "./KDS/KdsHtml";
 import { ExperienceCardComponentProps } from "@/app/(home)/_components/experience/experienceCard/experienceCard.config";
 
 const cameraPositions: Record<ConfianceCameraTypes, [number, number, number, number, number, number]> = {
-    frame: [-16, 5.5, -4, -16, 5.5, -10],
-    tv: [-5.5, 6.5, -4, -5.5, 6.5, -10],
-    kiosk: [2, 6, -7, 2, 2, -13],
-    kds: [10, 5, -7, 10, 1.5, -11],
+    frame: [-16, 5.5, -3, -16, 5.5, -10],
+    tv: [-5.5, 6.5, -3, -5.5, 6.5, -10],
+    kiosk: [2, 6, -6, 2, 2, -13],
+    kds: [10, 5, -6, 10, 1.5, -11],
 };
 
 export function ConfianceLabsScene({ cameraControls, ...props }: ExperienceCardComponentProps) {

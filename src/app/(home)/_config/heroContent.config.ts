@@ -9,24 +9,6 @@ export interface SphereConfig {
   targetScale?: number;
 }
 
-export interface Text3DConfig {
-  id: string;
-  text: string;
-  x: number;
-  yOffset: number;
-  size: number;
-  height: number;
-  restitution: number;
-  gravityScale?: number;
-  linearDamping: number;
-  angularDamping: number;
-  curveSegments?: number;
-  bevelEnabled?: boolean;
-  bevelThickness?: number;
-  bevelSize?: number;
-  bevelSegments?: number;
-}
-
 export const SPHERES_CONFIG: SphereConfig[] = [
   {
     id: "sphere1",
@@ -65,7 +47,7 @@ export const SPHERES_CONFIG: SphereConfig[] = [
     targetPosition: { x: 0, y: 1, z: 0 },
     duration: 1.5,
     ease: "power2.out",
-        initialScale: 2,
+    initialScale: 2,
     targetScale: 1,
   },
   {
@@ -75,18 +57,52 @@ export const SPHERES_CONFIG: SphereConfig[] = [
     targetPosition: { x: 2.1, y: 2, z: 0 },
     duration: 2.5,
     ease: "power2.out",
-        initialScale: 2,
+    initialScale: 2,
     targetScale: 1,
   },
 ];
+
+export interface Text3DConfig {
+  id: string;
+  text: string;
+  x: {
+    lg: number;
+    md: number;
+    sm: number;
+  };
+  yOffset: number;
+  size: {
+    lg: number;
+    md: number;
+    sm: number;
+  };
+  height: number;
+  restitution: number;
+  gravityScale?: number;
+  linearDamping: number;
+  angularDamping: number;
+  curveSegments?: number;
+  bevelEnabled?: boolean;
+  bevelThickness?: number;
+  bevelSize?: number;
+  bevelSegments?: number;
+}
 
 export const TEXT3D_CONFIG: Text3DConfig[] = [
   {
     id: "text1",
     text: "THE",
-    x: -1,
+    x: {
+      lg: -1,
+      md: -0.75,
+      sm: -0.25,
+    },
     yOffset: 1,
-    size: 0.3,
+    size: {
+      lg: 0.3,
+      md: 0.2,
+      sm: 0.08,
+    },
     height: 0.1,
     restitution: 0.1,
     gravityScale: 0.5,
@@ -101,9 +117,17 @@ export const TEXT3D_CONFIG: Text3DConfig[] = [
   {
     id: "text2",
     text: "STORY",
-    x: -1.5,
+    x: {
+      lg: -1.75,
+      md: -1,
+      sm: -0.5,
+    },
     yOffset: 0,
-    size: 0.5,
+    size: {
+      lg: 0.5,
+      md: 0.4,
+      sm: 0.12,
+    },
     height: 0.2,
     restitution: 0.25,
     linearDamping: 1,
@@ -117,9 +141,17 @@ export const TEXT3D_CONFIG: Text3DConfig[] = [
   {
     id: "text3",
     text: "BEGINS HERE",
-    x: -2.5,
+    x: {
+      lg: -2.5,
+      md: -2,
+      sm: -0.75,
+    },
     yOffset: -2,
-    size: 0.5,
+    size: {
+      lg: 0.5,
+      md: 0.4,
+      sm: 0.15,
+    },
     height: 0.5,
     restitution: 0.1,
     linearDamping: 0,

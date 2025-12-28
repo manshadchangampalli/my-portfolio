@@ -1,18 +1,19 @@
 import { Environment, Text3D } from "@react-three/drei";
 import { CollisionEnterPayload, RigidBody } from "@react-three/rapier";
 import { useThree } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { SPHERES_CONFIG, TEXT3D_CONFIG } from "../../_config/heroContent.config";
 import { audioManager } from "@/utils/audioManager";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 
-export default function HeroContent() {
+export default function HeroContent({ setRemoveBlackOverlay }: { setRemoveBlackOverlay: () => void }) {
     const { camera, size } = useThree();
 
     // Create refs for all spheres dynamically
     const sphereRefs = useRef<{ [key: string]: THREE.Mesh | null }>({});
-
+    const { isLg, isMd } = useBreakpoints();
     // Calculate bottom position based on camera's view frustum
     // This ensures consistent positioning across all devices
     const bottomPosition = useMemo(() => {
@@ -25,27 +26,53 @@ export default function HeroContent() {
     }, [camera, size]);
 
     const handlePlaneCollision = () => {
-        console.log("collision");
-        // Animate all spheres to their end positions while scaling down
+        setTimeout(() => {
+            setRemoveBlackOverlay();
+        }, 1000);
+        // Animate all spheres to their end positions while scaling down and fading out
         SPHERES_CONFIG.forEach((sphere) => {
             const sphereRef = sphereRefs.current[sphere.id];
             if (sphereRef) {
-                // Animate position
-                gsap.to(sphereRef.position, {
-                    x: sphere.targetPosition.x,
-                    y: sphere.targetPosition.y,
-                    z: sphere.targetPosition.z,
-                    duration: sphere.duration,
-                    ease: sphere.ease || "power2.inOut",
-                });
-                // Animate scale
-                gsap.to(sphereRef.scale, {
-                    x: sphere.targetScale || 1,
-                    y: sphere.targetScale || 1,
-                    z: sphere.targetScale || 1,
-                    duration: sphere.duration,
-                    ease: sphere.ease || "power2.inOut",
-                });
+                const material = sphereRef.material as THREE.MeshStandardMaterial;
+                if (!material) return;
+
+                const ease = sphere.ease || "power2.inOut";
+
+                // Create a timeline to run all animations in parallel
+                const tl = gsap.timeline();
+
+                // Add all animations to start at the same time (position 0)
+                tl.to(
+                    sphereRef.position,
+                    {
+                        x: sphere.targetPosition.x,
+                        y: sphere.targetPosition.y,
+                        z: sphere.targetPosition.z,
+                        duration: sphere.duration,
+                        ease: ease,
+                    },
+                    0
+                ) // Start at time 0
+                    .to(
+                        sphereRef.scale,
+                        {
+                            x: sphere.targetScale || 1,
+                            y: sphere.targetScale || 1,
+                            z: sphere.targetScale || 1,
+                            duration: sphere.duration,
+                            ease: ease,
+                        },
+                        0
+                    ) // Start at time 0 (parallel)
+                    .to(
+                        material,
+                        {
+                            opacity: 0,
+                            duration: sphere.duration + 1,
+                            ease: ease,
+                        },
+                        0
+                    ); // Start at time 0 (parallel)
             }
         });
     };
@@ -59,13 +86,27 @@ export default function HeroContent() {
         }
     };
 
+    const getTextSize = useCallback(
+        (sizes: { lg: number; md: number; sm: number }) => {
+            return isLg ? sizes.lg : isMd ? sizes.md : sizes.sm;
+        },
+        [isLg, isMd]
+    );
+
+    const getTextX = useCallback(
+        (x: { lg: number; md: number; sm: number }) => {
+            return isLg ? x.lg : isMd ? x.md : x.sm;
+        },
+        [isLg, isMd]
+    );
+
     return (
         <>
             {TEXT3D_CONFIG.map((textConfig, index) => (
                 <RigidBody
                     key={textConfig.id}
                     type="dynamic"
-                    position={[textConfig.x, -bottomPosition + textConfig.yOffset, 0]}
+                    position={[getTextX(textConfig.x), -bottomPosition + textConfig.yOffset, 0]}
                     restitution={textConfig.restitution}
                     {...(textConfig.gravityScale !== undefined && { gravityScale: textConfig.gravityScale })}
                     linearDamping={textConfig.linearDamping}
@@ -73,7 +114,7 @@ export default function HeroContent() {
                     angularDamping={textConfig.angularDamping}>
                     <Text3D
                         font="/fonts/Orbitron_Regular.json"
-                        size={textConfig.size}
+                        size={getTextSize(textConfig.size)}
                         height={textConfig.height}
                         curveSegments={textConfig.curveSegments || 12}
                         bevelEnabled={textConfig.bevelEnabled ?? true}
@@ -105,7 +146,11 @@ export default function HeroContent() {
                     position={[0, bottomPosition + sphere.initialYOffset, 0]}
                     scale={sphere.initialScale || 1}>
                     <sphereGeometry args={[sphere.radius, 32, 32]} />
-                    <meshStandardMaterial color="white" />
+                    <meshStandardMaterial
+                        color="white"
+                        transparent
+                        opacity={1}
+                    />
                 </mesh>
             ))}
             <Environment preset="sunset" />

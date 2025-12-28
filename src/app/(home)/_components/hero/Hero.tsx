@@ -7,7 +7,8 @@ import HeroContent from "./HeroContent";
 import HeroCanvas from "./HeroCanvas";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "@/utils/classNames";
 
 interface HeroSectionProps {
   onLoadingChange?: (isLoading: boolean) => void;
@@ -15,6 +16,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
   const { canvasRef, canvasContainerRef, backgroundRef, isLoading, loadingProgress, showLoadingPage, setLoadingPage } = useHero();
+  const [removeBlackOverlay, setRemoveBlackOverlay] = useState(false);
 
   // Notify parent when loading state changes
   useEffect(() => {
@@ -31,15 +33,15 @@ export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
       )}
       <div
         ref={backgroundRef}
-        className="w-full z-10 h-dvh relative bg-black">
+        className={cn("w-full z-10 h-dvh relative bg-black", removeBlackOverlay && "bg-transparent")}>
         <div
           ref={canvasContainerRef}
           className="w-full h-full">
           {!showLoadingPage && (
             <Canvas camera={{ position: [0, -1.5, 5], fov: 50 }}>
               <Physics>
-                <HeroContent />
-              </Physics>
+                  <HeroContent setRemoveBlackOverlay={() => setRemoveBlackOverlay(true)} />
+                </Physics>
             </Canvas>
           )}
         </div>
