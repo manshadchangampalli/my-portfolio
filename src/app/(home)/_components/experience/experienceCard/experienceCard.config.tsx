@@ -13,7 +13,11 @@ export interface ExperienceCardConfig {
     lg: [number, number, number, number, number, number];
   }; // [cameraX, cameraY, cameraZ, targetX, targetY, targetZ]
   slug: string; // Should be unique for each card
-  modelPosition: [number, number, number];
+  modelPosition: {
+    sm: [number, number, number];
+    md: [number, number, number];
+    lg: [number, number, number];
+  };
   cardPosition: [number, number, number];
   rotation: [number, number, number];
   component: (props: { cameraControls: CameraControls | null; blend: number }) => React.ReactNode;
@@ -42,7 +46,11 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       lg: [0.5, -0.5, -4.5, 0.5, -1, -6.2],
     },
     slug: EXPERIENCE_SLUGS.CARSCAN,
-    modelPosition: [5, -1, -5],
+    modelPosition: {
+      sm: [5, -5, -5],
+      md: [0, -5, -5],
+      lg: [0, -1, -5],
+    },
     cardPosition: [-4.5, 0, 0],
     rotation: [0, 0, 0],
     component: (props: ExperienceCardComponentProps) => {
@@ -64,7 +72,11 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       lg: [-15, 5, -10, -15, 5, -15],
     },
     slug: EXPERIENCE_SLUGS.CONFIANCE_LABS,
-    modelPosition: [0, -1, -10],
+    modelPosition: {
+      sm: [0, -1, -10],
+      md: [0, -1, -5],
+      lg: [0, -1, -5],
+    },
     cardPosition: [-1.5, 0, 0],
     rotation: [0, 0, 0],
     component: (props: ExperienceCardComponentProps) => (
@@ -84,7 +96,11 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       lg: [7, 2.2, -4.5, 7, 0, -5.5],
     },
     slug: EXPERIENCE_SLUGS.ISPG,
-    modelPosition: [5.5, -1, -5],
+    modelPosition: {
+      sm: [5.5, -1, -5],
+      md: [4.5, -1, -5],
+      lg: [7, -1, -5],
+    },
     rotation: [0, 0, 0],
     cardPosition: [1.5, 0, 0],
     component: (props: ExperienceCardComponentProps) => <LazyIspgModel {...props} />,
@@ -99,7 +115,11 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       lg: [-0.5, -1, -1.5, -0.5, -1.5, -4],
     },
     slug: EXPERIENCE_SLUGS.THIRTY_DAYS,
-    modelPosition: [-5, -1, -5],
+    modelPosition: {
+      sm: [-5, -1, -5],
+      md: [-4, 5, -5],
+      lg: [-0.5, -1, -5],
+    },
     cardPosition: [4.5, 0, 0],
     rotation: [0, 0, 0],
     component: (props: ExperienceCardComponentProps) => <LazyThirtyDaysModel {...props} />,

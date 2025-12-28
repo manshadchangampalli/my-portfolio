@@ -1,9 +1,10 @@
 import { CameraControls, Environment, Html, MeshPortalMaterial, Preload, RoundedBox, Text, Text3D } from "@react-three/drei";
-import React, { useRef, memo, useEffect, useState } from "react";
+import React, { useRef, memo, useEffect, useState, useMemo } from "react";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { ExperienceCardConfig } from "./experienceCard.config";
 import { ArrowUpRight } from "lucide-react";
+import { useBreakpoints } from "@/hooks/useBreakpoints";
 
 interface ExperienceCardProps {
     config: ExperienceCardConfig;
@@ -17,6 +18,7 @@ interface ExperienceCardProps {
 const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args }: ExperienceCardProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const meshPortalMaterialRef = useRef<ThreeElements["portalMaterialImpl"] | null>(null);
+    const { isMd, isLg } = useBreakpoints();
 
     useFrame((_state, delta: number) => {
         if (meshPortalMaterialRef.current) {
@@ -39,6 +41,11 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
 
     // Use passed args or default to original size
     const boxArgs: [number, number, number] = args || [2.5, 4, 0.05];
+
+    // Get responsive model position based on device size
+    const modelPosition = useMemo(() => {
+        return isLg ? config.modelPosition.lg : isMd ? config.modelPosition.md : config.modelPosition.sm;
+    }, [isLg, isMd, config.modelPosition]);
 
     return (
         <RoundedBox
@@ -63,7 +70,7 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                 pointerEvents="none"
                 occlude
                 className="pointer-events-none select-none">
-                <div className="font-orbitron lg:text-[8px] sm:text-[5px] text-[3px] font-semibold text-white uppercase text-center whitespace-nowrap">{config.name}</div>
+                <div className="font-orbitron mix-blend-difference lg:text-[8px] sm:text-[5px] text-[3px] font-semibold text-white uppercase text-center whitespace-nowrap">{config.name}</div>
             </Html>
             <MeshPortalMaterial
                 ref={meshPortalMaterialRef}
@@ -75,7 +82,7 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
                     attach="background"
                     args={[config.bgColor]}
                 />
-                <group position={config.modelPosition}>{config.component({ cameraControls, blend })}</group>
+                <group position={modelPosition}>{config.component({ cameraControls, blend })}</group>
             </MeshPortalMaterial>
         </RoundedBox>
     );
