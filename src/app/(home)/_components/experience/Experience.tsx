@@ -28,7 +28,7 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
             args = [2.5, 4, 0.05];
         } else if (isMd) {
             positions = [
-                [-1, 1.5, 0.01],
+                [-1, 1.5, 0.1],
                 [1, 1.5, 0.02],
                 [-1, -1.2, 0.03],
                 [1, -1.2, 0.04],

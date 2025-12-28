@@ -46,9 +46,9 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     name: "CarScan",
     bgColor: "#5c2532",
     lookAtPosition: {
-      sm: [5.1, 2, -3.5, 5, 1, -10],
-      md: [0.1, 1, -4, 0.1, 0.5, -6],
-      lg: [0.5, -0.5, -4.5, 0.5, -1, -6.2],
+      sm: [5.1, -2, -3.5, 5, -3, -10],
+      md: [-1, -2.5, -4, -1, -4, -6],
+      lg: [-10, -7, -2, -10.75, -8, -5],
     },
     slug: EXPERIENCE_SLUGS.CARSCAN,
     modelPosition: {
@@ -56,7 +56,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       md: [0, -5, -5],
       lg: [-5, -8, -5],
     },
-    cardPosition: [-4.5, 0, 0],
+    cardPosition: [-4.5, 0, 0.2],
     rotation: {
       sm: [0, 0, 0],
       md: [0, 0, 0],
@@ -76,9 +76,9 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     name: "Confiance Labs",
     bgColor: "#264b4c",
     lookAtPosition: {
-      sm: [0, 0.85, -5, 0, 0.85, -10],
-      md: [0, 1, -4, 0, 0.5, -6],
-      lg: [-15, 5, -10, -15, 5, -15],
+      sm: [-15, 5.5, -7, -15, 5.5, -10],
+      md: [-15, 6, -5, -15, 6, -10],
+      lg: [-31, -9, -6, -31, -9, -10],
     },
     slug: EXPERIENCE_SLUGS.CONFIANCE_LABS,
     modelPosition: {
@@ -104,9 +104,9 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     name: "ISPG",
     bgColor: "#0060d1",
     lookAtPosition: {
-      sm: [5.5, 1, -3.5, 5.5, 0.5, -4],
-      md: [4.5, 1, -3.5, 4.5, 0.5, -4],
-      lg: [7, 2.2, -4.5, 7, 0, -5.5],
+      sm: [5.5, 1, -4.2, 5.5, 0.5, -4.5],
+      md: [3.5, 1, -4.3, 3.5, 0.5, -4.5],
+      lg: [8.5, 2, -4.6, 8.5, 0, -5.5],
     },
     slug: EXPERIENCE_SLUGS.ISPG,
     modelPosition: {
@@ -128,8 +128,8 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     bgColor: "#5c8e93",
     lookAtPosition: {
       sm: [-5, -4, 2, -5, -4.5, -10],
-      md: [-4, -2, 0, -4, -2.5, -4],
-      lg: [-0.5, -1, -1.5, -0.5, -1.5, -4],
+      md: [-3, 4, 0, -3, 3, -4],
+      lg: [-4, -1, -5, -1.2, -1.5, -10],
     },
     slug: EXPERIENCE_SLUGS.THIRTY_DAYS,
     modelPosition: {
@@ -137,7 +137,7 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       md: [-4, 5, -5],
       lg: [-10, -1, -5],
     },
-    cardPosition: [4.5, 0, 0],
+    cardPosition: [4.5, 0, 0.2],
     rotation: {
       sm: [0, 0, 0],
       md: [0, 0, 0],
