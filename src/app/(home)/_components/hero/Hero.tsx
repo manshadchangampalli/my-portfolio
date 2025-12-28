@@ -31,7 +31,7 @@ export default function HeroSection({ onLoadingChange }: HeroSectionProps) {
       )}
       <div
         ref={backgroundRef}
-        className="w-full z-10 h-screen relative bg-black">
+        className="w-full z-10 h-dvh relative bg-black">
         <div
           ref={canvasContainerRef}
           className="w-full h-full">

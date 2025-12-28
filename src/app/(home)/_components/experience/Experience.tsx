@@ -12,7 +12,7 @@ interface ExperienceProps {
 }
 
 const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: ExperienceProps) => {
-    const { activeSlug, blend, toggleActiveSlug } = useExperienceCardsStore();
+    const { activeSlug, blend, toggleActiveSlug, setScrollPosition } = useExperienceCardsStore();
     const cameraControlsRef = useRef<CameraControls>(null);
     const [cameraControls, setCameraControls] = useState<CameraControls | null>(null);
     const { progress, active } = useProgress();
@@ -37,11 +37,11 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
         } else {
             positions = [
                 [0, 2.6, 0.01],
-                [0, 0.85, 0.02],
-                [0, -0.9, 0.03],
-                [0, -2.7, 0.04],
+                [0, 1, 0.02],
+                [0, -0.6, 0.03],
+                [0, -2.2, 0.04],
             ];
-            args = [1, 1.5, 0.05];
+            args = [1.2, 1.5, 0.05];
         }
 
         return { positions, args };
@@ -91,13 +91,18 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
         }
     }, [progress, setLoadingProgress]);
 
+    const handleClick = useCallback(
+        (slug: string) => {
+            setScrollPosition(window.scrollY);
+            handleBlend(slug);
+        },
+        [handleBlend, setScrollPosition]
+    );
+
     return (
         <>
-
             <Html fullscreen>
-                <h1 className="font-orbitron text-white text-3xl sm:text-4xl  md:mt-10 lg:mt-10  uppercase leading-tight text-center">
-                    My Evolution
-                </h1>
+                <h1 className="font-orbitron text-white text-3xl sm:text-4xl mt-2 md:mt-10 lg:mt-15  uppercase leading-tight text-center">My Evolution</h1>
             </Html>
             {experienceCardConfig?.map((config, index) => {
                 const position = cardPositions[index] as [number, number, number];
@@ -106,7 +111,9 @@ const Experience = ({ setIsFixed, setIsLoading, setLoadingProgress }: Experience
                         key={config.id}
                         config={config}
                         blend={activeSlug === config.slug ? blend : 0}
-                        onClick={() => handleBlend(config.slug)}
+                        onClick={() => {
+                            handleClick(config.slug);
+                        }}
                         cameraControls={cameraControls}
                         position={position}
                         args={boxArgs}

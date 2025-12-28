@@ -9,13 +9,16 @@ import { ConfianceLabsControl } from "./components/ConfianceLabsControl";
 import { ThirtyDaysControl } from "./components/ThirtyDaysControl";
 
 export const ExperienceControls = () => {
-    const { activeSlug, setActiveSlug } = useExperienceCardsStore();
+    const { activeSlug, setActiveSlug, scrollPosition } = useExperienceCardsStore();
     const { setCurrentZoom, setPreviousZoom } = useCarscanStore();
 
     const handleBack = () => {
         setActiveSlug(null);
         setCurrentZoom(0);
         setPreviousZoom(0);
+        setTimeout(() => {
+            window.scrollTo(0, scrollPosition);
+        }, 100);
     };
 
     const renderControlComponent = () => {

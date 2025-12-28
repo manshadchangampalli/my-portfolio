@@ -3,13 +3,16 @@ import { create } from "zustand";
 interface ExperienceCardsStore {
   activeSlug: string | null;
   blend: number;
+  scrollPosition: number;
   setActiveSlug: (slug: string | null) => void;
   toggleActiveSlug: (slug: string) => void;
+  setScrollPosition: (position: number) => void;
 }
 
 export const useExperienceCardsStore = create<ExperienceCardsStore>((set) => ({
   activeSlug: null,
   blend: 0,
+  scrollPosition: 0,
   setActiveSlug: (slug) =>
     set({
       activeSlug: slug,
@@ -27,5 +30,9 @@ export const useExperienceCardsStore = create<ExperienceCardsStore>((set) => ({
         activeSlug: slug,
         blend: 1,
       };
+    }),
+  setScrollPosition: (position) =>
+    set({
+      scrollPosition: position,
     }),
 }));

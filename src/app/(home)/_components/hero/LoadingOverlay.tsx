@@ -69,7 +69,7 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
                 width: "100vw",
                 height: "100vh",
             }}>
-            <div>
+            <div className="z-10">
                 <h2 className="font-orbitron">{loadingProgress}</h2>
                 <h2 className="animate-pulse text-lg font-orbitron"> {loadingProgress === 100 ? "Ready" : "Loading..."}</h2>
             </div>

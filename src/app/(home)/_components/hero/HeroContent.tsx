@@ -1,10 +1,11 @@
 import { Environment, Text3D } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
+import { CollisionEnterPayload, RigidBody } from "@react-three/rapier";
 import { useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { SPHERES_CONFIG, TEXT3D_CONFIG } from "../../_config/heroContent.config";
+import { audioManager } from "@/utils/audioManager";
 
 export default function HeroContent() {
     const { camera, size } = useThree();
@@ -49,9 +50,18 @@ export default function HeroContent() {
         });
     };
 
+    const handleTextCollision = (e: CollisionEnterPayload) => {
+        const vel = e.target.rigidBody?.linvel();
+        if (vel) {
+            const speed = Math.sqrt(vel.x ** 2 + vel.y ** 2 + vel.z ** 2);
+            const volume = Math.min(speed / 5, 1);
+            audioManager.play("/sounds/collision-sound.mp3", volume);
+        }
+    };
+
     return (
         <>
-            {TEXT3D_CONFIG.map((textConfig) => (
+            {TEXT3D_CONFIG.map((textConfig, index) => (
                 <RigidBody
                     key={textConfig.id}
                     type="dynamic"
@@ -59,6 +69,7 @@ export default function HeroContent() {
                     restitution={textConfig.restitution}
                     {...(textConfig.gravityScale !== undefined && { gravityScale: textConfig.gravityScale })}
                     linearDamping={textConfig.linearDamping}
+                    onCollisionEnter={handleTextCollision}
                     angularDamping={textConfig.angularDamping}>
                     <Text3D
                         font="/fonts/Orbitron_Regular.json"
