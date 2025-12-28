@@ -76,7 +76,11 @@ export interface Text3DConfig {
     md: number;
     sm: number;
   };
-  height: number;
+  height: {
+    lg: number;
+    md: number;
+    sm: number;
+  };
   restitution: number;
   gravityScale?: number;
   linearDamping: number;
@@ -103,7 +107,11 @@ export const TEXT3D_CONFIG: Text3DConfig[] = [
       md: 0.2,
       sm: 0.08,
     },
-    height: 0.1,
+    height: {
+      lg: 0.1,
+      md: 0.08,
+      sm: 0.03,
+    },
     restitution: 0.1,
     gravityScale: 0.5,
     linearDamping: 1,
@@ -128,7 +136,11 @@ export const TEXT3D_CONFIG: Text3DConfig[] = [
       md: 0.4,
       sm: 0.12,
     },
-    height: 0.2,
+    height: {
+      lg: 0.2,
+      md: 0.15,
+      sm: 0.1,
+    },
     restitution: 0.25,
     linearDamping: 1,
     angularDamping: 1,
@@ -152,7 +164,11 @@ export const TEXT3D_CONFIG: Text3DConfig[] = [
       md: 0.4,
       sm: 0.15,
     },
-    height: 0.5,
+    height: {
+      lg: 0.5,
+      md: 0.4,
+      sm: 0.2,
+    },
     restitution: 0.1,
     linearDamping: 0,
     angularDamping: 0,

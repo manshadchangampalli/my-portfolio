@@ -100,6 +100,13 @@ export default function HeroContent({ setRemoveBlackOverlay }: { setRemoveBlackO
         [isLg, isMd]
     );
 
+    const getTextHeight = useCallback(
+        (heights: { lg: number; md: number; sm: number }) => {
+            return isLg ? heights.lg : isMd ? heights.md : heights.sm;
+        },
+        [isLg, isMd]
+    );
+
     return (
         <>
             {TEXT3D_CONFIG.map((textConfig, index) => (
@@ -115,7 +122,7 @@ export default function HeroContent({ setRemoveBlackOverlay }: { setRemoveBlackO
                     <Text3D
                         font="/fonts/Orbitron_Regular.json"
                         size={getTextSize(textConfig.size)}
-                        height={textConfig.height}
+                        height={getTextHeight(textConfig.height)}
                         curveSegments={textConfig.curveSegments || 12}
                         bevelEnabled={textConfig.bevelEnabled ?? true}
                         bevelThickness={textConfig.bevelThickness || 0.02}
