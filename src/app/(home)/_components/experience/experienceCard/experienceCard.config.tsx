@@ -2,6 +2,7 @@
 import React from "react";
 import { CameraControls } from "@react-three/drei";
 import { LazyCarscanModel, LazyConfianceLabsScene, LazyIspgModel, LazyThirtyDaysModel } from "@/components/lazy/LazyModels";
+import { angle } from "@/utils/angle";
 
 export interface ExperienceCardConfig {
   id: string; // Unique identifier for each card
@@ -19,7 +20,11 @@ export interface ExperienceCardConfig {
     lg: [number, number, number];
   };
   cardPosition: [number, number, number];
-  rotation: [number, number, number];
+  rotation: {
+    sm: [number, number, number];
+    md: [number, number, number];
+    lg: [number, number, number];
+  };
   component: (props: { cameraControls: CameraControls | null; blend: number }) => React.ReactNode;
 }
 
@@ -49,10 +54,14 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     modelPosition: {
       sm: [5, -5, -5],
       md: [0, -5, -5],
-      lg: [0, -1, -5],
+      lg: [-5, -8, -5],
     },
     cardPosition: [-4.5, 0, 0],
-    rotation: [0, 0, 0],
+    rotation: {
+      sm: [0, 0, 0],
+      md: [0, 0, 0],
+      lg: [0, angle(15), 0],
+    },
     component: (props: ExperienceCardComponentProps) => {
       return (
         <LazyCarscanModel
@@ -75,10 +84,14 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     modelPosition: {
       sm: [0, -1, -10],
       md: [0, -1, -5],
-      lg: [0, -1, -5],
+      lg: [-15, -15, -5],
     },
     cardPosition: [-1.5, 0, 0],
-    rotation: [0, 0, 0],
+    rotation: {
+      sm: [0, 0, 0],
+      md: [0, 0, 0],
+      lg: [0, 0, 0],
+    },
     component: (props: ExperienceCardComponentProps) => (
       <LazyConfianceLabsScene
         {...props}
@@ -101,7 +114,11 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
       md: [4.5, -1, -5],
       lg: [7, -1, -5],
     },
-    rotation: [0, 0, 0],
+    rotation: {
+      sm: [0, 0, 0],
+      md: [0, 0, 0],
+      lg: [0, 0, 0],
+    },
     cardPosition: [1.5, 0, 0],
     component: (props: ExperienceCardComponentProps) => <LazyIspgModel {...props} />,
   },
@@ -118,10 +135,14 @@ export const experienceCardConfig: ExperienceCardConfig[] = [
     modelPosition: {
       sm: [-5, -1, -5],
       md: [-4, 5, -5],
-      lg: [-0.5, -1, -5],
+      lg: [-10, -1, -5],
     },
     cardPosition: [4.5, 0, 0],
-    rotation: [0, 0, 0],
+    rotation: {
+      sm: [0, 0, 0],
+      md: [0, 0, 0],
+      lg: [0, angle(-25), 0],
+    },
     component: (props: ExperienceCardComponentProps) => <LazyThirtyDaysModel {...props} />,
   },
 ];

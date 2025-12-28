@@ -5,10 +5,10 @@ const Profile = () => {
         <div className="w-full py-24 flex items-center justify-center bg-black px-4 sm:px-24 md:px-8 lg:px-24">
             <div className="max-w-4xl mx-auto">
                 <div className="flex flex-col items-center text-center ">
-                    <h2 className="font-orbitron text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase leading-tight">
+                    <h2 className="font-orbitron text-white text-3xl sm:text-4xl  uppercase leading-tight">
                         Manshad Changampalli
                     </h2>
-                    <h3 className=" text-white/90 text-lg sm:text-xl md:text-2xl lg:text-4xl font-light">
+                    <h3 className=" text-white/90 text-lg sm:text-xl font-light">
                         Senior Software Engineer
                     </h3>
                     <p className="text-white/80 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl leading-relaxed mt-6 sm:mt-8">

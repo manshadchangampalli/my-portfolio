@@ -47,10 +47,15 @@ const ExperienceCard = ({ config, blend, onClick, cameraControls, position, args
         return isLg ? config.modelPosition.lg : isMd ? config.modelPosition.md : config.modelPosition.sm;
     }, [isLg, isMd, config.modelPosition]);
 
+    // Get responsive rotation based on device size
+    const rotation = useMemo(() => {
+        return isLg ? config.rotation.lg : isMd ? config.rotation.md : config.rotation.sm;
+    }, [isLg, isMd, config.rotation]);
+
     return (
         <RoundedBox
             args={boxArgs}
-            rotation={config.rotation}
+            rotation={rotation}
             radius={0.05}
             position={positionWithZ}
             onPointerOver={() => {
