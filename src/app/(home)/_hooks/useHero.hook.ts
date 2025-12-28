@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
+import { audioManager } from "@/utils/audioManager";
 
 const TOTAL_FRAMES = 192;
 const SCROLL_TRIGGER_HEIGHT = 7;
@@ -36,6 +37,7 @@ export const useHero = () => {
   const pendingFrameRef = useRef<number | null>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
+  const alreadyPlayedRef = useRef(false);
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +45,8 @@ export const useHero = () => {
   const windowWidthRef = useRef<number>(typeof window !== "undefined" ? window.innerWidth : 0);
   const isMobileRef = useRef<boolean>(false);
   const lastRenderTimeRef = useRef<number>(0);
+  const scrollStartedRef = useRef<boolean>(false);
+  const scrollEndedRef = useRef<boolean>(false);
 
   // Actual rendering logic extracted to avoid duplication
   const executeRender = useCallback((frameToRender: number) => {
@@ -143,46 +147,6 @@ export const useHero = () => {
         }
         lastFrameRef.current = frameToRender;
         executeRender(frameToRender);
-
-        // Add grain effect to the full image using canvas
-        // const grainHeight = drawHeight;
-        // const grainY = drawY;
-        // const grainWidth = Math.round(drawWidth);
-        // const grainHeightPx = Math.round(grainHeight);
-
-        // Create a temporary canvas for grain
-        // const grainCanvas = document.createElement("canvas");
-        // grainCanvas.width = grainWidth;
-        // grainCanvas.height = grainHeightPx;
-        // const grainCtx = grainCanvas.getContext("2d");
-
-        // if (grainCtx) {
-        //   // Generate grain pattern
-        //   const imageData = grainCtx.createImageData(grainWidth, grainHeightPx);
-        //   const data = imageData.data;
-        //   const grainIntensity = 750; // Increased grain intensity
-
-        //   for (let i = 0; i < data.length; i += 4) {
-        //     // Create grain noise - centered around 128 (neutral gray)
-        //     const noise = (Math.random() - 0.45) * grainIntensity;
-        //     const grainValue = Math.max(0, Math.min(255, 128 + noise));
-
-        //     data[i] = grainValue; // R
-        //     data[i + 1] = grainValue; // G
-        //     data[i + 2] = grainValue; // B
-        //     data[i + 3] = 255; // A
-        //   }
-
-        //   grainCtx.putImageData(imageData, 0, 0);
-
-        //   // Apply grain overlay to the main canvas
-        //   ctx.save();
-        //   ctx.globalCompositeOperation = "overlay";
-        //   ctx.globalAlpha = 0.6; // Increased opacity for more visible grain
-        //   ctx.drawImage(grainCanvas, drawX, grainY, grainWidth, grainHeightPx);
-        //   ctx.restore();
-        // }
-
         rafIdRef.current = null;
       });
     },
@@ -192,6 +156,50 @@ export const useHero = () => {
   const scrollUpdate = useCallback(
     (self: ScrollTrigger) => {
       const progress = self.progress;
+
+      // Audio control logic - only play/stop at specific boundaries
+      const SCROLL_START_THRESHOLD = 0.01;
+
+      // Start playing audio when scrolling begins (progress > threshold)
+      if (progress > SCROLL_START_THRESHOLD && progress < 1 && !alreadyPlayedRef.current) {
+        audioManager.play("/sounds/keyboard-sound.mp3", 0.1, true);
+        audioManager.play("/sounds/piano-ready-for-loop.mp3", 0.5, true);
+        alreadyPlayedRef.current = true;
+        scrollStartedRef.current = true;
+        scrollEndedRef.current = false;
+      }
+
+      // Update volume based on progress when audio is playing
+      if (progress > SCROLL_START_THRESHOLD && progress < 1 && alreadyPlayedRef.current) {
+        // Normalize progress to 0-1 range for volume calculation
+        const normalizedProgress = (progress - SCROLL_START_THRESHOLD) / (1 - SCROLL_START_THRESHOLD);
+
+        // Keyboard sound: volume from 0.05 to 0.2 based on progress
+        const keyboardVolume = 0.1 + normalizedProgress * 0.15;
+        audioManager.setVolume("/sounds/keyboard-sound.mp3", keyboardVolume);
+
+        // Piano sound: volume from 0.2 to 0.8 based on progress
+        const pianoVolume = 0.01 + normalizedProgress * 0.6;
+        audioManager.setVolume("/sounds/piano-ready-for-loop.mp3", pianoVolume);
+      }
+
+      // Stop audio when at the start (progress === 0 or very close to 0)
+      if (progress <= SCROLL_START_THRESHOLD && alreadyPlayedRef.current) {
+        audioManager.stop("/sounds/keyboard-sound.mp3");
+        audioManager.stop("/sounds/piano-ready-for-loop.mp3");
+        alreadyPlayedRef.current = false;
+        scrollStartedRef.current = false;
+        scrollEndedRef.current = false;
+      }
+
+      // Stop audio when at the end (progress >= 1)
+      if (progress >= 1 && alreadyPlayedRef.current) {
+        audioManager.stop("/sounds/keyboard-sound.mp3");
+        audioManager.stop("/sounds/piano-ready-for-loop.mp3");
+        alreadyPlayedRef.current = false;
+        scrollEndedRef.current = true;
+      }
+
       const animationProgress = Math.min(progress / 0.9, 1);
       const targetFrame = Math.round(animationProgress * (TOTAL_FRAMES - 1));
       const reversedFrame = TOTAL_FRAMES - targetFrame - 1;
@@ -339,7 +347,7 @@ export const useHero = () => {
         invalidateOnRefresh: true,
         refreshPriority: -1,
         onUpdate: scrollUpdate,
-        // iOS-specific optimizations
+
         anticipatePin: 1,
         fastScrollEnd: true,
       });

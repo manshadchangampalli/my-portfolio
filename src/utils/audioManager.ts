@@ -33,7 +33,7 @@ class AudioManager {
     this.sounds.set(src, audio);
   }
 
-  play(src: string, volume: number = 1) {
+  play(src: string, volume: number = 1, loop: boolean = false) {
     if (this.muted) return;
 
     let audio = this.sounds.get(src);
@@ -41,9 +41,11 @@ class AudioManager {
       audio = new Audio(src);
       audio.preload = "auto";
       audio.volume = volume;
+      audio.loop = loop;
       this.sounds.set(src, audio);
     } else {
       audio.volume = volume;
+      audio.loop = loop;
     }
 
     audio.currentTime = 0;
@@ -64,6 +66,19 @@ class AudioManager {
     const audio = this.sounds.get(src);
     if (audio) {
       audio.volume = Math.max(0, Math.min(1, volume));
+    }
+  }
+  resume(src: string) {
+    const audio = this.sounds.get(src);
+    if (audio) {
+      audio.play();
+    }
+  }
+
+  stop(src: string) {
+    const audio = this.sounds.get(src);
+    if (audio) {
+      audio.pause();
     }
   }
 }

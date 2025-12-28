@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import * as THREE from "three";
 import { useBreakpoints } from "@/hooks/useBreakpoints";
 import useDevice from "@/hooks/useDevice";
+import { audioManager } from "@/utils/audioManager";
 
 interface LoadingOverlayProps {
     isLoading: boolean;
@@ -21,7 +22,6 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
         // Prevent scrolling on both html and body
         const html = document.documentElement;
         const body = document.body;
-
         // Store original values and scroll position
         const originalHtmlOverflow = html.style.overflow;
         const originalBodyOverflow = body.style.overflow;
@@ -97,8 +97,10 @@ export default function LoadingOverlay({ isLoading, loadingProgress = 0, setLoad
             {!isLoading && (
                 <button
                     onClick={() => {
-                        setLoadingPage(false);
-                        window.scrollTo(0, 0);
+                        setTimeout(() => {
+                            setLoadingPage(false);
+                            window.scrollTo(0, 0);
+                        }, 500);
                     }}
                     className="bg-white/10 cursor-pointer hover:bg-white/20 transition-colors text-lg backdrop-blur-sm text-white absolute left-1/2 -translate-1/2 top-1/2  px-4 py-2 rounded-md font-orbitron border border-white/20">
                     START
